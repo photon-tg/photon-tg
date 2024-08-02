@@ -17,6 +17,7 @@ export function useCamera() {
   }, [cameraRef]);
 
   const flip = useCallback(() => {
+    cameraRef.current?.switchCamera();
     setFacingMode((prevMode) => prevMode === "user" ? "environment" : "user");
   }, []);
 
