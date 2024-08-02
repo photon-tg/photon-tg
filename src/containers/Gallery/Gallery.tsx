@@ -1,7 +1,12 @@
 import { EmptyMessage } from "@/containers/Gallery/EmptyMessage/EmptyMessage";
 import { GalleryPhotos } from "@/containers/Gallery/GalleryPhotos/GalleryPhotos";
+import {Photo} from "@/api/photos/parsers";
 
-export function Gallery() {
+export interface GalleryProps {
+  photos: Photo[];
+}
+
+export function Gallery(props: GalleryProps) {
   return (
     <div
       className={
@@ -9,13 +14,14 @@ export function Gallery() {
       }
     >
       <h1 className={"text-center text-xl"}>Your gallery</h1>
-      <Content />
+      <Content photos={props.photos} />
     </div>
   );
 }
 
-function Content() {
-  if (false) {
+function Content(props: GalleryProps) {
+  const { photos } = props;
+  if (photos.length === 0) {
     return (
       <div className={"h-fit self-center"}>
         <EmptyMessage />
@@ -23,5 +29,5 @@ function Content() {
     );
   }
 
-  return <GalleryPhotos />;
+  return <GalleryPhotos photos={photos} />;
 }

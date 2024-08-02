@@ -1,9 +1,15 @@
 import { useCallback, useState } from "react";
+import { Photo } from "@/api/photos/parsers";
 
-export function useGalleryPhotos() {
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(2);
-  const [selectedImage, setSelectedImage] = useState(null);
+export const PHOTOS_PER_PAGE = 8;
+
+export function useGalleryPhotos(photos: Photo[]) {
+  const [page, setPage] = useState(0);
+  const totalPages = Math.round(photos.length / PHOTOS_PER_PAGE);
+  const [selectedImage, setSelectedImage] = useState(photos[0]);
+
+  const hasNextPage = page + 1 < totalPages;
+  const hasPrevPage = page !== 0;
 
   const toPrev = useCallback(() => {
     setPage((prevPage) => prevPage - 1);
@@ -13,12 +19,21 @@ export function useGalleryPhotos() {
     setPage((prevPage) => prevPage + 1);
   }, []);
 
+  const changeSelectedImage = useCallback((id: string) => {
+    const selImg = photos.find((photo) => photo.id === id);
+    if (selImg) {
+      setSelectedImage(selImg);
+    }
+  }, [photos]);
+
   return {
     page,
     totalPages,
     toNext,
     toPrev,
     selectedImage,
-    setSelectedImage,
+    changeSelectedImage,
+    hasNextPage,
+    hasPrevPage,
   };
 }

@@ -1,11 +1,22 @@
 "use client";
 
-import { useGalleryPhotos } from "@/containers/Gallery/GalleryPhotos/useGalleryPhotos";
+import {PHOTOS_PER_PAGE, useGalleryPhotos} from "@/containers/Gallery/GalleryPhotos/useGalleryPhotos";
 import ArrowLeft from "@/../public/assets/icons/Photo/arrow-left.svg";
+import {Photo} from "@/api/photos/parsers";
+import {photosBucketURL} from "@/api/supabase";
 
-export function GalleryPhotos() {
-  const { page, totalPages, selectedImage, setSelectedImage, toNext, toPrev } =
-    useGalleryPhotos();
+
+export interface GalleryPhotosProps {
+  photos: Photo[];
+}
+export function GalleryPhotos(props: GalleryPhotosProps) {
+  const { photos } = props;
+
+  const { page, totalPages, selectedImage, changeSelectedImage, toNext, toPrev, hasPrevPage, hasNextPage } =
+    useGalleryPhotos(photos);
+
+  const galleryStart = page * PHOTOS_PER_PAGE;
+  const galleryEnd = galleryStart + PHOTOS_PER_PAGE
 
   return (
     <div className={"h-[434px]"}>
@@ -18,23 +29,27 @@ export function GalleryPhotos() {
         {/* selected image */}
         <div className={"relative"}>
           {/*arrows*/}
-          <button
-            onClick={toPrev}
-            className={"absolute left-[-15px] top-[50%] translate-y-[-50%]"}
-          >
-            <ArrowLeft />
-          </button>
-          <button
-            onClick={toNext}
-            className={
-              "absolute right-[-15px] top-[50%] translate-y-[-50%] rotate-180"
-            }
-          >
-            <ArrowLeft />
-          </button>
+          {hasPrevPage && (
+            <button
+              onClick={toPrev}
+              className={"absolute left-[-15px] top-[50%] translate-y-[-50%]"}
+            >
+              <ArrowLeft/>
+            </button>
+          )}
+          {hasNextPage && (
+            <button
+              onClick={toNext}
+              className={
+                "absolute right-[-15px] top-[50%] translate-y-[-50%] rotate-180"
+              }
+            >
+              <ArrowLeft/>
+            </button>
+          )}
           <img
             className={"h-[280px] w-full rounded object-cover"}
-            src={"/assets/icons/test.png"}
+            src={`${photosBucketURL}/${selectedImage.name}`}
             alt={""}
           />
         </div>
@@ -44,11 +59,12 @@ export function GalleryPhotos() {
             "grid grid-cols-[minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)] justify-between gap-x-[5px] gap-y-[7px]"
           }
         >
-          {Array.from({ length: 8 }, (_, i) => (
+          {photos.slice(galleryStart, galleryEnd).map(({ name, id }) => (
             <img
-              key={i}
-              className={"h-au w-[68px] rounded object-cover"}
-              src={"/assets/icons/test.png"}
+              onClick={() => changeSelectedImage(id)}
+              key={id}
+              className={`h-[70px] w-[68px] rounded object-cover ${selectedImage.id === id ? 'opacity-100' : 'opacity-50'}`}
+              src={`${photosBucketURL}/${name}`}
               alt={""}
             />
           ))}
@@ -56,7 +72,7 @@ export function GalleryPhotos() {
       </div>
       {/* pages counter */}
       <span className={"block text-center text-sm"}>
-        Page {page} / {totalPages}
+        Page {page + 1} / {totalPages}
       </span>
     </div>
   );

@@ -1,5 +1,5 @@
 import { Camera } from "@/containers/Camera/Camera";
 
-export default function CameraPage() {
+export default async function CameraPage() {
   return <Camera />;
 }
