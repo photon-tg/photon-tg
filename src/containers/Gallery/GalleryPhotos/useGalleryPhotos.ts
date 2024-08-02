@@ -5,7 +5,7 @@ export const PHOTOS_PER_PAGE = 8;
 
 export function useGalleryPhotos(photos: Photo[]) {
   const [page, setPage] = useState(0);
-  const totalPages = Math.round(photos.length / PHOTOS_PER_PAGE);
+  const totalPages = Math.ceil(photos.length / PHOTOS_PER_PAGE);
   const [selectedImage, setSelectedImage] = useState(photos[0]);
 
   const hasNextPage = page + 1 < totalPages;
