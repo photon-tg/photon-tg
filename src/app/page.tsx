@@ -8,11 +8,12 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent)) {
-      router.replace('/photo/gallery');
+    if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent)) {
+      setIsLoading(false);
+      return;
     }
 
-    setIsLoading(false);
+    router.replace('/photo/gallery');
   }, [router]);
 
   if (isLoading) {
