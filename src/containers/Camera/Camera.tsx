@@ -40,7 +40,7 @@ export function Camera() {
         <ArrowIcon />
       </button>
       <CameraPro
-        facingMode={facingMode}
+        facingMode={'user'}
         ref={cameraRef}
         errorMessages={errorMessages}
       />
