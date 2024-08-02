@@ -3,7 +3,7 @@ import {parsePhotos} from "@/api/photos/parsers";
 
 export const photosApi = {
   async getBatch() {
-    const { error, data  } = await supabase.storage.from('photos').list('qwert', {
+    const { error, data  } = await supabase.storage.from('photos').list('public', {
       offset: 0,
       limit: 50,
     });
