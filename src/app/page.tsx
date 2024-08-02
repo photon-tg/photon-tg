@@ -1,10 +1,22 @@
 'use client';
 
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
 
 export default function Home() {
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    return redirect('/photo/gallery');
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent)) {
+      router.replace('/photo/gallery');
+    }
+
+    setIsLoading(false);
+  }, [router]);
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
   return (
