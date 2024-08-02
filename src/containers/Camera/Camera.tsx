@@ -18,7 +18,6 @@ export function Camera() {
     cameraRef,
     takePhoto,
     flip,
-    facingMode,
     image,
     onReject,
     onAccept,
@@ -40,7 +39,7 @@ export function Camera() {
         <ArrowIcon />
       </button>
       <CameraPro
-        facingMode={facingMode}
+        facingMode={'environment'}
         ref={cameraRef}
         errorMessages={errorMessages}
       />

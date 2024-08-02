@@ -1,13 +1,9 @@
-import {
-  CameraType,
-  FacingMode,
-} from "react-camera-pro/dist/components/Camera/types";
+import { CameraType } from "react-camera-pro/dist/components/Camera/types";
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function useCamera() {
   const cameraRef = useRef<CameraType | null>(null);
-  const [facingMode, setFacingMode] = useState<FacingMode>("environment");
   const [image, setImage] = useState<string | null>(null);
   const router = useRouter();
 
@@ -18,7 +14,6 @@ export function useCamera() {
 
   const flip = useCallback(() => {
     cameraRef.current?.switchCamera();
-    setFacingMode((prevMode) => prevMode === "user" ? "environment" : "user");
   }, []);
 
   const onAccept = useCallback(() => {
@@ -37,7 +32,6 @@ export function useCamera() {
 
   return {
     cameraRef,
-    facingMode,
     image,
     takePhoto,
     flip,
