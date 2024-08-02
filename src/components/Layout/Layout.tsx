@@ -7,7 +7,7 @@ export function Layout({ children }: PropsWithChildren<LayoutProps>) {
   return (
     <main
       className={
-        "mx-auto grid h-full w-full max-w-[375px] grid-rows-[1fr_min-content] px-[10px] pt-[10px]"
+        "mx-auto grid h-full w-full max-w-[375px] grid-rows-[1fr_min-content] px-[5px] pt-[5px]"
       }
     >
       <div
