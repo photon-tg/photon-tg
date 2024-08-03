@@ -26,12 +26,11 @@ export async function POST(request: Request) {
     const decodedDataCheckString = decodeURIComponent(dataCheckString);
     const dataCheckMap = new URLSearchParams(decodedDataCheckString);
     const hash = dataCheckMap.get('hash');
-    const secretKey = crypto.createHmac('sha256', process.env.TELEGRAM_BOT_TOKEN!).update('WebAppData').digest();
+    const secretKey = crypto.createHmac("sha256", "WebAppData").update(process.env.TELEGRAM_BOT_TOKEN!).digest();
     const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
     console.log(calculatedHash, hash, 'hash');
     if (calculatedHash === hash) {
       // data is from Telegram
-      console.log('success');
       const userData: WebAppUser = JSON.parse(dataCheckMap.get('user') as string);
       const response= {
         telegramId: userData.id,
