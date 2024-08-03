@@ -22,29 +22,14 @@ export async function POST(request: Request) {
 
   try {
     const dataCheckString = body.dataCheckString;
-    const other = verifyTelegramWebAppData(dataCheckString);
-    console.log(other, 'other')
-    const decodedDataCheckString = decodeURIComponent(dataCheckString);
+    // The data is a query string, which is composed of a series of field-value pairs.
+    const dataCheckStringDecoded = decodeURIComponent(dataCheckString);
+    const isDataVerified = verifyTelegramWebAppData(dataCheckStringDecoded);
 
-    const secret = crypto.createHmac("sha256", "WebAppData").update(process.env.TELEGRAM_BOT_TOKEN!);
-    console.log(process.env.TELEGRAM_BOT_TOKEN, 'tg token')
-    const dataCheckArr = decodedDataCheckString.split('&');
-    const sortedDataCheckArr = dataCheckArr.sort((a, b) => a.localeCompare(b));
-
-    const dataCheckURLSearchParams = new URLSearchParams(decodedDataCheckString);
-    const hash = dataCheckURLSearchParams.get('hash');
-
-    const dataCheck = sortedDataCheckArr.join('\n');
-
-    const _hash = crypto
-      .createHmac("sha256", secret.digest())
-      .update(dataCheck)
-      .digest("hex");
-
-    console.log(_hash, hash, 'hash', decodedDataCheckString, 'decoded');
-    if (_hash === hash) {
+    if (isDataVerified) {
+      const data = new URLSearchParams(dataCheckStringDecoded);
       // data is from Telegram
-      const userData: WebAppUser = JSON.parse(dataCheckURLSearchParams.get('user') as string);
+      const userData: WebAppUser = JSON.parse(data.get('user') as string);
       const response= {
         telegramId: userData.id,
         firstName: userData.first_name,
@@ -64,14 +49,11 @@ export async function POST(request: Request) {
 }
 
 const verifyTelegramWebAppData = (telegramInitData: string) => {
-  // The data is a query string, which is composed of a series of field-value pairs.
-  const encoded = decodeURIComponent(telegramInitData);
-
   // HMAC-SHA-256 signature of the bot's token with the constant string WebAppData used as a key.
   const secret = crypto.createHmac("sha256", "WebAppData").update(process.env.TELEGRAM_BOT_TOKEN!);
 
   // Data-check-string is a chain of all received fields'.
-  const arr = encoded.split("&");
+  const arr = telegramInitData.split("&");
   const hashIndex = arr.findIndex((str) => str.startsWith("hash="));
   const hash = arr.splice(hashIndex)[0].split("=")[1];
   // Sorted alphabetically
