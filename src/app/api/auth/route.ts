@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const hash = dataCheckMap.get('hash');
     const secretKey = crypto.createHmac('sha256', process.env.TELEGRAM_BOT_TOKEN!).update('WebAppData').digest();
     const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
-
+    console.log(calculatedHash, dataCheckMap.get('user'));
     if (calculatedHash === hash) {
       // data is from Telegram
       console.log('success');
@@ -46,6 +46,7 @@ export async function POST(request: Request) {
 
     return new Response(JSON.stringify({ message: 'You are not allowed to use this app outside of telegram' }), { status: 403 });
   } catch (err) {
+    console.error(err, 'error');
     return new Response(JSON.stringify({ message: 'Internal server error' }), { status: 500 });
   }
 }
