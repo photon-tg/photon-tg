@@ -21,6 +21,9 @@ export default function Home() {
       console.dir(window.Telegram, 'w')
       const resp = await fetch('/api/auth', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           dataCheckString: window?.Telegram?.WebApp.initData,
         })
