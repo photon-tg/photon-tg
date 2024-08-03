@@ -23,7 +23,8 @@ export async function POST(request: Request) {
 
   try {
     const dataCheckString = body.dataCheckString;
-    const dataCheckMap = new URLSearchParams(dataCheckString);
+    const decodedDataCheckString = decodeURIComponent(dataCheckString);
+    const dataCheckMap = new URLSearchParams(decodedDataCheckString);
     const hash = dataCheckMap.get('hash');
     const secretKey = crypto.createHmac('sha256', process.env.TELEGRAM_BOT_TOKEN!).update('WebAppData').digest();
     const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
