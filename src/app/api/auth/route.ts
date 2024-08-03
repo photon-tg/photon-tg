@@ -25,6 +25,7 @@ export async function POST(request: Request) {
     const dataCheckString = body.dataCheckString;
     const decodedDataCheckString = decodeURIComponent(dataCheckString);
     const splited = decodedDataCheckString.split('&');
+    splited.sort((a, b) => a.localeCompare(b));
     const dataCheckStringJoined = splited.join('\n')
     const dataCheckMap = new URLSearchParams(decodedDataCheckString);
     const hash = dataCheckMap.get('hash');
