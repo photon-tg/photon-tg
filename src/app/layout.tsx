@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Montserrat({ subsets: ["latin"] });
 
@@ -16,13 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html className={inter.className} lang={"en"}>
-      <body
-        className={
-          "h-full bg-gradient-to-b from-saturated-blue from-0% to-dark-black to-100% bg-no-repeat"
-        }
-      >
-        {children}
-      </body>
+    <body
+      className={
+        "h-full bg-gradient-to-b from-saturated-blue from-0% to-dark-black to-100% bg-no-repeat"
+      }
+    >
+      {children}
+    </body>
+    <Script src="https://telegram.org/js/telegram-web-app.js" strategy={'beforeInteractive'}></Script>
     </html>
   );
 }
