@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import {z} from "zod";
+import { z } from "zod";
 
 const AuthenticationData = z.object({
   dataCheckString: z.string(),
@@ -24,10 +24,12 @@ export async function POST(request: Request) {
   try {
     const dataCheckString = body.dataCheckString;
     const decodedDataCheckString = decodeURIComponent(dataCheckString);
+    const splited = decodedDataCheckString.split('&');
+    const dataCheckStringJoined = splited.join('\n')
     const dataCheckMap = new URLSearchParams(decodedDataCheckString);
     const hash = dataCheckMap.get('hash');
     const secretKey = crypto.createHmac("sha256", "WebAppData").update(process.env.TELEGRAM_BOT_TOKEN!).digest();
-    const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
+    const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckStringJoined).digest('hex');
     console.log(calculatedHash, hash, 'hash');
     if (calculatedHash === hash) {
       // data is from Telegram
