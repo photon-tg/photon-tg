@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const body: AuthenticationDataBody = await request.json();
 
   const { data, error, success } = AuthenticationData.safeParse(body);
-
+  console.log(data, body, 'bd');
   if (!success) {
     console.log(error);
     return new Response(JSON.stringify({
