@@ -2,7 +2,7 @@ import * as crypto from "crypto";
 import { z } from "zod";
 
 const AuthenticationData = z.object({
-  dataCheckString: z.string(),
+  dataCheckString: z.string().trim().min(1),
 });
 
 type AuthenticationDataBody = z.infer<typeof AuthenticationData>;
@@ -11,9 +11,8 @@ export async function POST(request: Request) {
   const body: AuthenticationDataBody = await request.json();
 
   const { data, error, success } = AuthenticationData.safeParse(body);
-  console.log(data, body, 'bd');
+
   if (!success) {
-    console.log(error);
     return new Response(JSON.stringify({
       message: 'Error occurred while validating'
     }), {
@@ -24,15 +23,23 @@ export async function POST(request: Request) {
   try {
     const dataCheckString = body.dataCheckString;
     const decodedDataCheckString = decodeURIComponent(dataCheckString);
-    const splited = decodedDataCheckString.split('&');
-    splited.sort((a, b) => a.localeCompare(b));
-    const dataCheckStringJoined = splited.join('\n')
-    const dataCheckMap = new URLSearchParams(decodedDataCheckString);
-    const hash = dataCheckMap.get('hash');
-    const secretKey = crypto.createHmac("sha256", "WebAppData").update(process.env.TELEGRAM_BOT_TOKEN!).digest();
-    const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckStringJoined).digest('hex');
-    console.log(calculatedHash, hash, 'hash');
-    if (calculatedHash === hash) {
+
+    const secret = crypto.createHmac("sha256", "WebAppData").update(process.env.TELEGRAM_BOT_TOKEN!);
+
+    const dataCheckArr = decodedDataCheckString.split('&');
+    const sortedDataCheckArr = dataCheckArr.sort((a, b) => a.localeCompare(b));
+
+    const hash = new URLSearchParams(decodedDataCheckString).get('hash');
+
+    const dataCheck = sortedDataCheckArr.join('\n');
+
+    const _hash = crypto
+      .createHmac("sha256", secret.digest())
+      .update(dataCheck)
+      .digest("hex");
+
+    console.log(_hash, hash, 'hash', decodedDataCheckString, 'decoded');
+    if (_hash === hash) {
       // data is from Telegram
       const userData: WebAppUser = JSON.parse(dataCheckMap.get('user') as string);
       const response= {
