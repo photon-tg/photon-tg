@@ -17,6 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html className={inter.className} lang={"en"}>
+    <Script src="https://telegram.org/js/telegram-web-app.js" strategy={'afterInteractive'} />
     <body
       className={
         "h-full bg-gradient-to-b from-saturated-blue from-0% to-dark-black to-100% bg-no-repeat"
@@ -24,7 +25,6 @@ export default function RootLayout({
     >
       {children}
     </body>
-    <Script src="https://telegram.org/js/telegram-web-app.js" strategy={'beforeInteractive'}></Script>
     </html>
   );
 }
