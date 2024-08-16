@@ -1,10 +1,12 @@
-"use client";
-
-import {PHOTOS_PER_PAGE, useGalleryPhotos} from "@/containers/Gallery/GalleryPhotos/useGalleryPhotos";
+import {
+  PHOTOS_PER_PAGE,
+  useGalleryPhotos,
+} from "@/containers/Gallery/GalleryPhotos/useGalleryPhotos";
 import ArrowLeft from "@/../public/assets/icons/Photo/arrow-left.svg";
-import {Photo} from "@/api/photos/parsers";
-import {photosBucketURL} from "@/api/supabase";
-
+import { Photo } from "@/api/photos/parsers";
+import { photosBucketURL } from "@/api/supabase";
+import { useApplicationContext } from "@/contexts/ApplicationContext/ApplicationContext";
+import { useUserContext } from "@/contexts/UserContext";
 
 export interface GalleryPhotosProps {
   photos: Photo[];
@@ -12,11 +14,20 @@ export interface GalleryPhotosProps {
 export function GalleryPhotos(props: GalleryPhotosProps) {
   const { photos } = props;
 
-  const { page, totalPages, selectedImage, changeSelectedImage, toNext, toPrev, hasPrevPage, hasNextPage } =
-    useGalleryPhotos(photos);
+  const {
+    page,
+    totalPages,
+    selectedImage,
+    changeSelectedImage,
+    toNext,
+    toPrev,
+    hasPrevPage,
+    hasNextPage,
+  } = useGalleryPhotos(photos);
+  const { user } = useUserContext();
 
   const galleryStart = page * PHOTOS_PER_PAGE;
-  const galleryEnd = galleryStart + PHOTOS_PER_PAGE
+  const galleryEnd = galleryStart + PHOTOS_PER_PAGE;
 
   return (
     <div className={"h-[434px]"}>
@@ -34,7 +45,7 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
               onClick={toPrev}
               className={"absolute left-[-15px] top-[50%] translate-y-[-50%]"}
             >
-              <ArrowLeft/>
+              <ArrowLeft />
             </button>
           )}
           {hasNextPage && (
@@ -44,12 +55,12 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
                 "absolute right-[-15px] top-[50%] translate-y-[-50%] rotate-180"
               }
             >
-              <ArrowLeft/>
+              <ArrowLeft />
             </button>
           )}
           <img
             className={"h-[280px] w-full rounded object-cover"}
-            src={`${photosBucketURL}/${selectedImage.name}`}
+            src={`${photosBucketURL}/${user?.id}/${selectedImage.name}`}
             alt={""}
           />
         </div>
@@ -63,8 +74,8 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
             <img
               onClick={() => changeSelectedImage(id)}
               key={id}
-              className={`h-[70px] w-[68px] rounded object-cover ${selectedImage.id === id ? 'opacity-100' : 'opacity-50'}`}
-              src={`${photosBucketURL}/${name}`}
+              className={`h-[70px] w-[68px] rounded object-cover ${selectedImage.id === id ? "opacity-100" : "opacity-50"}`}
+              src={`${photosBucketURL}/${user?.id}/${name}`}
               alt={""}
             />
           ))}

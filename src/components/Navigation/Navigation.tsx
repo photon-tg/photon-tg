@@ -11,8 +11,8 @@ const tabs = [
   },
   {
     icon: "/assets/icons/pickaxe.svg",
-    name: "Mine",
-    url: "/",
+    name: "Tap",
+    url: "/tap",
   },
   {
     icon: "/assets/icons/friends.svg",
@@ -28,7 +28,7 @@ const tabs = [
 
 export function Navigation() {
   const pathname = usePathname();
-  console.log(pathname);
+
   return (
     <div
       className={

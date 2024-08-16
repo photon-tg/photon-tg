@@ -1,20 +1,26 @@
+"use client";
+
 import { EmptyMessage } from "@/containers/Gallery/EmptyMessage/EmptyMessage";
 import { GalleryPhotos } from "@/containers/Gallery/GalleryPhotos/GalleryPhotos";
-import {Photo} from "@/api/photos/parsers";
+
+import { useApplicationContext } from "@/contexts/ApplicationContext/ApplicationContext";
+import { FileObject } from "@supabase/storage-js";
 
 export interface GalleryProps {
-  photos: Photo[];
+  photos: FileObject[];
 }
 
-export function Gallery(props: GalleryProps) {
+export function Gallery() {
+  const { photos } = useApplicationContext();
+
   return (
     <div
       className={
         "grid h-full grid-rows-[min-content_1fr] gap-y-[15px] px-[30px] pt-[20px]"
       }
     >
-      <h1 className={"text-center text-xl"}>Your gallery</h1>
-      <Content photos={props.photos} />
+      <h1 className={"text-center text-xxl"}>Your gallery</h1>
+      <Content photos={photos} />
     </div>
   );
 }

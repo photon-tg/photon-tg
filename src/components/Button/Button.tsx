@@ -23,7 +23,7 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
     >
       <button
         onClick={onClick}
-        className={`w-full rounded bg-dark-blue px-[30px] py-[15px] text-center text-md font-semibold`}
+        className={`w-full rounded bg-dark-blue px-[30px] py-[15px] text-center text-lg font-semibold`}
       >
         {children}
       </button>

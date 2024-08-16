@@ -14,15 +14,8 @@ const errorMessages: CameraProps["errorMessages"] = {
 };
 
 export function Camera() {
-  const {
-    cameraRef,
-    takePhoto,
-    flip,
-    image,
-    onReject,
-    onAccept,
-    goBack,
-  } = useCamera();
+  const { cameraRef, takePhoto, flip, image, onReject, onAccept, goBack } =
+    useCamera();
 
   if (image) {
     return (
@@ -39,7 +32,7 @@ export function Camera() {
         <ArrowIcon />
       </button>
       <CameraPro
-        facingMode={'environment'}
+        facingMode={"user"}
         ref={cameraRef}
         errorMessages={errorMessages}
       />

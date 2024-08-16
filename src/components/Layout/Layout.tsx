@@ -1,23 +1,28 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import { Navigation } from "@/components/Navigation/Navigation";
 
-export interface LayoutProps {}
+export interface LayoutProps {
+  externalChildren?: ReactNode | undefined;
+}
 
-export function Layout({ children }: PropsWithChildren<LayoutProps>) {
+export function Layout(props: PropsWithChildren<LayoutProps>) {
+  const { children, externalChildren } = props;
+
   return (
     <main
-      className={
-        "mx-auto grid h-full w-full max-w-[375px] grid-rows-[1fr_min-content] px-[5px] pt-[5px]"
-      }
+      className={`grid ${externalChildren ? "grid-rows-[min-content_1fr]" : "grid-rows-1"} mx-auto h-full w-full max-w-[375px] px-[5px] pt-[5px]`}
     >
-      <div
-        className={
-          "h-full translate-y-[5px] rounded-tl rounded-tr bg-dark-blue"
-        }
-      >
-        {children}
+      {externalChildren}
+      <div className={"grid h-full w-full grid-rows-[1fr_min-content]"}>
+        <div
+          className={
+            "h-full translate-y-[5px] rounded-tl rounded-tr bg-dark-blue"
+          }
+        >
+          {children}
+        </div>
+        <Navigation />
       </div>
-      <Navigation />
     </main>
   );
 }

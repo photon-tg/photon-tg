@@ -4,8 +4,8 @@ import { Button } from "@/components/Button/Button";
 export function EmptyMessage() {
   return (
     <div className={"flex flex-col rounded bg-light-blue px-[30px] py-[24px]"}>
-      <h2 className={"mb-[15px] text-center text-lg"}>Your gallery is empty</h2>
-      <div className={"mb-[30px] flex flex-col gap-y-[2px] text-md"}>
+      <h2 className={"mb-[15px] text-center text-xl"}>Your gallery is empty</h2>
+      <div className={"mb-[30px] flex flex-col gap-y-[2px] text-lg"}>
         Make your first photo and earn
         <Money />
       </div>

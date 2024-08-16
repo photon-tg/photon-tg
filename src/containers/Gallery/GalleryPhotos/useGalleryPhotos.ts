@@ -19,12 +19,15 @@ export function useGalleryPhotos(photos: Photo[]) {
     setPage((prevPage) => prevPage + 1);
   }, []);
 
-  const changeSelectedImage = useCallback((id: string) => {
-    const selImg = photos.find((photo) => photo.id === id);
-    if (selImg) {
-      setSelectedImage(selImg);
-    }
-  }, [photos]);
+  const changeSelectedImage = useCallback(
+    (id: string) => {
+      const selImg = photos.find((photo) => photo.id === id);
+      if (selImg) {
+        setSelectedImage(selImg);
+      }
+    },
+    [photos],
+  );
 
   return {
     page,

@@ -8,6 +8,11 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    extend: {
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      }
+    },
     colors: {
       'sky-blue': '#5DB3DC',
       'light-blue': '#274784',
@@ -34,17 +39,22 @@ const config: Config = {
         letterSpacing: '0.01em',
         fontWeight: '500',
       }],
-      'md': ['1rem', {
+      'md': ['0.875rem', {
+        lineHeight: '1.138rem',
+        letterSpacing: '0.01em',
+        fontWeight: '500',
+      }],
+      'lg': ['1rem', {
         lineHeight: '1.3rem',
         letterSpacing: '0.01em',
         fontWeight: '400',
       }],
-      'lg': ['1.25rem', {
+      'xl': ['1.25rem', {
         lineHeight: '1.625rem',
         letterSpacing: '0.01em',
         fontWeight: '600',
       }],
-      'xl': ['1.750rem', {
+      'xxl': ['1.750rem', {
         lineHeight: '2.275rem',
         letterSpacing: '0.01em',
         fontWeight: '600',
