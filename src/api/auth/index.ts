@@ -1,23 +1,23 @@
-import { axiosInstance } from "@/api/axios";
-import { AxiosResponse } from "axios";
-import { supabase } from "@/api/supabase";
+import { axiosInstance } from '@/api/axios';
+import { AxiosResponse } from 'axios';
+import { supabase } from '@/api/supabase';
 
 const mockData = process.env.NEXT_PUBLIC_MOCK_TG_DATA;
 
 export const authApi = {
   async authenticate(): Promise<any> {
     const { data }: AxiosResponse<any> = await axiosInstance.post<any>(
-      "/check-telegram-data",
+      '/check-telegram-data',
       {
         dataCheckString:
-          process.env.NODE_ENV === "development"
+          process.env.NODE_ENV === 'development'
             ? mockData
             : window?.Telegram?.WebApp.initData,
       },
     );
 
     if (!data) {
-      return "bad user";
+      return 'bad user';
     }
 
     const signUpResult = await supabase.auth.signUp({
@@ -43,6 +43,6 @@ export const authApi = {
     }
 
     // TODO: fixfix
-    return "";
+    return '';
   },
 } as const;

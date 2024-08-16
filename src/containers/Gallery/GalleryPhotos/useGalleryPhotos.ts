@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { Photo } from "@/api/photos/parsers";
+import { useCallback, useState } from 'react';
+import { Photo } from '@/api/photos/parsers';
 
 export const PHOTOS_PER_PAGE = 8;
 

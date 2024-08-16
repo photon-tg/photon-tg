@@ -1,1 +1,1 @@
-export const HOME_PAGE = "/photo/gallery";
+export const HOME_PAGE = '/photo/gallery';

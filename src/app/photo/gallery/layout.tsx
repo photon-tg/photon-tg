@@ -1,5 +1,5 @@
-import { PhotoTabs } from "@/containers/Gallery/PhotoTabs/PhotoTabs";
-import { Layout } from "@/components/Layout/Layout";
+import { PhotoTabs } from '@/containers/Gallery/PhotoTabs/PhotoTabs';
+import { Layout } from '@/components/Layout/Layout';
 
 export default function GalleryLayout({
   children,
@@ -8,9 +8,9 @@ export default function GalleryLayout({
 }>) {
   return (
     <Layout>
-      <div className={"grid h-full grid-rows-[1fr_min-content]"}>
+      <div className={'grid h-full grid-rows-[1fr_min-content]'}>
         {children}
-        <div className={"pb-[10px]"}>
+        <div className={'pb-[10px]'}>
           <PhotoTabs />
         </div>
       </div>

@@ -1,11 +1,11 @@
-import { supabase } from "../supabase";
+import { supabase } from '../supabase';
 
 export const userApi = {
   async getApplicationData(userId: string) {
     const { error, data } = await supabase
-      .from("users")
+      .from('users')
       .select()
-      .eq("id", userId);
+      .eq('id', userId);
 
     if (error) {
       // deal with it

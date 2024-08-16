@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -9,12 +9,12 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { useUserContext } from "../UserContext";
-import { useRouter } from "next/navigation";
-import { HOME_PAGE } from "@/constants/urls";
-import { userApi } from "@/api/user";
-import { User } from "@/interfaces/User";
+} from 'react';
+import { useUserContext } from '../UserContext';
+import { useRouter } from 'next/navigation';
+import { HOME_PAGE } from '@/constants/urls';
+import { userApi } from '@/api/user';
+import { User } from '@/interfaces/User';
 import {
   getUserLevel,
   getUserPassiveIncome,
@@ -22,9 +22,9 @@ import {
   Level,
   levelToCoinsPerTap,
   levelToMaxEnergy,
-} from "@/constants";
-import { photosApi } from "@/api/photos";
-import { FileObject } from "@supabase/storage-js";
+} from '@/constants';
+import { photosApi } from '@/api/photos';
+import { FileObject } from '@supabase/storage-js';
 
 interface ApplicationContext {
   energy: number;
@@ -181,7 +181,7 @@ export function ApplicationContextProvider({
 export function useApplicationContext() {
   const context = useContext(ApplicationContext);
   if (!context) {
-    throw new Error("useApplicationContext is used outside of its Provider");
+    throw new Error('useApplicationContext is used outside of its Provider');
   }
 
   return context;

@@ -1,12 +1,12 @@
 import {
   PHOTOS_PER_PAGE,
   useGalleryPhotos,
-} from "@/containers/Gallery/GalleryPhotos/useGalleryPhotos";
-import ArrowLeft from "@/../public/assets/icons/Photo/arrow-left.svg";
-import { Photo } from "@/api/photos/parsers";
-import { photosBucketURL } from "@/api/supabase";
-import { useApplicationContext } from "@/contexts/ApplicationContext/ApplicationContext";
-import { useUserContext } from "@/contexts/UserContext";
+} from '@/containers/Gallery/GalleryPhotos/useGalleryPhotos';
+import ArrowLeft from '@/../public/assets/icons/Photo/arrow-left.svg';
+import { Photo } from '@/api/photos/parsers';
+import { photosBucketURL } from '@/api/supabase';
+import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { useUserContext } from '@/contexts/UserContext';
 
 export interface GalleryPhotosProps {
   photos: Photo[];
@@ -30,20 +30,20 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
   const galleryEnd = galleryStart + PHOTOS_PER_PAGE;
 
   return (
-    <div className={"h-[434px]"}>
+    <div className={'h-[434px]'}>
       {/* container [selected image + all images] */}
       <div
         className={
-          "mb-[15px] grid grid-rows-[min-content_min-content] gap-y-[10px]"
+          'mb-[15px] grid grid-rows-[min-content_min-content] gap-y-[10px]'
         }
       >
         {/* selected image */}
-        <div className={"relative"}>
+        <div className={'relative'}>
           {/*arrows*/}
           {hasPrevPage && (
             <button
               onClick={toPrev}
-              className={"absolute left-[-15px] top-[50%] translate-y-[-50%]"}
+              className={'absolute left-[-15px] top-[50%] translate-y-[-50%]'}
             >
               <ArrowLeft />
             </button>
@@ -52,37 +52,37 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
             <button
               onClick={toNext}
               className={
-                "absolute right-[-15px] top-[50%] translate-y-[-50%] rotate-180"
+                'absolute right-[-15px] top-[50%] translate-y-[-50%] rotate-180'
               }
             >
               <ArrowLeft />
             </button>
           )}
           <img
-            className={"h-[280px] w-full rounded object-cover"}
+            className={'h-[280px] w-full rounded object-cover'}
             src={`${photosBucketURL}/${user?.id}/${selectedImage.name}`}
-            alt={""}
+            alt={''}
           />
         </div>
         {/* all images */}
         <div
           className={
-            "grid grid-cols-[minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)] justify-between gap-x-[5px] gap-y-[7px]"
+            'grid grid-cols-[minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)] justify-between gap-x-[5px] gap-y-[7px]'
           }
         >
           {photos.slice(galleryStart, galleryEnd).map(({ name, id }) => (
             <img
               onClick={() => changeSelectedImage(id)}
               key={id}
-              className={`h-[70px] w-[68px] rounded object-cover ${selectedImage.id === id ? "opacity-100" : "opacity-50"}`}
+              className={`h-[70px] w-[68px] rounded object-cover ${selectedImage.id === id ? 'opacity-100' : 'opacity-50'}`}
               src={`${photosBucketURL}/${user?.id}/${name}`}
-              alt={""}
+              alt={''}
             />
           ))}
         </div>
       </div>
       {/* pages counter */}
-      <span className={"block text-center text-sm"}>
+      <span className={'block text-center text-sm'}>
         Page {page + 1} / {totalPages}
       </span>
     </div>

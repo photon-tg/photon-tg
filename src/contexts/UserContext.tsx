@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -9,10 +9,10 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { authApi } from "@/api/auth";
-import { User } from "@/interfaces/User";
+import { authApi } from '@/api/auth';
+import { User } from '@/interfaces/User';
 
 interface UserContext {
   user: User | null;
@@ -56,7 +56,7 @@ export function UserContextProvider({ children }: PropsWithChildren<{}>) {
 export function useUserContext() {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useUserContext is used outside of its Provider");
+    throw new Error('useUserContext is used outside of its Provider');
   }
 
   return useContext(UserContext);

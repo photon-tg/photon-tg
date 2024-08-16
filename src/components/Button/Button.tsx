@@ -1,9 +1,9 @@
-import { MouseEventHandler, PropsWithChildren } from "react";
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 export interface ButtonProps {
-  variant?: "outline" | "filled";
+  variant?: 'outline' | 'filled';
   width?: string | number;
-  size?: "lg";
+  size?: 'lg';
 
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -11,9 +11,9 @@ export interface ButtonProps {
 export function Button(props: PropsWithChildren<ButtonProps>) {
   const {
     children,
-    variant = "outline",
-    width = "fit-content",
-    size = "md",
+    variant = 'outline',
+    width = 'fit-content',
+    size = 'md',
     onClick,
   } = props;
 
@@ -23,7 +23,7 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
     >
       <button
         onClick={onClick}
-        className={`w-full rounded bg-dark-blue px-[30px] py-[15px] text-center text-lg font-semibold`}
+        className={'w-full rounded bg-dark-blue px-[30px] py-[15px] text-center text-lg font-semibold'}
       >
         {children}
       </button>

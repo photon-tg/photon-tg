@@ -1,4 +1,4 @@
-import { FileObject } from "@supabase/storage-js";
+import { FileObject } from '@supabase/storage-js';
 
 export interface Photo {
   name: string;

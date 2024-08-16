@@ -1,4 +1,4 @@
-import { Tap } from "@/containers/Tap/Tap";
+import { Tap } from '@/containers/Tap/Tap';
 
 export default function TapPage() {
   return <Tap />;

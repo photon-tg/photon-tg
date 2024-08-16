@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { HOME_PAGE } from "@/constants/urls";
-import { useApplicationContext } from "@/contexts/ApplicationContext/ApplicationContext";
-import { useUserContext } from "@/contexts/UserContext";
-import { useDevice } from "@/hooks/useDevice";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { HOME_PAGE } from '@/constants/urls';
+import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { useUserContext } from '@/contexts/UserContext';
+import { useDevice } from '@/hooks/useDevice';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface IndexProps {}
 
@@ -40,10 +40,10 @@ export function Index(props: IndexProps) {
 
   if (isLoading) {
     return (
-      <div className={"flex h-full items-center justify-center"}>
+      <div className={'flex h-full items-center justify-center'}>
         <img
-          className={"w-[200px] animate-spin-slow"}
-          src={"/assets/icons/photon.svg"}
+          className={'w-[200px] animate-spin-slow'}
+          src={'/assets/icons/photon.svg'}
         />
       </div>
     );
@@ -51,7 +51,7 @@ export function Index(props: IndexProps) {
 
   if (!isMobile) {
     return (
-      <div className={"flex h-full items-center justify-center"}>
+      <div className={'flex h-full items-center justify-center'}>
         <h1>Photon is only available on mobile devices</h1>
       </div>
     );

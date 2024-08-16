@@ -1,8 +1,8 @@
-import { CameraType } from "react-camera-pro/dist/components/Camera/types";
-import { useCallback, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { photosApi } from "@/api/photos";
-import { useUserContext } from "@/contexts/UserContext";
+import { CameraType } from 'react-camera-pro/dist/components/Camera/types';
+import { useCallback, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { photosApi } from '@/api/photos';
+import { useUserContext } from '@/contexts/UserContext';
 
 export function useCamera() {
   const cameraRef = useRef<CameraType | null>(null);
@@ -11,7 +11,7 @@ export function useCamera() {
   const { user } = useUserContext();
 
   const takePhoto = useCallback(() => {
-    const base64Image = cameraRef.current?.takePhoto("base64url") as string;
+    const base64Image = cameraRef.current?.takePhoto('base64url') as string;
     setImage(base64Image);
   }, [cameraRef]);
 
@@ -26,7 +26,7 @@ export function useCamera() {
 
     await photosApi.uploadPhoto(user.id, image!);
 
-    router.push("/photo/gallery");
+    router.push('/photo/gallery');
   }, [image, router, user]);
 
   const onReject = useCallback(() => {
@@ -34,7 +34,7 @@ export function useCamera() {
   }, []);
 
   const goBack = useCallback(() => {
-    router.push("/photo/gallery");
+    router.push('/photo/gallery');
   }, [router]);
 
   return {

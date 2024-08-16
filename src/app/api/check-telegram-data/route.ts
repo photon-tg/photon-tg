@@ -1,5 +1,5 @@
-import { TelegramAuth } from "@/utils/telegram-auth-verification";
-import { z } from "zod";
+import { TelegramAuth } from '@/utils/telegram-auth-verification';
+import { z } from 'zod';
 
 const AuthenticationData = z.object({
   dataCheckString: z.string().trim().min(1),
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   if (error) {
     return new Response(
       JSON.stringify({
-        message: "Error occurred while validating",
+        message: 'Error occurred while validating',
       }),
       {
         status: 400,
@@ -35,20 +35,20 @@ export async function POST(request: Request) {
     if (!isDataValid) {
       return new Response(
         JSON.stringify({
-          message: "You are not allowed to use this app outside of telegram",
+          message: 'You are not allowed to use this app outside of telegram',
         }),
         { status: 403 },
       );
     }
 
     const userData = tgAuthClient.parseAuthString();
-    console.log(userData, "sd");
+    console.log(userData, 'sd');
     return new Response(JSON.stringify(userData.metadata.user), {
       status: 200,
     });
   } catch (err) {
-    console.error(err, "error");
-    return new Response(JSON.stringify({ message: "Internal server error" }), {
+    console.error(err, 'error');
+    return new Response(JSON.stringify({ message: 'Internal server error' }), {
       status: 500,
     });
   }
