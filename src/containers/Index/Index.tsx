@@ -28,9 +28,9 @@ export function Index(props: IndexProps) {
     }
 
     async function checkDevice() {
-      if (isMobile) {
+      // if (isMobile) {
         await clientReady();
-      }
+      // }
 
       setIsLoading(false);
     }
