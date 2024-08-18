@@ -69,6 +69,10 @@ export function ApplicationContextProvider({
   const level = useMemo<Level>(() => getUserLevel(coins), [coins]);
   const isEnergyFull = useMemo(
     () => energy >= (levelToMaxEnergy.get(level) as number),
+    [energy, level],
+  );
+  const isEnergyEmpty = useMemo(
+    () => energy === 0,
     [energy],
   );
   const maxEnergy = useMemo(
@@ -132,7 +136,7 @@ export function ApplicationContextProvider({
       const result = await userApi.getApplicationData(userData.id);
       const photos = await photosApi.getBatch(userData.id);
 
-      setEnergy(result.energy);
+      setEnergy(100);
       setCoins(result.coins_count);
       setPhotos(photos);
       isApplicationInitialized.current = true;
@@ -142,9 +146,13 @@ export function ApplicationContextProvider({
   );
 
   const tap = useCallback(() => {
+    if (isEnergyEmpty) {
+      return;
+    }
+
     increaseCoins();
     decreaseEnergy();
-  }, []);
+  }, [isEnergyEmpty]);
 
   const value = useMemo<ApplicationContext>(
     () => ({
