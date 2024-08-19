@@ -11,7 +11,7 @@ export type Database = {
     Tables: {
       users: {
         Row: {
-          coins_count: number;
+          coins: number;
           created_at: string;
           email: string | null;
           energy: number;
@@ -19,7 +19,7 @@ export type Database = {
           last_hourly_reward_at: string;
         };
         Insert: {
-          coins_count?: number;
+          coins?: number;
           created_at?: string;
           email?: string | null;
           energy?: number;
@@ -27,7 +27,7 @@ export type Database = {
           last_hourly_reward_at?: string;
         };
         Update: {
-          coins_count?: number;
+          coins?: number;
           created_at?: string;
           email?: string | null;
           energy?: number;

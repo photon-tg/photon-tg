@@ -84,10 +84,14 @@ export function ApplicationContextProvider({
     [coins],
   );
   const passiveIncome = useMemo<number>(() => getUserPassiveIncome(level), []);
+  const coinsPerTap = useMemo(() => (levelToCoinsPerTap.get(level) as number), [level]);
+  const syncTimeoutId = useRef<NodeJS.Timeout>();
 
-  const decreaseEnergy = useCallback(() => {
-    setEnergy((prevEnergy) => prevEnergy - 1);
-  }, []);
+  const decreaseEnergy = useCallback((): number => {
+    const newEnergy = energy - 1;
+    setEnergy(newEnergy);
+    return newEnergy;
+  }, [energy]);
 
   const increaseEnergy = useCallback(() => {
     if (energy >= maxEnergy) {
@@ -100,11 +104,11 @@ export function ApplicationContextProvider({
     });
   }, [energy]);
 
-  const increaseCoins = useCallback(() => {
-    setCoins(
-      (prevMoney) => prevMoney + (levelToCoinsPerTap.get(level) as number),
-    );
-  }, []);
+  const increaseCoins = useCallback((): number => {
+    const newCoins = coins + coinsPerTap;
+    setCoins(newCoins);
+    return newCoins;
+  }, [coinsPerTap, coins]);
 
   // regenirate energy
   useEffect(() => {
@@ -136,8 +140,8 @@ export function ApplicationContextProvider({
       const result = await userApi.getApplicationData(userData.id);
       const photos = await photosApi.getBatch(userData.id);
 
-      setEnergy(100);
-      setCoins(result.coins_count);
+      setEnergy(result.energy);
+      setCoins(result.coins);
       setPhotos(photos);
       isApplicationInitialized.current = true;
       router.replace(HOME_PAGE);
@@ -145,14 +149,22 @@ export function ApplicationContextProvider({
     [user],
   );
 
+  const syncStats = useCallback((coins: number, energy: number) => {
+    clearTimeout(syncTimeoutId.current);
+
+    syncTimeoutId.current = setTimeout(() => {
+      userApi.sync(user?.id as string, { coins, energy });
+    }, 3000);
+  }, [user?.id]);
+
   const tap = useCallback(() => {
     if (isEnergyEmpty) {
       return;
     }
-
-    increaseCoins();
-    decreaseEnergy();
-  }, [isEnergyEmpty]);
+    const actualCoins = increaseCoins();
+    const actualEnergy = decreaseEnergy();
+    syncStats(actualCoins, actualEnergy);
+  }, [isEnergyEmpty, syncStats, increaseCoins, decreaseEnergy]);
 
   const value = useMemo<ApplicationContext>(
     () => ({
