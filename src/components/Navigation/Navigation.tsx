@@ -17,7 +17,7 @@ const tabs = [
   {
     icon: '/assets/icons/friends.svg',
     name: 'Friends',
-    url: '/',
+    url: '/friends',
   },
   {
     icon: '/assets/icons/task.svg',
