@@ -32,6 +32,7 @@ export function Camera() {
         <ArrowIcon />
       </button>
       <CameraPro
+        aspectRatio={0.5265}
         facingMode={'user'}
         ref={cameraRef}
         errorMessages={errorMessages}

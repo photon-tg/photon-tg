@@ -20,6 +20,7 @@ const config: Config = {
       'dark-blue': '#0F1B38',
 
       'saturated-blue': '#00288C',
+      'text-blue': '#368FEA',
 
       'dark-black': '#161616',
 

@@ -19,11 +19,11 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
 
   return (
     <div
-      className={`rounded bg-gradient-to-tr from-light-blue from-0% to-sky-blue to-100% p-[4px] w-[${width}]`}
+      className={`rounded ${variant === 'outline' ? 'bg-gradient-to-tr from-light-blue from-0% to-sky-blue to-100%' : 'bg-gradient-to-tr from-sky-blue to-saturated-blue'} p-[4px] w-[${width}] `}
     >
       <button
         onClick={onClick}
-        className={'w-full rounded bg-dark-blue px-[30px] py-[15px] text-center text-lg font-semibold'}
+        className={`w-full rounded ${variant === 'outline' ? 'bg-dark-blue active:bg-gradient-to-tr active:from-light-blue active:from-0% active:to-sky-blue active:to-100% ' : 'bg-gradient-to-tr from-sky-blue to-saturated-blue'} px-[30px] py-[15px] text-center text-lg font-semibold`}
       >
         {children}
       </button>
