@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from "@/components/Button/Button";
-import { CTACard } from "@/components/CTACard/CTACard";
-import { appURL } from "@/constants/urls";
+import { Button } from '@/components/Button/Button';
+import { CTACard } from '@/components/CTACard/CTACard';
+import { appURL } from '@/constants/urls';
 
 export function Friends() {
 
