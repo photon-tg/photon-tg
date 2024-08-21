@@ -22,7 +22,7 @@ const tabs = [
   {
     icon: '/assets/icons/task.svg',
     name: 'Tasks',
-    url: '/',
+    url: '/tasks',
   },
 ];
 

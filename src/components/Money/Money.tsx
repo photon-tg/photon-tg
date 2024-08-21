@@ -1,12 +1,15 @@
+import { formatNumber } from '@/utils/formatter';
+
 export type MoneySize = 'xs' | 'md' | 'xl';
 
 export interface MoneyProps {
   amount: number;
+  isCompact?: boolean;
   size?: MoneySize;
 }
 
 export function Money(props: MoneyProps) {
-  const { amount, size = 'md' } = props;
+  const { amount, isCompact = false, size = 'md' } = props;
 
   const sizeMap: Record<MoneySize, { img: { width: number; height: number }; text: string }> = {
     xs: {
@@ -39,7 +42,7 @@ export function Money(props: MoneyProps) {
       `flex items-center gap-x-[10px] justify-self-center ${text}`
     }>
       <img width={img.width} height={img.height} src={'/assets/icons/photon.svg'} />
-      {amount}
+      +{isCompact ? formatNumber(amount) : amount}
     </div>
   );
 }

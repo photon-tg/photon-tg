@@ -70,9 +70,19 @@ export class TelegramAuth implements TelegramAuthInterface {
       hash,
       metadata: {
         user: JSON.parse(searchParams.get('user') as string) as WebAppUser,
+        referrerId: this.parseStartParams(searchParams.get('start_param')),
         authDate: searchParams.get('auth_date') as string,
         queryId: searchParams.get('query_id') as string,
       },
     };
+  }
+
+  private parseStartParams(startParams: string | null) {
+    try {
+      const [, match] = startParams?.match(/friendId(\d+)/) || [];
+      return match;
+    } catch (err) {
+      return null;
+    }
   }
 }

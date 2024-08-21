@@ -25,6 +25,8 @@ import {
 } from '@/constants';
 import { photosApi } from '@/api/photos';
 import { FileObject } from '@supabase/storage-js';
+import { applicationApi } from '@/api/application';
+import { Task } from '@/interfaces/Task';
 
 interface ApplicationContext {
   energy: number;
@@ -33,6 +35,7 @@ interface ApplicationContext {
   progress: number;
   passiveIncome: number;
   photos: FileObject[];
+  tasks: Task[];
   increaseEnergy(): void;
   increaseCoins(amount?: number): void;
   tap(): void;
@@ -46,6 +49,7 @@ const initialUserContext = {
   progress: 0,
   passiveIncome: 0,
   photos: [],
+  tasks: [],
   increaseEnergy() {},
   increaseCoins() {},
   tap() {},
@@ -83,9 +87,11 @@ export function ApplicationContextProvider({
     () => getUserProgressProcentage(coins),
     [coins],
   );
-  const passiveIncome = useMemo<number>(() => getUserPassiveIncome(level), []);
+  const passiveIncome = useMemo<number>(() => getUserPassiveIncome(level), [level]);
   const coinsPerTap = useMemo(() => (levelToCoinsPerTap.get(level) as number), [level]);
   const syncTimeoutId = useRef<NodeJS.Timeout>();
+
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const decreaseEnergy = useCallback((): number => {
     const newEnergy = energy - 1;
@@ -113,7 +119,7 @@ export function ApplicationContextProvider({
   // regenirate energy
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-
+    console.log('regenerate for some', isEnergyFull, energy)
     if (isEnergyFull) {
       return;
     }
@@ -123,12 +129,12 @@ export function ApplicationContextProvider({
     return () => {
       clearInterval(intervalId);
     };
-  }, [isEnergyFull]);
+  }, [isEnergyFull, energy]);
 
   const clientReady = useCallback(async () => {
     const userData = await authenticate();
     await initializeApplication(userData);
-  }, []);
+  }, [authenticate]);
 
   const initializeApplication = useCallback(
     async (userData: User | null) => {
@@ -140,13 +146,21 @@ export function ApplicationContextProvider({
       const result = await userApi.getApplicationData(userData.id);
       const photos = await photosApi.getBatch(userData.id);
 
+      if (userData.referrerId) {
+        await userApi.refer(userData.id, userData.referrerId);
+      }
+
+      const { tasks } = await applicationApi.getConfig();
+      console.log(tasks, 'taskssetset')
+      setTasks(tasks ?? []);
+
       setEnergy(result.energy);
       setCoins(result.coins);
       setPhotos(photos);
       isApplicationInitialized.current = true;
       router.replace(HOME_PAGE);
     },
-    [user],
+    [user, router],
   );
 
   const syncStats = useCallback((coins: number, energy: number) => {
@@ -174,6 +188,7 @@ export function ApplicationContextProvider({
       progress,
       passiveIncome,
       photos,
+      tasks,
       increaseEnergy,
       increaseCoins,
       clientReady,
@@ -184,6 +199,9 @@ export function ApplicationContextProvider({
       coins,
       level,
       progress,
+      tasks,
+      passiveIncome,
+      photos,
       tap,
       clientReady,
       increaseCoins,

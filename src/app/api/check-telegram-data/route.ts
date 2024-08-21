@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
     const userData = tgAuthClient.parseAuthString();
     console.log(userData, 'sd');
-    return new Response(JSON.stringify(userData.metadata.user), {
+    return new Response(JSON.stringify(userData.metadata), {
       status: 200,
     });
   } catch (err) {

@@ -50,7 +50,7 @@ export function Tab({ name, icon, url, isActive, onClick }: TabProps) {
       href={url}
       onClick={onClick}
     >
-      <img className={''} src={icon} />
+      <img src={icon} />
       <span className={'text-xsm'}>{name}</span>
     </Link>
   );

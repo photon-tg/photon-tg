@@ -16,29 +16,32 @@ export const authApi = {
       },
     );
 
-    if (!data) {
+    const { user, referrerId, ...rest } = data || {};
+
+    if (!user) {
       return 'bad user';
     }
 
     const signUpResult = await supabase.auth.signUp({
-      email: `${data.id}@photon.com`,
-      password: `${data.id}`,
+      email: `${user.id}@photon.com`,
+      password: `${user.id}`,
     });
 
     // user already registered
     if (signUpResult.error?.status === 422) {
       const signUpResult = await supabase.auth.signInWithPassword({
-        email: `${data.id}@photon.com`,
-        password: `${data.id}`,
+        email: `${user.id}@photon.com`,
+        password: `${user.id}`,
       });
-
+      console.log(rest, 'ddd')
       return {
         ...signUpResult.data?.user,
         telegram: {
-          firstName: data?.first_name,
-          lastName: data?.last_name,
-          username: data?.username,
+          firstName: user?.first_name,
+          lastName: user?.last_name,
+          username: user?.username,
         },
+        referrerId,
       };
     }
 

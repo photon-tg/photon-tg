@@ -5,9 +5,7 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 
@@ -47,7 +45,7 @@ export function UserContextProvider({ children }: PropsWithChildren<{}>) {
       user,
       authenticate,
     }),
-    [user],
+    [user, authenticate],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
