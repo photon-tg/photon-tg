@@ -5,11 +5,19 @@ export interface RewardByDays {
   reward: number;
 }
 
+export type TaskType = 'daily_reward';
+
 export interface Task {
   id: string;
   name: string;
   description: string;
   image: Image;
   reward_coins?: number;
-  rewards_by_day?: RewardByDays[];
+  reward_by_day?: RewardByDays[];
+  type: TaskType;
+
+  userTaskId: string;
+  isCompleted?: boolean;
+  daysCompleted?: number;
+  isRewardByDayClaimedToday?: boolean;
 }

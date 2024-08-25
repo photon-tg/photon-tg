@@ -5,6 +5,7 @@ import Script from 'next/script';
 import { UserContextProvider } from '@/contexts/UserContext';
 import { ApplicationContextProvider } from '@/contexts/ApplicationContext/ApplicationContext';
 import { ModalContextProvider } from '@/contexts/ModalContext';
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Montserrat({ subsets: ['latin'] });
 
@@ -43,6 +44,7 @@ export default function RootLayout({
           src="https://telegram.org/js/telegram-web-app.js"
           strategy={'beforeInteractive'}
         />
+        <GoogleAnalytics gaId='G-SQ0XS74EJ2' />
       </body>
     </html>
   );

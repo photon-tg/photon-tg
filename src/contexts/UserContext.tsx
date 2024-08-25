@@ -11,6 +11,7 @@ import {
 
 import { authApi } from '@/api/auth';
 import { User } from '@/interfaces/User';
+import { userApi } from '@/api/user';
 
 interface UserContext {
   user: User | null;
@@ -34,10 +35,11 @@ export function UserContextProvider({ children }: PropsWithChildren<{}>) {
       return user;
     }
 
-    const userData = await authApi.authenticate();
-
-    setUser(userData);
-    return userData;
+    const authData = await authApi.authenticate();
+    const userData = await userApi.getApplicationData(authData.id);
+    const fullUserData = { ...authData, ...userData };
+    setUser(fullUserData);
+    return fullUserData;
   }, [user]);
 
   const value = useMemo<UserContext>(

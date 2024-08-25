@@ -7,11 +7,12 @@ import { useModalContext } from '@/contexts/ModalContext';
 import { TaskModal } from './TaskModal';
 
 interface TaskProps extends TaskType {
- clickable?: boolean;
 }
 
 export function Task(props: TaskProps) {
-  const { name, image, reward_coins, clickable } = props;
+  const { name, image, isCompleted, reward_coins } = props;
+
+  const isClickable = true;
 
   const { openModal } = useModalContext();
 
@@ -20,7 +21,7 @@ export function Task(props: TaskProps) {
   }
 
   return (
-    <article onClick={onClick} className={`grid grid-cols-[max-content_1fr_max-content] bg-light-blue py-[10px] px-[12px] gap-x-[10px] w-full rounded ${clickable && 'active:bg-[#183368]'}`}>
+    <article onClick={onClick} className={`grid grid-cols-[max-content_1fr_max-content] bg-light-blue py-[10px] px-[12px] gap-x-[10px] w-full rounded ${isClickable && 'active:bg-[#183368]'}`}>
       <div>
         <img src={image.url} />
       </div>
@@ -28,9 +29,11 @@ export function Task(props: TaskProps) {
         <span className={'text-lg font-medium'}>{name}</span>
         <div className={'flex gap-x-[10px] items-center'}><Money size={'md'} amount={reward_coins || 0} /></div>
       </div>
-      <div className={'w-[45px] h-[45px] bg-gradient-to-r from-text-blue to-[#00E1FF] rounded-[50%] flex items-center justify-center'}>
-        <Tick />
-      </div>
+      {isCompleted && (
+        <div className={'w-[45px] h-[45px] bg-gradient-to-r from-text-blue to-[#00E1FF] rounded-[50%] flex items-center justify-center'}>
+          <Tick />
+        </div>
+      )}
     </article>
   );
 }

@@ -48,4 +48,14 @@ export const authApi = {
     // TODO: fixfix
     return '';
   },
+  async getUser(userId: string) {
+    const { data, error } = await supabase.from('users').select().eq('id', userId);
+
+    if (error) {
+     // TODO: handle
+      throw new Error();
+    }
+
+    return data?.[0];
+  }
 } as const;

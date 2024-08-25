@@ -10,8 +10,8 @@ export function TasksList() {
     <div>
       <span className={'block text-lg mb-[15px] font-medium'}>Daily tasks</span>
       <div className={'flex flex-col gap-y-[10px]'}>
-        {tasks.map((task) => <Task key={task.id} clickable {...task} />)}
+        {tasks.map((task) => <Task key={task.id} {...task}  />)}
       </div>
     </div>
-  )
+  );
 }

@@ -27,6 +27,7 @@ import { photosApi } from '@/api/photos';
 import { FileObject } from '@supabase/storage-js';
 import { applicationApi } from '@/api/application';
 import { Task } from '@/interfaces/Task';
+import { getIsDailyRewardClaimed } from './utils';
 
 interface ApplicationContext {
   energy: number;
@@ -36,6 +37,7 @@ interface ApplicationContext {
   passiveIncome: number;
   photos: FileObject[];
   tasks: Task[];
+  isDailyRewardClaimed: boolean | null;
   increaseEnergy(): void;
   increaseCoins(amount?: number): void;
   tap(): void;
@@ -50,6 +52,7 @@ const initialUserContext = {
   passiveIncome: 0,
   photos: [],
   tasks: [],
+  isDailyRewardClaimed: null,
   increaseEnergy() {},
   increaseCoins() {},
   tap() {},
@@ -92,6 +95,8 @@ export function ApplicationContextProvider({
   const syncTimeoutId = useRef<NodeJS.Timeout>();
 
   const [tasks, setTasks] = useState<Task[]>([]);
+  // TODO: update after user claims daily reward
+  const [isDailyRewardClaimed, setIsDailyRewardClaimed] = useState<boolean | null>(null);
 
   const decreaseEnergy = useCallback((): number => {
     const newEnergy = energy - 1;
@@ -143,24 +148,23 @@ export function ApplicationContextProvider({
         return;
       }
 
-      const result = await userApi.getApplicationData(userData.id);
       const photos = await photosApi.getBatch(userData.id);
 
       if (userData.referrerId) {
         await userApi.refer(userData.id, userData.referrerId);
       }
 
-      const { tasks } = await applicationApi.getConfig();
-      console.log(tasks, 'taskssetset')
-      setTasks(tasks ?? []);
-
-      setEnergy(result.energy);
-      setCoins(result.coins);
+      const taskss = await applicationApi.getTasks(userData);
+      console.log(taskss, 'taskssetset')
+      setTasks(taskss ?? []);
+      setIsDailyRewardClaimed(getIsDailyRewardClaimed(userData?.last_claimed_daily_reward_at))
+      setEnergy(userData.energy as number);
+      setCoins(userData.coins as number);
       setPhotos(photos);
       isApplicationInitialized.current = true;
       router.replace(HOME_PAGE);
     },
-    [user, router],
+    [router],
   );
 
   const syncStats = useCallback((coins: number, energy: number) => {
@@ -189,6 +193,7 @@ export function ApplicationContextProvider({
       passiveIncome,
       photos,
       tasks,
+      isDailyRewardClaimed,
       increaseEnergy,
       increaseCoins,
       clientReady,
@@ -202,6 +207,7 @@ export function ApplicationContextProvider({
       tasks,
       passiveIncome,
       photos,
+      isDailyRewardClaimed,
       tap,
       clientReady,
       increaseCoins,
