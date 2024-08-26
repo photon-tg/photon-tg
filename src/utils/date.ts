@@ -7,9 +7,11 @@ export function isDateTodayUTC(date: Date | null): boolean {
   const todayUTC = new Date();
 
   // Compare the UTC year, month, and day
-  return date.getUTCDate() === todayUTC.getUTCDate() &&
-         date.getUTCMonth() === todayUTC.getUTCMonth() &&
-         date.getUTCFullYear() === todayUTC.getUTCFullYear();
+  return (
+    date.getUTCDate() === todayUTC.getUTCDate() &&
+    date.getUTCMonth() === todayUTC.getUTCMonth() &&
+    date.getUTCFullYear() === todayUTC.getUTCFullYear()
+  );
 }
 
 function daysSinceDate(inputDate: Date): number {

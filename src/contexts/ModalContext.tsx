@@ -1,7 +1,15 @@
 'use client';
 
 import { Close } from '@/components/Close';
-import { createContext, PropsWithChildren, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import {
+  createContext,
+  PropsWithChildren,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 
 export interface ModalContext {
   openModal(component: ReactNode): void;
@@ -26,27 +34,39 @@ export function ModalContextProvider({ children }: PropsWithChildren<{}>) {
     setModalContent(null);
   }, []);
 
-  const value = useMemo(() => ({
-    openModal,
-    closeModal
-  }), [openModal,
-    closeModal]);
+  const value = useMemo(
+    () => ({
+      openModal,
+      closeModal,
+    }),
+    [openModal, closeModal],
+  );
 
   return (
     <ModalContext.Provider value={value}>
-      <div style={{filter: modalContent ? 'blur(3px)' : ''}} className={`h-full w-full ${modalContent && 'bg-dark-blue opacity-50 z-10'}`}>
+      <div
+        style={{ filter: modalContent ? 'blur(3px)' : '' }}
+        className={`h-full w-full ${modalContent && 'z-10 bg-dark-blue opacity-50'}`}
+      >
         {children}
       </div>
       {modalContent && (
-        <div className={'absolute bottom-0 left-0 w-full z-20'}>
-          <div className={'relative max-w-[375px] mx-auto bg-dark-blue px-[15px] pt-[50px] pb-[20px] rounded drop-shadow-xl'} id="modal">
-            <div className={'absolute top-[20px] right-[20px]'}><Close onClick={closeModal} /></div>
+        <div className={'absolute bottom-0 left-0 z-20 w-full'}>
+          <div
+            className={
+              'relative mx-auto max-w-[375px] rounded bg-dark-blue px-[15px] pb-[20px] pt-[50px] drop-shadow-xl'
+            }
+            id="modal"
+          >
+            <div className={'absolute right-[20px] top-[20px]'}>
+              <Close onClick={closeModal} />
+            </div>
             {modalContent}
           </div>
         </div>
       )}
     </ModalContext.Provider>
-  )
+  );
 }
 
 export function useModalContext() {

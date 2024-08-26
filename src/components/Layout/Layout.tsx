@@ -16,7 +16,7 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
       <div className={'grid h-full w-full grid-rows-[1fr_min-content]'}>
         <div
           className={
-            'h-full translate-y-[5px] rounded-tl rounded-tr bg-dark-blue overflow-auto'
+            'h-full translate-y-[5px] overflow-auto rounded-tl rounded-tr bg-dark-blue'
           }
         >
           {children}

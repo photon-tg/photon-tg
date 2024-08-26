@@ -12,7 +12,6 @@ export interface GalleryProps {
 
 export function Gallery() {
   const { photos } = useApplicationContext();
-
   return (
     <div
       className={

@@ -9,7 +9,7 @@ class ApplicationApi {
     const tasks = await this.getTasks(user);
 
     return { tasks };
-  };
+  }
 
   public async getTasks(user: User | null): Promise<Task[] | null> {
     const { data, error } = await supabase.from('tasks').select(`*,
@@ -23,20 +23,27 @@ class ApplicationApi {
       return null;
     }
 
-    const { data: uData, error: uError } = await supabase.from('user_tasks').select('*').eq('user_id', user?.id);
+    const { data: uData, error: uError } = await supabase
+      .from('user_tasks')
+      .select('*')
+      .eq('user_id', user?.id);
     return data.map((task) => {
-      const uTask = uData?.find(({task_id}) => task_id === task.id);
+      const uTask = uData?.find(({ task_id }) => task_id === task.id);
       if (!uTask) {
         return task;
       }
-       return {
+      return {
         ...task,
         isCompleted: uTask.completed,
-        daysCompleted: task.type === 'daily_reward' ? uTask.days_completed : undefined,
-        isRewardByDayClaimedToday: task.type === 'daily_reward' ? isDateTodayUTC(new Date(user?.last_daily_reward as string)) : undefined
+        daysCompleted:
+          task.type === 'daily_reward' ? uTask.days_completed : undefined,
+        isRewardByDayClaimedToday:
+          task.type === 'daily_reward'
+            ? isDateTodayUTC(new Date(user?.last_daily_reward as string))
+            : undefined,
       } as Task;
     });
   }
-};
+}
 
 export const applicationApi = new ApplicationApi();

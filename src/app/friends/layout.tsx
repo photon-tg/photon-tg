@@ -5,7 +5,5 @@ export default function FriendsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <Layout>{children}</Layout>
-  )
+  return <Layout>{children}</Layout>;
 }

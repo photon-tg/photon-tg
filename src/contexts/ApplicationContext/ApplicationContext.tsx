@@ -78,10 +78,7 @@ export function ApplicationContextProvider({
     () => energy >= (levelToMaxEnergy.get(level) as number),
     [energy, level],
   );
-  const isEnergyEmpty = useMemo(
-    () => energy === 0,
-    [energy],
-  );
+  const isEnergyEmpty = useMemo(() => energy === 0, [energy]);
   const maxEnergy = useMemo(
     () => levelToMaxEnergy.get(level) as number,
     [level],
@@ -90,13 +87,21 @@ export function ApplicationContextProvider({
     () => getUserProgressProcentage(coins),
     [coins],
   );
-  const passiveIncome = useMemo<number>(() => getUserPassiveIncome(level), [level]);
-  const coinsPerTap = useMemo(() => (levelToCoinsPerTap.get(level) as number), [level]);
+  const passiveIncome = useMemo<number>(
+    () => getUserPassiveIncome(level),
+    [level],
+  );
+  const coinsPerTap = useMemo(
+    () => levelToCoinsPerTap.get(level) as number,
+    [level],
+  );
   const syncTimeoutId = useRef<NodeJS.Timeout>();
 
   const [tasks, setTasks] = useState<Task[]>([]);
   // TODO: update after user claims daily reward
-  const [isDailyRewardClaimed, setIsDailyRewardClaimed] = useState<boolean | null>(null);
+  const [isDailyRewardClaimed, setIsDailyRewardClaimed] = useState<
+    boolean | null
+  >(null);
 
   const decreaseEnergy = useCallback((): number => {
     const newEnergy = energy - 1;
@@ -124,7 +129,7 @@ export function ApplicationContextProvider({
   // regenirate energy
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
-    console.log('regenerate for some', isEnergyFull, energy)
+    console.log('regenerate for some', isEnergyFull, energy);
     if (isEnergyFull) {
       return;
     }
@@ -155,9 +160,11 @@ export function ApplicationContextProvider({
       }
 
       const taskss = await applicationApi.getTasks(userData);
-      console.log(taskss, 'taskssetset')
+      console.log(taskss, 'taskssetset');
       setTasks(taskss ?? []);
-      setIsDailyRewardClaimed(getIsDailyRewardClaimed(userData?.last_claimed_daily_reward_at))
+      setIsDailyRewardClaimed(
+        getIsDailyRewardClaimed(userData?.last_claimed_daily_reward_at),
+      );
       setEnergy(userData.energy as number);
       setCoins(userData.coins as number);
       setPhotos(photos);
@@ -167,13 +174,16 @@ export function ApplicationContextProvider({
     [router],
   );
 
-  const syncStats = useCallback((coins: number, energy: number) => {
-    clearTimeout(syncTimeoutId.current);
+  const syncStats = useCallback(
+    (coins: number, energy: number) => {
+      clearTimeout(syncTimeoutId.current);
 
-    syncTimeoutId.current = setTimeout(() => {
-      userApi.sync(user?.id as string, { coins, energy });
-    }, 3000);
-  }, [user?.id]);
+      syncTimeoutId.current = setTimeout(() => {
+        userApi.sync(user?.id as string, { coins, energy });
+      }, 3000);
+    },
+    [user?.id],
+  );
 
   const tap = useCallback(() => {
     if (isEnergyEmpty) {

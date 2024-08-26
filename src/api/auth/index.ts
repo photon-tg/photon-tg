@@ -33,7 +33,7 @@ export const authApi = {
         email: `${user.id}@photon.com`,
         password: `${user.id}`,
       });
-      console.log(rest, 'ddd')
+      console.log(rest, 'ddd');
       return {
         ...signUpResult.data?.user,
         telegram: {
@@ -49,13 +49,16 @@ export const authApi = {
     return '';
   },
   async getUser(userId: string) {
-    const { data, error } = await supabase.from('users').select().eq('id', userId);
+    const { data, error } = await supabase
+      .from('users')
+      .select()
+      .eq('id', userId);
 
     if (error) {
-     // TODO: handle
+      // TODO: handle
       throw new Error();
     }
 
     return data?.[0];
-  }
+  },
 } as const;

@@ -1,1 +1,3 @@
-export const { format: formatNumber } = Intl.NumberFormat('en', { notation: 'compact' });
+export const { format: formatNumber } = Intl.NumberFormat('en', {
+  notation: 'compact',
+});
