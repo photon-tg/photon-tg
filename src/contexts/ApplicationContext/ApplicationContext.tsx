@@ -227,6 +227,7 @@ export function ApplicationContextProvider({
 		};
 
 		initializedApp().then(() => {
+			window.Telegram.WebApp.disableVerticalSwipes();
 			window.Telegram.WebApp.ready();
 			!window.Telegram.WebApp.isExpanded && window.Telegram.WebApp.expand();
 		});
