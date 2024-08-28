@@ -4,9 +4,10 @@ import {
 	createContext,
 	PropsWithChildren,
 	useCallback,
-	useContext, useEffect,
+	useContext,
+	useEffect,
 	useMemo,
-	useState
+	useState,
 } from 'react';
 
 import { authApi } from '@/api/auth';
@@ -17,14 +18,14 @@ import { useDevice } from '@/hooks/useDevice';
 import { LoadingScreen } from '@/components/LoadingScreen';
 
 interface UserContext {
-  user: User;
-  authenticate(): Promise<User | null>;
+	user: User;
+	authenticate(): Promise<User | null>;
 	updateLocalUser(user: Partial<User>): User;
 }
 
 const initialUserContext: UserContext = {
-  user: null!,
-  authenticate(): Promise<User> {},
+	user: null!,
+	authenticate(): Promise<User> {},
 	updateLocalUser(user: Partial<User>): User {},
 };
 
@@ -32,16 +33,18 @@ const UserContext = createContext<UserContext>(initialUserContext);
 
 export function UserContextProvider({ children }: PropsWithChildren<{}>) {
 	const { isMobile, isDetected } = useDevice();
-  const [user, setUser] = useState<User>(null);
+	const [user, setUser] = useState<User>(null);
 
 	const modifyUser = useCallback((userData: Partial<User>): User => {
-		const isDailyRewardClaimed = getIsDailyRewardClaimed(userData.last_daily_reward);
+		const isDailyRewardClaimed = getIsDailyRewardClaimed(
+			userData.last_daily_reward,
+		);
 
 		return { ...userData, isDailyRewardClaimed } as User;
 	}, []);
 
-  const authenticate = useCallback(async () => {
-    const authData = await authApi.authenticate();
+	const authenticate = useCallback(async () => {
+		const authData = await authApi.authenticate();
 
 		const userData = await getUser(authData.id);
 
@@ -50,47 +53,52 @@ export function UserContextProvider({ children }: PropsWithChildren<{}>) {
 		}
 
 		const fullUserData: User = modifyUser({ ...authData, ...userData });
-    setUser(fullUserData);
-    return fullUserData;
-  }, [modifyUser]);
+		setUser(fullUserData);
+		return fullUserData;
+	}, [modifyUser]);
 
 	useEffect(() => {
 		if (!!user || !isMobile) {
-			return
+			return;
 		}
 
 		authenticate();
 	}, [authenticate, isMobile, user]);
 
-	const updateLocalUser = useCallback((newUser: Partial<User>) => {
-		const updatedUser = modifyUser({ ...user, ...newUser });
+	const updateLocalUser = useCallback(
+		(newUser: Partial<User>) => {
+			const updatedUser = modifyUser({ ...user, ...newUser });
 
-		setUser(updatedUser);
-		return updatedUser;
-	}, [modifyUser, user]);
+			setUser(updatedUser);
+			return updatedUser;
+		},
+		[modifyUser, user],
+	);
 
-  const value = useMemo<UserContext>(
-    () => ({
-      user,
-      authenticate,
+	const value = useMemo<UserContext>(
+		() => ({
+			user,
+			authenticate,
 			updateLocalUser,
-    }),
-    [user, authenticate, updateLocalUser],
-  );
+		}),
+		[user, authenticate, updateLocalUser],
+	);
 
-  return <UserContext.Provider value={value}>
-		{!!user && children}
-		{!user && <LoadingScreen isLoading={!isDetected} isMobile={isMobile} />}
-	</UserContext.Provider>;
+	return (
+		<UserContext.Provider value={value}>
+			{!!user && children}
+			{!user && <LoadingScreen isLoading={!isDetected} isMobile={isMobile} />}
+		</UserContext.Provider>
+	);
 }
 
 export function useUserContext() {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUserContext is used outside of its Provider');
-  }
+	const context = useContext(UserContext);
+	if (!context) {
+		throw new Error('useUserContext is used outside of its Provider');
+	}
 
-  return useContext(UserContext);
+	return useContext(UserContext);
 }
 
 function getIsDailyRewardClaimed(lastDailyReward: string | undefined | null) {

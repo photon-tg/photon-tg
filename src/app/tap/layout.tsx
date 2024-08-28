@@ -2,9 +2,9 @@ import { Layout } from '@/components/Layout/Layout';
 import { Profile } from '@/containers/Tap/Profile';
 
 export default function TapLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return <Layout externalChildren={<Profile />}>{children}</Layout>;
+	return <Layout externalChildren={<Profile />}>{children}</Layout>;
 }

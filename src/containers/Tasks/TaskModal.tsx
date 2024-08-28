@@ -1,11 +1,14 @@
-
 import { Button } from '@/components/Button/Button';
 import { Money } from '@/components/Money/Money';
 import { useUserContext } from '@/contexts/UserContext';
 import { cn } from '@/utils/cn';
 import { RewardByDay } from '@/interfaces/Task';
 import { claimDailyReward } from '@/api/api';
-import { ClaimFirstDailyRewardMutation, CoreUserFieldsFragment, FullUserTaskFragment } from '@/gql/graphql';
+import {
+	ClaimFirstDailyRewardMutation,
+	CoreUserFieldsFragment,
+	FullUserTaskFragment,
+} from '@/gql/graphql';
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 
 export interface TaskModalProps {
@@ -14,7 +17,7 @@ export interface TaskModalProps {
 
 export function TaskModal(props: TaskModalProps) {
 	const { taskId } = props;
-  const { tasks } = useApplicationContext();
+	const { tasks } = useApplicationContext();
 
 	const task = tasks.find((task) => task.id === taskId);
 
@@ -24,68 +27,90 @@ export function TaskModal(props: TaskModalProps) {
 		return null;
 	}
 
-  return (
-    <div className={'flex flex-col'}>
-      <img className={'mx-auto mb-[5px] w-[100px]'} src={task.images?.url || ''} />
-      <span className={'mb-[10px] text-center text-xxl'}>{task.name}</span>
-      <p className={'mb-[20px] text-center text-md font-normal'}>
-        {task.description}
-      </p>
-      {task.rewardByDay && (
-        <DailyRewardModal
-          taskId={taskId}
-          userTaskId={task.userTask?.id}
+	return (
+		<div className={'flex flex-col'}>
+			<img
+				className={'mx-auto mb-[5px] w-[100px]'}
+				src={task.images?.url || ''}
+			/>
+			<span className={'mb-[10px] text-center text-xxl'}>{task.name}</span>
+			<p className={'mb-[20px] text-center text-md font-normal'}>
+				{task.description}
+			</p>
+			{task.rewardByDay && (
+				<DailyRewardModal
+					taskId={taskId}
+					userTaskId={task.userTask?.id}
 					isDailyRewardClaimed={user?.isDailyRewardClaimed}
-          daysCompleted={task.userTask?.days_completed}
-          days={task.rewardByDay}
-        />
-      )}
-    </div>
-  );
+					daysCompleted={task.userTask?.days_completed}
+					days={task.rewardByDay}
+				/>
+			)}
+		</div>
+	);
 }
 
 interface DailyRewardModalProps {
-  days: RewardByDay[];
-  daysCompleted?: number;
+	days: RewardByDay[];
+	daysCompleted?: number;
 	isDailyRewardClaimed?: boolean;
-  userTaskId?: string;
-  taskId: string;
+	userTaskId?: string;
+	taskId: string;
 }
 
 function DailyRewardModal(props: DailyRewardModalProps) {
-  const { days, taskId, userTaskId, daysCompleted = 0, isDailyRewardClaimed } =
-    props;
+	const {
+		days,
+		taskId,
+		userTaskId,
+		daysCompleted = 0,
+		isDailyRewardClaimed,
+	} = props;
 
-  const { user, updateLocalUser } = useUserContext();
+	const { user, updateLocalUser } = useUserContext();
 	const { increaseCoins, updateUserTaskProgress } = useApplicationContext();
 
-  const onClaimReward = async () => {
-		window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
-		const rewardCoins = days.find(({ day }) =>  day === daysCompleted + 1)?.reward;
+	const onClaimReward = async () => {
+		window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+		const rewardCoins = days.find(
+			({ day }) => day === daysCompleted + 1,
+		)?.reward;
 		if (!rewardCoins) {
 			throw new Error();
 		}
-   	const data = await claimDailyReward(user?.id as string, taskId, userTaskId, daysCompleted + 1, rewardCoins, user.coins);
-		 const newUserData = data.updateusersCollection[0];
-		 increaseCoins(rewardCoins);
-		 updateUserTaskProgress(data.updateuser_tasksCollection?.[0] as FullUserTaskFragment || (data as ClaimFirstDailyRewardMutation).insertIntouser_tasksCollection?.[0] as FullUserTaskFragment)
-		 if (newUserData) {
-			 updateLocalUser(newUserData as CoreUserFieldsFragment);
-		 }
-  };
+		const data = await claimDailyReward(
+			user?.id as string,
+			taskId,
+			userTaskId,
+			daysCompleted + 1,
+			rewardCoins,
+			user.coins,
+		);
+		const newUserData = data.updateusersCollection[0];
+		increaseCoins(rewardCoins);
+		updateUserTaskProgress(
+			(data.updateuser_tasksCollection?.[0] as FullUserTaskFragment) ||
+				((data as ClaimFirstDailyRewardMutation)
+					.insertIntouser_tasksCollection?.[0] as FullUserTaskFragment),
+		);
+		if (newUserData) {
+			updateLocalUser(newUserData as CoreUserFieldsFragment);
+		}
+	};
 
-  console.log(isDailyRewardClaimed, daysCompleted, user);
-  return (
-    <div className={'flex flex-col gap-y-[10px]'}>
-      <div
-        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}
-        className={'grid max-h-[250px] gap-[10px] overflow-y-scroll'}
-      >
-        {days.map(({ day, reward }) => {
+	console.log(isDailyRewardClaimed, daysCompleted, user);
+	return (
+		<div className={'flex flex-col gap-y-[10px]'}>
+			<div
+				style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}
+				className={'grid max-h-[250px] gap-[10px] overflow-y-scroll'}
+			>
+				{days.map(({ day, reward }) => {
 					const completedDay = daysCompleted + 1;
 					const isAvailable = day === completedDay && !isDailyRewardClaimed;
-					const isNotYetAvailable = day === completedDay && isDailyRewardClaimed;
-					console.log(completedDay, 'comp')
+					const isNotYetAvailable =
+						day === completedDay && isDailyRewardClaimed;
+					console.log(completedDay, 'comp');
 					const isClaimedPrevDay = day <= completedDay;
 					return (
 						<div
@@ -100,16 +125,16 @@ function DailyRewardModal(props: DailyRewardModalProps) {
 							<span className={'mb-[15px] text-md'}>Day {day}</span>
 							<Money isCompact amount={reward} size={'xs'} />
 						</div>
-					)
+					);
 				})}
-      </div>
-      <Button
-        disabled={isDailyRewardClaimed}
-        onClick={onClaimReward}
-        variant={'filled'}
-      >
-        Claim
-      </Button>
-    </div>
-  );
+			</div>
+			<Button
+				disabled={isDailyRewardClaimed}
+				onClick={onClaimReward}
+				variant={'filled'}
+			>
+				Claim
+			</Button>
+		</div>
+	);
 }

@@ -8,13 +8,13 @@ import { ApolloProvider } from '@apollo/client';
 import apolloClient from '@/api/graphql';
 
 export function ApplicationProviders({ children }: PropsWithChildren<{}>) {
-  return (
-    <ApolloProvider client={apolloClient}>
-      <UserContextProvider>
-        <ApplicationContextProvider>
-          <ModalContextProvider>{children}</ModalContextProvider>
-        </ApplicationContextProvider>
-      </UserContextProvider>
-    </ApolloProvider>
-  );
+	return (
+		<ApolloProvider client={apolloClient}>
+			<UserContextProvider>
+				<ApplicationContextProvider>
+					<ModalContextProvider>{children}</ModalContextProvider>
+				</ApplicationContextProvider>
+			</UserContextProvider>
+		</ApolloProvider>
+	);
 }

@@ -16,5 +16,5 @@ export function Index() {
 		}
 	}, [isAppInitialized, router]);
 
-	return <LoadingScreen isLoading={true} isMobile={true} />
+	return <LoadingScreen isLoading={true} isMobile={true} />;
 }

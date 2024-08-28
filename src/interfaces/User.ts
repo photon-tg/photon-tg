@@ -4,8 +4,9 @@ export type AuthData = {
 	id: string;
 	telegram: WebAppUser;
 	referrerId: string | null;
-}
-
-export type User = CoreUserFieldsFragment & AuthData & {
-	isDailyRewardClaimed: boolean;
 };
+
+export type User = CoreUserFieldsFragment &
+	AuthData & {
+		isDailyRewardClaimed: boolean;
+	};

@@ -26,4 +26,3 @@ export const FULL_TASK = graphql(`
 		type
 	}
 `);
-

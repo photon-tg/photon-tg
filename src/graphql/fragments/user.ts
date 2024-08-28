@@ -12,4 +12,3 @@ export const CORE_USER_FIELDS = graphql(`
 		created_at
 	}
 `);
-

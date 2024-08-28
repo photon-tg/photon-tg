@@ -11,66 +11,74 @@ import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
 
 const errorMessages: CameraProps['errorMessages'] = {
-  noCameraAccessible: 'No camera accessible',
-  permissionDenied: 'Permission denied',
-  switchCamera: 'Switch camera',
-  canvas: 'Problem occurred',
+	noCameraAccessible: 'No camera accessible',
+	permissionDenied: 'Permission denied',
+	switchCamera: 'Switch camera',
+	canvas: 'Problem occurred',
 };
 
 export function Camera() {
 	const router = useRouter();
 	const { user } = useUserContext();
-  const { cameraRef, takePhoto, flip, image, onReject, onAccept, goBack } =
-    useCamera();
+	const { cameraRef, takePhoto, flip, image, onReject, onAccept, goBack } =
+		useCamera();
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
-			<div className={'absolute top-[50%] translate-y-[-50%] w-full'}>
-				<div className={'flex flex-col rounded bg-light-blue px-[30px] py-[24px] w-full mx-auto max-w-[280px]'}>
-					<h2 className={'mb-[15px] text-center text-xl'}>Wait for tomorrow!</h2>
+			<div className={'absolute top-[50%] w-full translate-y-[-50%]'}>
+				<div
+					className={
+						'mx-auto flex w-full max-w-[280px] flex-col rounded bg-light-blue px-[30px] py-[24px]'
+					}
+				>
+					<h2 className={'mb-[15px] text-center text-xl'}>
+						Wait for tomorrow!
+					</h2>
 					<div className={'mb-[30px] flex flex-col gap-y-[2px] text-lg'}>
 						You can make photos only once a day
 					</div>
-					<Button onClick={() => router.push('/photo/gallery')} width={'100%'}>Return</Button>
+					<Button onClick={() => router.push('/photo/gallery')} width={'100%'}>
+						Return
+					</Button>
 				</div>
 			</div>
 		);
 	}
 
 	if (image) {
-    return (
-      <PhotoReview onReject={onReject} onAccept={onAccept} image={image} />
-    );
-  }
+		return (
+			<PhotoReview onReject={onReject} onAccept={onAccept} image={image} />
+		);
+	}
 
-  return (
-    <div>
-      <button
-        onClick={goBack}
-        className={'absolute left-[20px] top-[20px] z-10'}
-      >
-        <ArrowIcon />
-      </button>
-      <CameraPro
-        aspectRatio={0.5265}
-        facingMode={'user'}
-        ref={cameraRef}
-        errorMessages={errorMessages}
-      />
-      <div
-        className={
-          'absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[30px]'
-        }
-      >
-        <button />
-        <button
-          onClick={takePhoto}
-          className={'h-[50px] w-[50px] self-center rounded-[50%] border-[5px]'}
-        />
-        <button onClick={flip}>
-          <CameraSwitch />
-        </button>
-      </div>
-    </div>
-  );
+	return (
+		<div>
+			<button
+				onClick={goBack}
+				className={'absolute left-[20px] top-[20px] z-10'}
+			>
+				<ArrowIcon />
+			</button>
+			<CameraPro
+				aspectRatio={0.5265}
+				facingMode={'user'}
+				ref={cameraRef}
+				errorMessages={errorMessages}
+			/>
+			<div
+				className={
+					'absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[30px]'
+				}
+			>
+				<button />
+				<button
+					onClick={takePhoto}
+					className={'h-[50px] w-[50px] self-center rounded-[50%] border-[5px]'}
+				/>
+				<button onClick={flip}>
+					<CameraSwitch />
+				</button>
+			</div>
+		</div>
+	);
 }

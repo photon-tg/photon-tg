@@ -5,15 +5,18 @@ import { AddUserPhotoMutation, CoreUserFieldsFragment } from '@/gql/graphql';
 import {
 	OmitTypenameAndUnwrapRecords,
 	parseGraphQLMutationResponse,
-	parseTasks
+	parseTasks,
 } from '@/api/parsers';
 import { PersonalizedTask } from '@/interfaces/Task';
 import {
 	CLAIM_DAILY_REWARD,
 	CLAIM_FIRST_DAILY_REWARD,
-	UPDATE_DAILY_REWARD_COMPLETED_DAYS
+	UPDATE_DAILY_REWARD_COMPLETED_DAYS,
 } from '@/graphql/mutations/task';
-import { SYNCHRONIZE_TAPS, UPDATE_PASSIVE_INCOME } from '@/graphql/mutations/tap';
+import {
+	SYNCHRONIZE_TAPS,
+	UPDATE_PASSIVE_INCOME,
+} from '@/graphql/mutations/tap';
 import { GET_USER_PHOTOS } from '@/graphql/queries/photo';
 import { UserPhoto } from '@/interfaces/photo';
 import { photosBucketURL, supabase } from './supabase';
@@ -22,13 +25,15 @@ import { nanoid } from 'nanoid';
 import { ADD_USER_PHOTO } from '@/graphql/mutations';
 import { Level, levelToPhotoReward } from '@/constants';
 
-export async function getUser(userId: string): Promise<CoreUserFieldsFragment | undefined> {
-	const {  error, data  } = await apolloClient.query({
+export async function getUser(
+	userId: string,
+): Promise<CoreUserFieldsFragment | undefined> {
+	const { error, data } = await apolloClient.query({
 		query: GET_USER,
 		fetchPolicy: 'no-cache',
 		variables: {
 			id: userId,
-		}
+		},
 	});
 
 	if (error) {
@@ -38,13 +43,15 @@ export async function getUser(userId: string): Promise<CoreUserFieldsFragment | 
 	return data.usersCollection?.edges[0].node;
 }
 
-export async function getTasks(userId: string): Promise<PersonalizedTask[] | undefined> {
-	const {  error, data  } = await apolloClient.query({
+export async function getTasks(
+	userId: string,
+): Promise<PersonalizedTask[] | undefined> {
+	const { error, data } = await apolloClient.query({
 		query: GET_TASKS,
 		fetchPolicy: 'no-cache',
 		variables: {
 			id: userId,
-		}
+		},
 	});
 
 	if (error || !data) {
@@ -54,7 +61,11 @@ export async function getTasks(userId: string): Promise<PersonalizedTask[] | und
 	return parseTasks(data.tasksCollection, data.user_tasksCollection);
 }
 
-export async function updateDailyRewardCompletedDays(userId: string, userTaskId: string, completedDays: number) {
+export async function updateDailyRewardCompletedDays(
+	userId: string,
+	userTaskId: string,
+	completedDays: number,
+) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_DAILY_REWARD_COMPLETED_DAYS,
 		fetchPolicy: 'no-cache',
@@ -62,7 +73,7 @@ export async function updateDailyRewardCompletedDays(userId: string, userTaskId:
 			userId,
 			userTaskId,
 			completedDays,
-		}
+		},
 	});
 
 	if (errors?.length || !data) {
@@ -72,7 +83,14 @@ export async function updateDailyRewardCompletedDays(userId: string, userTaskId:
 	return;
 }
 
-export async function claimDailyReward(userId: string, taskId: string, userTaskId: string | undefined, daysCompleted: number, rewardCoins: number, coins: number) {
+export async function claimDailyReward(
+	userId: string,
+	taskId: string,
+	userTaskId: string | undefined,
+	daysCompleted: number,
+	rewardCoins: number,
+	coins: number,
+) {
 	const { data, errors } = await apolloClient.mutate({
 		mutation: userTaskId ? CLAIM_DAILY_REWARD : CLAIM_FIRST_DAILY_REWARD,
 		fetchPolicy: 'no-cache',
@@ -84,7 +102,7 @@ export async function claimDailyReward(userId: string, taskId: string, userTaskI
 			daysCompleted,
 			coins: coins + rewardCoins,
 			completed: daysCompleted === 10,
-		}
+		},
 	});
 
 	if (errors?.length || !data) {
@@ -94,7 +112,11 @@ export async function claimDailyReward(userId: string, taskId: string, userTaskI
 	return parseGraphQLMutationResponse(data);
 }
 
-export async function synchronizeTaps(userId: string, coins: number, energy: number) {
+export async function synchronizeTaps(
+	userId: string,
+	coins: number,
+	energy: number,
+) {
 	const { data, errors } = await apolloClient.mutate({
 		mutation: SYNCHRONIZE_TAPS,
 		fetchPolicy: 'no-cache',
@@ -102,7 +124,7 @@ export async function synchronizeTaps(userId: string, coins: number, energy: num
 			userId,
 			coins,
 			energy,
-		}
+		},
 	});
 
 	if (errors?.length || !data) {
@@ -112,7 +134,11 @@ export async function synchronizeTaps(userId: string, coins: number, energy: num
 	return parseGraphQLMutationResponse(data);
 }
 
-export async function updatePassiveIncome(userId: string, coins: number, lastHourlyReward: string) {
+export async function updatePassiveIncome(
+	userId: string,
+	coins: number,
+	lastHourlyReward: string,
+) {
 	const { data, errors } = await apolloClient.mutate({
 		mutation: UPDATE_PASSIVE_INCOME,
 		fetchPolicy: 'no-cache',
@@ -120,7 +146,7 @@ export async function updatePassiveIncome(userId: string, coins: number, lastHou
 			userId,
 			coins,
 			lastHourlyReward,
-		}
+		},
 	});
 
 	if (errors?.length || !data) {
@@ -135,23 +161,30 @@ export async function getUserPhotos(userId: string): Promise<UserPhoto[]> {
 		query: GET_USER_PHOTOS,
 		variables: {
 			userId,
-		}
+		},
 	});
 
 	if (error) {
 		throw new Error();
 	}
 
-	const parsedPhotos = data.user_photosCollection?.edges.map(({ node: photo }) => {
-		return {
-			...photo,
-		}
-	});
+	const parsedPhotos = data.user_photosCollection?.edges.map(
+		({ node: photo }) => {
+			return {
+				...photo,
+			};
+		},
+	);
 
 	return parsedPhotos ?? [];
 }
 
-export async function postUserPhoto(userId: string, imageBase64: string, level: number, coins: number): Promise<OmitTypenameAndUnwrapRecords<AddUserPhotoMutation>> {
+export async function postUserPhoto(
+	userId: string,
+	imageBase64: string,
+	level: number,
+	coins: number,
+): Promise<OmitTypenameAndUnwrapRecords<AddUserPhotoMutation>> {
 	const image = decode(imageBase64.split('base64,')[1]);
 
 	const imageId = nanoid();
@@ -175,7 +208,7 @@ export async function postUserPhoto(userId: string, imageBase64: string, level: 
 			url: `${photosBucketURL}/${userId}/${imageId}`,
 			lastPhoto: new Date().toUTCString(),
 			coins: levelToPhotoReward.get(level as Level) + coins,
-		}
+		},
 	});
 
 	if (errors?.length || !data) {

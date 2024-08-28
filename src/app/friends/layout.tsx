@@ -1,9 +1,9 @@
 import { Layout } from '@/components/Layout/Layout';
 
 export default function FriendsLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return <Layout>{children}</Layout>;
+	return <Layout>{children}</Layout>;
 }

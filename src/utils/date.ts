@@ -1,40 +1,54 @@
 export function isDateTodayUTC(date: Date | null): boolean {
-  if (date === null) {
-    return false;
-  }
+	if (date === null) {
+		return false;
+	}
 
-  // Get the current date in UTC
-  const todayUTC = new Date();
+	// Get the current date in UTC
+	const todayUTC = new Date();
 
-  // Compare the UTC year, month, and day
-  return (
-    date.getUTCDate() === todayUTC.getUTCDate() &&
-    date.getUTCMonth() === todayUTC.getUTCMonth() &&
-    date.getUTCFullYear() === todayUTC.getUTCFullYear()
-  );
+	// Compare the UTC year, month, and day
+	return (
+		date.getUTCDate() === todayUTC.getUTCDate() &&
+		date.getUTCMonth() === todayUTC.getUTCMonth() &&
+		date.getUTCFullYear() === todayUTC.getUTCFullYear()
+	);
 }
 
 export function daysSinceDate(inputDate: Date): number {
-  // Get the current date and the input date as UTC timestamps
-  const now = new Date();
-  const currentTimestamp = now.getTime(); // current time in milliseconds
-  const inputTimestamp = inputDate.getTime(); // input time in milliseconds
+	// Get the current date and the input date as UTC timestamps
+	const now = new Date();
+	const currentTimestamp = now.getTime(); // current time in milliseconds
+	const inputTimestamp = inputDate.getTime(); // input time in milliseconds
 
-  // Calculate the difference in milliseconds and convert it to days
-  const diffInMillis = currentTimestamp - inputTimestamp;
-  const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
+	// Calculate the difference in milliseconds and convert it to days
+	const diffInMillis = currentTimestamp - inputTimestamp;
+	const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
 
-  // Return the floor value of the difference in days
-  return Math.floor(diffInDays);
+	// Return the floor value of the difference in days
+	return Math.floor(diffInDays);
 }
 
 export function hoursSinceDateUTC(inputDate: Date): number {
 	// Get the current UTC time in milliseconds
 	const now = new Date();
-	const currentUTCTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+	const currentUTCTime = Date.UTC(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate(),
+		now.getUTCHours(),
+		now.getUTCMinutes(),
+		now.getUTCSeconds(),
+	);
 
 	// Get the input date's UTC time in milliseconds
-	const inputUTCTime = Date.UTC(inputDate.getUTCFullYear(), inputDate.getUTCMonth(), inputDate.getUTCDate(), inputDate.getUTCHours(), inputDate.getUTCMinutes(), inputDate.getUTCSeconds());
+	const inputUTCTime = Date.UTC(
+		inputDate.getUTCFullYear(),
+		inputDate.getUTCMonth(),
+		inputDate.getUTCDate(),
+		inputDate.getUTCHours(),
+		inputDate.getUTCMinutes(),
+		inputDate.getUTCSeconds(),
+	);
 
 	// Calculate the difference in milliseconds and convert to hours
 	const diffInMillis = currentUTCTime - inputUTCTime;
