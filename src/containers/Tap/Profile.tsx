@@ -12,12 +12,14 @@ export function Profile() {
     <div className={'mb-[5px] grid grid-cols-2 gap-x-[10px] pt-[5px]'}>
       <div className={'grid grid-cols-[max-content_1fr] gap-x-[10px]'}>
         <img
-          src={'/assets/icons/test.png'}
-          className={'h-[63px] w-[63px] rounded'}
+					height={63}
+					width={63}
+          src={user.telegram?.photo_url || '/assets/icons/test.png'}
+          className={'rounded'}
           alt={'avatar'}
         />
         <div className={'grid content-start'}>
-          <span className={'mb-[7px] text-md'}>{user?.telegram.firstName}</span>
+          <span className={'mb-[7px] text-md'}>{user?.telegram.first_name}</span>
           <span className={'text-md font-semibold text-sky-blue'}>
             Level {level}
           </span>

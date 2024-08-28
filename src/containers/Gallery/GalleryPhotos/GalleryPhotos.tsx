@@ -3,13 +3,15 @@ import {
   useGalleryPhotos,
 } from '@/containers/Gallery/GalleryPhotos/useGalleryPhotos';
 import ArrowLeft from '@/../public/assets/icons/Photo/arrow-left.svg';
-import { Photo } from '@/api/photos/parsers';
-import { photosBucketURL } from '@/api/supabase';
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import Calendar from '@/../public/assets/icons/calendar.svg';
 import { useUserContext } from '@/contexts/UserContext';
+import { UserPhoto } from '@/interfaces/photo';
+import { Money } from '@/components/Money/Money';
+import { Level, levelToPhotoReward } from '@/constants';
+import { formatDate } from '@/utils/date';
 
 export interface GalleryPhotosProps {
-  photos: Photo[];
+  photos: UserPhoto[];
 }
 export function GalleryPhotos(props: GalleryPhotosProps) {
   const { photos } = props;
@@ -58,11 +60,17 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
               <ArrowLeft />
             </button>
           )}
-          <img
-            className={'h-[280px] w-full rounded object-cover'}
-            src={`${photosBucketURL}/${user?.id}/${selectedImage.name}`}
-            alt={''}
-          />
+					<div className={'relative'}>
+						<img
+							className={'h-[280px] w-full rounded object-cover'}
+							src={selectedImage.url}
+							alt={''}
+						/>
+						<div className={'absolute bottom-[10px] right-[10px] flex gap-x-[10px] items-center bg-dark-blue px-[10px] py-[5px] rounded'}>
+							<Money amount={levelToPhotoReward.get(selectedImage.level_at_time as Level) as number} />
+							<div className={'text-md flex items-center gap-x-[5px]'}><Calendar /> {formatDate(new Date(selectedImage.created_at))}</div>
+						</div>
+					</div>
         </div>
         {/* all images */}
         <div
@@ -70,19 +78,26 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
             'grid grid-cols-[minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)_minmax(55px,max-content)] justify-between gap-x-[5px] gap-y-[7px]'
           }
         >
-          {photos.slice(galleryStart, galleryEnd).map(({ name, id }) => (
-            <img
-              onClick={() => changeSelectedImage(id)}
-              key={id}
-              className={`h-[70px] w-[68px] rounded object-cover ${selectedImage.id === id ? 'opacity-100' : 'opacity-50'}`}
-              src={`${photosBucketURL}/${user?.id}/${name}`}
-              alt={''}
-            />
-          ))}
-        </div>
-      </div>
-      {/* pages counter */}
-      <span className={'block text-center text-sm'}>
+          {photos.slice(galleryStart, galleryEnd).map(({url, id }) => (
+						<div key={id} className={'relative'}>
+							<img
+								onClick={() => changeSelectedImage(id)}
+								className={`h-[70px] w-[68px] rounded object-cover ${selectedImage.id === id ? 'opacity-100' : 'opacity-50'}`}
+								src={url}
+								alt={''}
+							/>
+							<img
+								className={'absolute top-[5px] right-[5px]'}
+								width={12}
+								height={12}
+								src={'/assets/icons/photon.svg'}
+							/>
+						</div>
+					))}
+				</div>
+			</div>
+			{/* pages counter */}
+			<span className={'block text-center text-sm'}>
         Page {page + 1} / {totalPages}
       </span>
     </div>

@@ -2,11 +2,14 @@ import { axiosInstance } from '@/api/axios';
 import { AxiosResponse } from 'axios';
 import { supabase } from '@/api/supabase';
 
+import { CheckTelegramDataRT } from '@/app/api/check-telegram-data/route';
+import { AuthData } from '@/interfaces/User';
+
 const mockData = process.env.NEXT_PUBLIC_MOCK_TG_DATA;
 
 export const authApi = {
-  async authenticate(): Promise<any> {
-    const { data }: AxiosResponse<any> = await axiosInstance.post<any>(
+  async authenticate(): Promise<AuthData> {
+    const { data }: AxiosResponse<CheckTelegramDataRT & { id: string }> = await axiosInstance.post(
       '/check-telegram-data',
       {
         dataCheckString:
@@ -16,49 +19,45 @@ export const authApi = {
       },
     );
 
-    const { user, referrerId, ...rest } = data || {};
+    const { user, referrerId } = data ?? {};
 
     if (!user) {
-      return 'bad user';
-    }
-
-    const signUpResult = await supabase.auth.signUp({
-      email: `${user.id}@photon.com`,
-      password: `${user.id}`,
-    });
-
-    // user already registered
-    if (signUpResult.error?.status === 422) {
-      const signUpResult = await supabase.auth.signInWithPassword({
-        email: `${user.id}@photon.com`,
-        password: `${user.id}`,
-      });
-      console.log(rest, 'ddd');
-      return {
-        ...signUpResult.data?.user,
-        telegram: {
-          firstName: user?.first_name,
-          lastName: user?.last_name,
-          username: user?.username,
-        },
-        referrerId,
-      };
-    }
-
-    // TODO: fixfix
-    return '';
-  },
-  async getUser(userId: string) {
-    const { data, error } = await supabase
-      .from('users')
-      .select()
-      .eq('id', userId);
-
-    if (error) {
-      // TODO: handle
       throw new Error();
     }
 
-    return data?.[0];
+		const credentials = {
+			email: `${user.id}@photon.com`,
+			password: `${user.id}`,
+		};
+
+		const baseResponse: Pick<AuthData, 'telegram' | 'referrerId'> = {
+			telegram: user,
+			referrerId,
+		}
+
+    const signUpResult = await supabase.auth.signUp(credentials);
+
+		if (!signUpResult.error && !!signUpResult.data.user) {
+			return {
+				...baseResponse,
+				id: signUpResult.data.user.id,
+			}
+		}
+
+    // user already registered
+    if (signUpResult.error?.status !== 422) {
+			throw new Error();
+		}
+
+		const signInResult = await supabase.auth.signInWithPassword(credentials);
+
+		if (signInResult.error || !signInResult.data.user) {
+			throw new Error();
+		}
+
+		return {
+			...baseResponse,
+			id: signInResult.data.user.id,
+		}
   },
 } as const;

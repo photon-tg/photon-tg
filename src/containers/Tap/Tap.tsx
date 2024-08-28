@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { levelToMaxEnergy } from '@/constants';
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 
 export function Tap() {
-  const { coins, energy, tap } = useApplicationContext();
+  const { coins, maxEnergy, energy, tap } = useApplicationContext();
 
   return (
     <div className={'flex h-full items-center justify-center'}>
@@ -25,7 +24,7 @@ export function Tap() {
         <TapArea onTap={tap} />
         <div className={'flex items-center justify-center gap-x-[10px]'}>
           <img className={'w-[10px]'} src={'/assets/icons/energy.svg'} />
-          {energy} / {levelToMaxEnergy.get(1)}
+          {energy} / {maxEnergy}
         </div>
       </div>
     </div>
@@ -42,6 +41,7 @@ function TapArea(props: TapAreaProps) {
   const [isPressed, setIsPressed] = useState(false);
 
   const onTouchStart = () => {
+		window.Telegram.WebApp.HapticFeedback.impactOccurred('light')
     setIsPressed(true);
   };
 

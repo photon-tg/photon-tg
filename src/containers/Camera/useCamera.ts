@@ -1,14 +1,17 @@
 import { CameraType } from 'react-camera-pro/dist/components/Camera/types';
 import { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { photosApi } from '@/api/photos';
 import { useUserContext } from '@/contexts/UserContext';
+import { postUserPhoto } from '@/api/api';
+import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { CoreUserFieldsFragment } from '@/gql/graphql';
 
 export function useCamera() {
   const cameraRef = useRef<CameraType | null>(null);
   const [image, setImage] = useState<string | null>(null);
   const router = useRouter();
-  const { user } = useUserContext();
+  const { user, updateLocalUser } = useUserContext();
+	const { level, coins, photos, updatePhotos } = useApplicationContext();
 
   const takePhoto = useCallback(() => {
     const base64Image = cameraRef.current?.takePhoto('base64url') as string;
@@ -24,10 +27,14 @@ export function useCamera() {
       return;
     }
 
-    await photosApi.uploadPhoto(user.id, image!);
+		const postedPhotoData = await postUserPhoto(user.id, image!, level, coins);
+		if (postedPhotoData) {
+			updatePhotos([...photos, postedPhotoData.insertIntouser_photosCollection?.[0]]);
+			updateLocalUser(postedPhotoData.updateusersCollection[0] as CoreUserFieldsFragment);
+		}
 
     router.push('/photo/gallery');
-  }, [image, router, user]);
+  }, [coins, image, level, photos, router, updateLocalUser, updatePhotos, user]);
 
   const onReject = useCallback(() => {
     setImage(null);

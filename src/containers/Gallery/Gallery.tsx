@@ -4,10 +4,10 @@ import { EmptyMessage } from '@/containers/Gallery/EmptyMessage/EmptyMessage';
 import { GalleryPhotos } from '@/containers/Gallery/GalleryPhotos/GalleryPhotos';
 
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
-import { FileObject } from '@supabase/storage-js';
+import { UserPhoto } from '@/interfaces/photo';
 
 export interface GalleryProps {
-  photos: FileObject[];
+  photos: UserPhoto[];
 }
 
 export function Gallery() {

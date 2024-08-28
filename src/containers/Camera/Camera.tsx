@@ -5,6 +5,10 @@ import { useCamera } from '@/containers/Camera/useCamera';
 import CameraSwitch from '@/../public/assets/icons/cameraswitch.svg';
 import ArrowIcon from '@/../public/assets/icons/Photo/arrow-left.svg';
 import { PhotoReview } from '@/containers/Camera/PhotoReview/PhotoReview';
+import { useUserContext } from '@/contexts/UserContext';
+import { isDateTodayUTC } from '@/utils/date';
+import { Button } from '@/components/Button/Button';
+import { useRouter } from 'next/navigation';
 
 const errorMessages: CameraProps['errorMessages'] = {
   noCameraAccessible: 'No camera accessible',
@@ -14,10 +18,26 @@ const errorMessages: CameraProps['errorMessages'] = {
 };
 
 export function Camera() {
+	const router = useRouter();
+	const { user } = useUserContext();
   const { cameraRef, takePhoto, flip, image, onReject, onAccept, goBack } =
     useCamera();
 
-  if (image) {
+	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
+		return (
+			<div className={'absolute top-[50%] translate-y-[-50%] w-full'}>
+				<div className={'flex flex-col rounded bg-light-blue px-[30px] py-[24px] w-full mx-auto max-w-[280px]'}>
+					<h2 className={'mb-[15px] text-center text-xl'}>Wait for tomorrow!</h2>
+					<div className={'mb-[30px] flex flex-col gap-y-[2px] text-lg'}>
+						You can make photos only once a day
+					</div>
+					<Button onClick={() => router.push('/photo/gallery')} width={'100%'}>Return</Button>
+				</div>
+			</div>
+		);
+	}
+
+	if (image) {
     return (
       <PhotoReview onReject={onReject} onAccept={onAccept} image={image} />
     );

@@ -1,33 +1,38 @@
 'use client';
 
 import {
-  createContext,
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+	createContext,
+	PropsWithChildren,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+	useState
 } from 'react';
 import { useUserContext } from '../UserContext';
-import { useRouter } from 'next/navigation';
-import { HOME_PAGE } from '@/constants/urls';
 import { userApi } from '@/api/user';
-import { User } from '@/interfaces/User';
 import {
-  getUserLevel,
-  getUserPassiveIncome,
-  getUserProgressProcentage,
-  Level,
-  levelToCoinsPerTap,
-  levelToMaxEnergy,
+	getUserLevel,
+	getUserPassiveIncome,
+	getUserProgressProcentage,
+	Level,
+	levelToCoinsPerTap,
+	levelToMaxEnergy,
+	levelToPhotoPassiveIncome
 } from '@/constants';
-import { photosApi } from '@/api/photos';
-import { FileObject } from '@supabase/storage-js';
-import { applicationApi } from '@/api/application';
-import { Task } from '@/interfaces/Task';
-import { getIsDailyRewardClaimed } from './utils';
+
+import { PersonalizedTask } from '@/interfaces/Task';
+import {
+	getTasks,
+	getUserPhotos,
+	synchronizeTaps,
+	updateDailyRewardCompletedDays,
+	updatePassiveIncome
+} from '@/api/api';
+import { CoreUserFieldsFragment, FullUserTaskFragment } from '@/gql/graphql';
+import { daysSinceDate, hoursSinceDateUTC } from '@/utils/date';
+import { UserPhoto } from '@/interfaces/photo';
 
 interface ApplicationContext {
   energy: number;
@@ -35,28 +40,34 @@ interface ApplicationContext {
   level: number;
   progress: number;
   passiveIncome: number;
-  photos: FileObject[];
-  tasks: Task[];
-  isDailyRewardClaimed: boolean | null;
+  photos: UserPhoto[];
+  tasks: PersonalizedTask[];
+	isAppInitialized: boolean;
   increaseEnergy(): void;
+	updatePhotos(photos: UserPhoto[]): void;
   increaseCoins(amount?: number): void;
   tap(): void;
   clientReady(): Promise<void>;
+	updateUserTaskProgress(userTask: FullUserTaskFragment): void;
+	maxEnergy: number;
 }
 
-const initialUserContext = {
+const initialUserContext: ApplicationContext = {
   energy: 0,
   coins: 0,
   level: 1,
   progress: 0,
   passiveIncome: 0,
   photos: [],
-  tasks: [],
-  isDailyRewardClaimed: null,
+	updatePhotos() {},
+	tasks: [],
+	isAppInitialized: false,
+	maxEnergy: 0,
   increaseEnergy() {},
   increaseCoins() {},
   tap() {},
   async clientReady() {},
+	updateUserTaskProgress() {},
 };
 
 const ApplicationContext =
@@ -65,14 +76,12 @@ const ApplicationContext =
 export function ApplicationContextProvider({
   children,
 }: PropsWithChildren<{}>) {
-  const { authenticate, user } = useUserContext();
+  const { authenticate, updateLocalUser, user } = useUserContext();
 
-  const router = useRouter();
-
-  const isApplicationInitialized = useRef(false);
-  const [energy, setEnergy] = useState<number>(0);
-  const [coins, setCoins] = useState<number>(initialUserContext.coins);
-  const [photos, setPhotos] = useState<FileObject[]>([]);
+	const [isAppInitialized, setIsAppInitialized] = useState(false);
+  const [energy, setEnergy] = useState<number>(user?.energy as number);
+  const [coins, setCoins] = useState<number>(user?.coins as number);
+  const [photos, setPhotos] = useState<UserPhoto[]>([]);
   const level = useMemo<Level>(() => getUserLevel(coins), [coins]);
   const isEnergyFull = useMemo(
     () => energy >= (levelToMaxEnergy.get(level) as number),
@@ -87,21 +96,14 @@ export function ApplicationContextProvider({
     () => getUserProgressProcentage(coins),
     [coins],
   );
-  const passiveIncome = useMemo<number>(
-    () => getUserPassiveIncome(level),
-    [level],
-  );
+	const [passiveIncome, setPassiveIncome] = useState(getUserPassiveIncome(level));
   const coinsPerTap = useMemo(
     () => levelToCoinsPerTap.get(level) as number,
     [level],
   );
   const syncTimeoutId = useRef<NodeJS.Timeout>();
 
-  const [tasks, setTasks] = useState<Task[]>([]);
-  // TODO: update after user claims daily reward
-  const [isDailyRewardClaimed, setIsDailyRewardClaimed] = useState<
-    boolean | null
-  >(null);
+  const [tasks, setTasks] = useState<PersonalizedTask[]>([]);
 
   const decreaseEnergy = useCallback((): number => {
     const newEnergy = energy - 1;
@@ -118,15 +120,15 @@ export function ApplicationContextProvider({
       const nextEnergyValue = prevEnergy + 3;
       return nextEnergyValue > maxEnergy ? maxEnergy : nextEnergyValue;
     });
-  }, [energy]);
+  }, [energy, maxEnergy]);
 
-  const increaseCoins = useCallback((): number => {
-    const newCoins = coins + coinsPerTap;
+  const increaseCoins = useCallback((amount = coinsPerTap): number => {
+    const newCoins = coins + amount;
     setCoins(newCoins);
     return newCoins;
   }, [coinsPerTap, coins]);
 
-  // regenirate energy
+  // regenerate energy
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
     console.log('regenerate for some', isEnergyFull, energy);
@@ -139,51 +141,101 @@ export function ApplicationContextProvider({
     return () => {
       clearInterval(intervalId);
     };
-  }, [isEnergyFull, energy]);
+  }, [isEnergyFull, energy, increaseEnergy]);
 
   const clientReady = useCallback(async () => {
     const userData = await authenticate();
-    await initializeApplication(userData);
+    await (userData);
   }, [authenticate]);
 
-  const initializeApplication = useCallback(
-    async (userData: User | null) => {
-      if (!userData) {
-        // do something
-        return;
-      }
+	useEffect(() => {
+		const initializedApp = async () => {
+			const photos = await getUserPhotos(user.id);
 
-      const photos = await photosApi.getBatch(userData.id);
+			if (user.referrerId) {
+				await userApi.refer(user.id, user.referrerId);
+			}
 
-      if (userData.referrerId) {
-        await userApi.refer(userData.id, userData.referrerId);
-      }
+			let personalizedTasks = await getTasks(user.id);
 
-      const taskss = await applicationApi.getTasks(userData);
-      console.log(taskss, 'taskssetset');
-      setTasks(taskss ?? []);
-      setIsDailyRewardClaimed(
-        getIsDailyRewardClaimed(userData?.last_claimed_daily_reward_at),
-      );
-      setEnergy(userData.energy as number);
-      setCoins(userData.coins as number);
-      setPhotos(photos);
-      isApplicationInitialized.current = true;
-      router.replace(HOME_PAGE);
-    },
-    [router],
-  );
+			const dailyRewardTask = personalizedTasks && personalizedTasks.find((task) => task.id === 'daily_reward');
+			if (!!user.last_daily_reward && daysSinceDate(new Date(user.last_daily_reward)) > 1 && dailyRewardTask?.userTask?.task_id) {
+				// user started daily quest but skipped day(s)
+				await updateDailyRewardCompletedDays(user.id, dailyRewardTask.userTask.id, 0);
+				personalizedTasks = personalizedTasks?.map((task) => {
+					if (task.id === 'daily_reward') {
+						return {
+							...task,
+							userTask: {
+								...task.userTask,
+								days_completed: 0,
+							}
+						} as PersonalizedTask
+					}
+
+					return task;
+				});
+			}
+
+			// User may change their passive income rate during the app (update this value each time then)
+			const hrsSinceLastHourlyReward = hoursSinceDateUTC(new Date(user.last_hourly_reward));
+			const passiveIncomeSinceLast = hrsSinceLastHourlyReward * passiveIncome;
+			console.log(passiveIncomeSinceLast, hoursSinceDateUTC(new Date(user.last_hourly_reward)), user.last_hourly_reward, 'pass inc');
+			const photosPassiveIncome = photos.reduce((acc, curr) => {
+				const passInc = levelToPhotoPassiveIncome.get(curr.level_at_time as Level);
+				return passInc ? acc + passInc : acc;
+			}, 0);
+
+			console.log(photosPassiveIncome, 'pass')
+
+			const newCoins = user.coins + passiveIncomeSinceLast + (hrsSinceLastHourlyReward * photosPassiveIncome);
+			await updatePassiveIncome(user.id, newCoins, new Date().toUTCString());
+
+			setPassiveIncome(getUserPassiveIncome(level) + photosPassiveIncome);
+			setTasks(personalizedTasks ?? []);
+			setEnergy(user.energy as number);
+			setCoins(newCoins);
+			setPhotos(photos);
+			setIsAppInitialized(true);
+		};
+
+		initializedApp().then(() => {
+			window.Telegram.WebApp.ready();
+			!window.Telegram.WebApp.isExpanded && window.Telegram.WebApp.expand();
+		});
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
   const syncStats = useCallback(
     (coins: number, energy: number) => {
       clearTimeout(syncTimeoutId.current);
 
-      syncTimeoutId.current = setTimeout(() => {
-        userApi.sync(user?.id as string, { coins, energy });
+      syncTimeoutId.current = setTimeout(async () => {
+				const data = await synchronizeTaps(user.id, coins, energy);
+				const updatedUser = data.updateusersCollection[0];
+				if (updatedUser) {
+					updateLocalUser(updatedUser as CoreUserFieldsFragment);
+				}
       }, 3000);
     },
-    [user?.id],
+    [updateLocalUser, user.id],
   );
+
+	const updateUserTaskProgress = useCallback((userTask: FullUserTaskFragment) => {
+		const updatedTasks = tasks.map((task) => {
+			if (userTask.task_id === task.id) {
+				return {
+					...task,
+					userTask,
+				}
+			}
+
+			return task;
+		});
+
+		setTasks(updatedTasks);
+	}, [tasks]);
 
   const tap = useCallback(() => {
     if (isEnergyEmpty) {
@@ -194,6 +246,10 @@ export function ApplicationContextProvider({
     syncStats(actualCoins, actualEnergy);
   }, [isEnergyEmpty, syncStats, increaseCoins, decreaseEnergy]);
 
+	const updatePhotos = useCallback((photos: UserPhoto[]) => {
+		setPhotos(photos);
+	}, []);
+
   const value = useMemo<ApplicationContext>(
     () => ({
       energy,
@@ -202,12 +258,15 @@ export function ApplicationContextProvider({
       progress,
       passiveIncome,
       photos,
+			updatePhotos,
       tasks,
-      isDailyRewardClaimed,
       increaseEnergy,
       increaseCoins,
       clientReady,
       tap,
+			isAppInitialized,
+			updateUserTaskProgress,
+			maxEnergy,
     }),
     [
       energy,
@@ -216,12 +275,15 @@ export function ApplicationContextProvider({
       progress,
       tasks,
       passiveIncome,
+			updatePhotos,
       photos,
-      isDailyRewardClaimed,
       tap,
       clientReady,
       increaseCoins,
       increaseEnergy,
+			isAppInitialized,
+			updateUserTaskProgress,
+			maxEnergy
     ],
   );
 

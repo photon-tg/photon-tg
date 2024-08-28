@@ -11,14 +11,18 @@ const config: CodegenConfig = {
       },
     },
   ],
-  documents: 'src/**/*.tsx',
+	documents: ['src/**/*.{ts,tsx}'],
   overwrite: true,
   ignoreNoDocuments: true,
   generates: {
-    'src/graphql/': {
+    'src/gql/': {
       preset: 'client',
       documentTransforms: [addTypenameSelectionDocumentTransform],
+			documents: ['src/graphql/queries/*.ts', 'src/graphql/mutations/*.ts', 'src/graphql/fragments/*.ts'],
       plugins: [],
+			presetConfig: {
+				fragmentMasking: false
+			},
       config: {
         scalars: {
           UUID: 'string',

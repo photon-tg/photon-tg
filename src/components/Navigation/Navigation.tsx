@@ -53,6 +53,7 @@ export function Tab({ name, icon, url, isActive }: TabProps) {
   return (
     <Link
       className={`w-50 flex flex-col items-center gap-y-[6px] rounded px-[20px] py-[7px] ${isActive && 'bg-gradient-to-b from-light-blue from-0% to-deep-blue to-80%'}`}
+			onClick={() => window.Telegram.WebApp.HapticFeedback.impactOccurred('medium')}
       href={url}
     >
       <img className={'w-6'} src={icon} alt={''} />

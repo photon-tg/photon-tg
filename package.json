@@ -12,7 +12,7 @@
     "prettier": "prettier src/",
     "prettier:fix": "prettier src/ --write",
     "graphql:generate": "graphql-codegen",
-    "graphql:watch": "graphql-codegen --watch"
+    "graphql:watch": "graphql-codegen --watch --overwrite"
   },
   "dependencies": {
     "@apollo/client": "^3.11.4",
@@ -32,7 +32,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@0no-co/graphqlsp": "^1.12.13",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/schema-ast": "^4.1.0",
     "@parcel/watcher": "^2.4.1",

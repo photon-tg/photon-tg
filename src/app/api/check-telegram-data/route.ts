@@ -7,6 +7,11 @@ const AuthenticationData = z.object({
 
 type AuthenticationDataBody = z.infer<typeof AuthenticationData>;
 
+export interface CheckTelegramDataRT {
+	user: WebAppUser;
+	referrerId: string | null;
+}
+
 // Add caching or JWT tokens on top
 // TODO: use ready-made lib https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/init-data-node
 export async function POST(request: Request) {
@@ -42,8 +47,11 @@ export async function POST(request: Request) {
     }
 
     const userData = tgAuthClient.parseAuthString();
-    console.log(userData, 'sd');
-    return new Response(JSON.stringify(userData.metadata), {
+
+    return new Response(JSON.stringify({
+			user: userData.user,
+			referrerId: userData.referrerId,
+		} as  CheckTelegramDataRT), {
       status: 200,
     });
   } catch (err) {

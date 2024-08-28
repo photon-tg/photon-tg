@@ -1,13 +1,8 @@
 import * as crypto from 'crypto';
 
 export interface ParseAuthStringResult {
-  dataCheckString: string;
-  hash: string;
-  metadata: {
     user: WebAppUser;
-    authDate: string;
-    queryId: string;
-  };
+		referrerId: string | null;
 }
 
 export interface TelegramAuthInterface {
@@ -50,7 +45,7 @@ export class TelegramAuth implements TelegramAuthInterface {
     return _hash === hash;
   }
 
-  parseAuthString() {
+  parseAuthString(): ParseAuthStringResult {
     // parse string to get params
     const searchParams = new URLSearchParams(this.tgInitData);
 
@@ -60,24 +55,18 @@ export class TelegramAuth implements TelegramAuthInterface {
 
     // sort params
     const restKeys = Array.from(searchParams.entries());
-    restKeys.sort(([aKey, aValue], [bKey, bValue]) => aKey.localeCompare(bKey));
+    restKeys.sort(([aKey, _aValue], [bKey, _bValue]) => aKey.localeCompare(bKey));
 
     // and join it with \n
     const dataCheckString = restKeys.map(([n, v]) => `${n}=${v}`).join('\n');
-
+		console.log(searchParams)
     return {
-      dataCheckString,
-      hash,
-      metadata: {
-        user: JSON.parse(searchParams.get('user') as string) as WebAppUser,
-        referrerId: this.parseStartParams(searchParams.get('start_param')),
-        authDate: searchParams.get('auth_date') as string,
-        queryId: searchParams.get('query_id') as string,
-      },
+			user: JSON.parse(searchParams.get('user') as string) as WebAppUser,
+			referrerId: this.parseStartParams(searchParams.get('start_param')),
     };
   }
 
-  private parseStartParams(startParams: string | null) {
+  private parseStartParams(startParams: string | null): string | null {
     try {
       const [, match] = startParams?.match(/friendId(\d+)/) || [];
       return match;

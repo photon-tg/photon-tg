@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
-import { Photo } from '@/api/photos/parsers';
+import { UserPhoto } from '@/interfaces/photo';
 
 export const PHOTOS_PER_PAGE = 8;
 
-export function useGalleryPhotos(photos: Photo[]) {
+export function useGalleryPhotos(photos: UserPhoto[]) {
   const [page, setPage] = useState(0);
   const totalPages = Math.ceil(photos.length / PHOTOS_PER_PAGE);
   const [selectedImage, setSelectedImage] = useState(photos[0]);

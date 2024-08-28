@@ -44,5 +44,5 @@ next-env.d.ts
 .vscode/
 
 # graphql codegen
-graphql/
+src/gql/
 schema.graphql

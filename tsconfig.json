@@ -17,10 +17,6 @@
       {
         "name": "next"
       },
-      {
-        "name": "@0no-co/graphqlsp",
-        "schema": "schema.graphql"
-      }
     ],
     "paths": {
       "@/*": ["./src/*"]
