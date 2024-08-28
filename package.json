@@ -8,6 +8,7 @@
     "start": "npm run prestart && next start",
     "prestart": "npm run graphql:generate",
     "lint": "next lint",
+		"typecheck": "tsc --noEmit",
     "lint:fix": "next lint --fix",
     "prettier": "prettier src/",
     "prettier:fix": "prettier src/ --write",

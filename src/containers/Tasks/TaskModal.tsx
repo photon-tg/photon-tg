@@ -89,9 +89,9 @@ function DailyRewardModal(props: DailyRewardModalProps) {
 		const newUserData = data.updateusersCollection[0];
 		increaseCoins(rewardCoins);
 		updateUserTaskProgress(
-			(data.updateuser_tasksCollection?.[0] as FullUserTaskFragment) ||
-				((data as ClaimFirstDailyRewardMutation)
-					.insertIntouser_tasksCollection?.[0] as FullUserTaskFragment),
+			((data.updateuser_tasksCollection as any)?.[0] as FullUserTaskFragment) ||
+				(((data as any)
+					.insertIntouser_tasksCollection as any)?.[0] as FullUserTaskFragment),
 		);
 		if (newUserData) {
 			updateLocalUser(newUserData as CoreUserFieldsFragment);

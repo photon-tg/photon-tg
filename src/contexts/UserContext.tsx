@@ -25,15 +25,15 @@ interface UserContext {
 
 const initialUserContext: UserContext = {
 	user: null!,
-	authenticate(): Promise<User> {},
-	updateLocalUser(user: Partial<User>): User {},
+	authenticate(): Promise<User> { return Promise.resolve(null!) },
+	updateLocalUser(user: Partial<User>): User { return null! },
 };
 
 const UserContext = createContext<UserContext>(initialUserContext);
 
 export function UserContextProvider({ children }: PropsWithChildren<{}>) {
 	const { isMobile, isDetected } = useDevice();
-	const [user, setUser] = useState<User>(null);
+	const [user, setUser] = useState<User>(null!);
 
 	const modifyUser = useCallback((userData: Partial<User>): User => {
 		const isDailyRewardClaimed = getIsDailyRewardClaimed(

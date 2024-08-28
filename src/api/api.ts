@@ -207,7 +207,7 @@ export async function postUserPhoto(
 			currentLevel: level,
 			url: `${photosBucketURL}/${userId}/${imageId}`,
 			lastPhoto: new Date().toUTCString(),
-			coins: levelToPhotoReward.get(level as Level) + coins,
+			coins: (levelToPhotoReward.get(level as Level) as number) + coins,
 		},
 	});
 

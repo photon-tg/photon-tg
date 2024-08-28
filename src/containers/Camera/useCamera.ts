@@ -31,7 +31,7 @@ export function useCamera() {
 		if (postedPhotoData) {
 			updatePhotos([
 				...photos,
-				postedPhotoData.insertIntouser_photosCollection?.[0],
+				(postedPhotoData.insertIntouser_photosCollection as any)?.[0],
 			]);
 			updateLocalUser(
 				postedPhotoData.updateusersCollection[0] as CoreUserFieldsFragment,

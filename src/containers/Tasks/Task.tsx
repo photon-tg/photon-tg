@@ -7,7 +7,7 @@ import { PersonalizedTask, RewardByDay, TaskType } from '@/interfaces/Task';
 interface TaskProps extends PersonalizedTask {}
 
 export function Task(props: TaskProps) {
-	const { name, images, id, isCompleted, rewardByDay, reward_coins, type } =
+	const { name, images,  id, userTask, rewardByDay, reward_coins, type } =
 		props;
 
 	const isClickable = true;
@@ -35,7 +35,7 @@ export function Task(props: TaskProps) {
 					/>
 				</div>
 			</div>
-			{isCompleted && (
+			{userTask?.completed && (
 				<div
 					className={
 						'flex h-[45px] w-[45px] items-center justify-center rounded-[50%] bg-gradient-to-r from-text-blue to-[#00E1FF]'
