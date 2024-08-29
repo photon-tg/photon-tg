@@ -29,44 +29,51 @@ export function Friends() {
 	return (
 		<div
 			className={
-				'relative flex h-full flex-col items-center px-[15px] pt-[30px]'
+				'gap-y-[10px] flex h-full flex-col items-center px-[15px] pt-[30px] justify-between'
 			}
 		>
-			<h1 className={'mb-[10px] text-xxl'}>Invite friends!</h1>
-			<p
-				className={'mb-[20px] max-w-[230px] text-center text-sm text-text-blue'}
-			>
-				you and your friend will receive bonuses for participation
-			</p>
-			<div className={'mb-[20px] flex w-full flex-col gap-y-[10px]'}>
-				<CTACard
-					title={'Invite a friend'}
-					description={'for you and your friend'}
-					profit={5000}
-					iconUrl={'/assets/present.png'}
-				/>
-				<CTACard
-					title={'Invite a friend'}
-					description={'for you and your friend'}
-					profit={5000}
-					iconUrl={'/assets/present.png'}
-				/>
-			</div>
-			<div className={'w-full mb-[15px]'}>
-				<span className={'text-start text-md mb-[10px] inline-block'}>Friends list</span>
-				<div className={'flex flex-col gap-y-[10px]'}>
-					{referrals.map((ref) => {
-						return (
-							<div className={'bg-inactive-grey rounded py-[12px] px-[20px] flex flex-col gap-x-[5px]'}>
-								<div>
-									<span className={'text-md'}>{ref.firstName}</span>
-								</div>
-								<div>
-									<span className={'text-md text-[#42C2FF]'}>Lvl {ref.level}</span>
-								</div>
-							</div>
-						);
-					})}
+			<div className={'flex flex-col items-center relative overflow-auto'}>
+				<h1 className={'mb-[10px] text-xxl'}>Invite friends!</h1>
+				<p
+					className={'mb-[20px] max-w-[230px] text-center text-sm text-text-blue'}
+				>
+					you and your friend will receive bonuses for participation
+				</p>
+				<div className={'mb-[20px] flex w-full flex-col gap-y-[10px]'}>
+					<CTACard
+						title={'Invite a friend'}
+						description={'for you and your friend'}
+						profit={5000}
+						iconUrl={'/assets/present.png'}
+					/>
+					<CTACard
+						title={'Invite a friend with Telegram premium'}
+						description={'for you and your friend'}
+						profit={25000}
+						iconUrl={'/assets/icons/presents.png'}
+					/>
+				</div>
+				<div className={'w-full mb-[15px]'}>
+					<span className={'text-start text-md mb-[10px] inline-block'}>Friends list</span>
+					{!referrals?.length && (
+						<div className={'text-inactive-grey text-md font-semibold text-[16px] text-center'}>Empty</div>
+					)}
+					{!!referrals?.length && (
+						<div className={'flex flex-col gap-y-[10px]'}>
+							{referrals.map((ref) => {
+								return (
+									<div className={'bg-inactive-grey rounded py-[12px] px-[20px] flex flex-col gap-x-[5px]'}>
+										<div>
+											<span className={'text-md'}>{ref.firstName}</span>
+										</div>
+										<div>
+											<span className={'text-md text-[#42C2FF]'}>Lvl {ref.level}</span>
+										</div>
+									</div>
+								);
+							})}
+						</div>
+					)}
 				</div>
 			</div>
 			<div
@@ -75,7 +82,7 @@ export function Friends() {
 				}
 			>
 				<Button onClick={onReferealLink} variant={'outline'}>
-					Referal link
+					Copy referral link
 				</Button>
 				<Button onClick={onShare} variant={'filled'}>
 					Invite a friend

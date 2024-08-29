@@ -3,6 +3,7 @@ import Tick from '@/../public/assets/icons/tick.svg';
 import { useModalContext } from '@/contexts/ModalContext';
 import { TaskModal } from './TaskModal';
 import { PersonalizedTask, RewardByDay, TaskType } from '@/interfaces/Task';
+import { formatNumber } from '@/utils/formatter';
 
 interface TaskProps extends PersonalizedTask {}
 
@@ -24,13 +25,14 @@ export function Task(props: TaskProps) {
 			className={`grid w-full grid-cols-[max-content_1fr_max-content] gap-x-[10px] rounded bg-light-blue px-[12px] py-[10px] ${isClickable && 'active:bg-[#183368]'}`}
 		>
 			<div>
-				<img src={images?.url || ''} />
+				<img width={43} src={images?.url || ''} />
 			</div>
 			<div className={'grid gap-y-[5px]'}>
 				<span className={'text-lg font-medium'}>{name}</span>
 				<div className={'flex items-center gap-x-[10px]'}>
 					<Money
 						size={'md'}
+						isCompact
 						amount={getTaskRewardAmount(type, rewardByDay, reward_coins)}
 					/>
 				</div>

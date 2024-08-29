@@ -1,15 +1,19 @@
+'use client';
+
 import Coin from '@/../public/assets/icons/photon.svg';
 import { Button } from '@/components/Button/Button';
+import { useRouter } from 'next/navigation';
 
 export function EmptyMessage() {
+	const router = useRouter();
 	return (
 		<div className={'flex flex-col rounded bg-light-blue px-[30px] py-[24px]'}>
 			<h2 className={'mb-[15px] text-center text-xl'}>Your gallery is empty</h2>
-			<div className={'mb-[30px] flex flex-col gap-y-[2px] text-lg'}>
+			<div className={'mb-[30px] text-lg'}>
 				Make your first photo and earn
 				<Money />
 			</div>
-			<Button width={'100%'}>Some text</Button>
+			<Button onClick={() => router.push('/photo/camera')} width={'100%'}>Take a photo</Button>
 		</div>
 	);
 }
@@ -17,10 +21,12 @@ export function EmptyMessage() {
 function Money() {
 	return (
 		<div
-			className={'flex items-center gap-x-[5px] font-semibold text-sky-blue'}
+			className={'inline-block'}
 		>
-			<Coin />
-			+5000
+			<div className={'flex items-center gap-x-[5px] font-semibold text-sky-blue translate-y-[4px] translate-x-[7px]'}>
+				<Coin />
+				+5000
+			</div>
 		</div>
 	);
 }
