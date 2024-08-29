@@ -3,8 +3,10 @@
 import { Button } from '@/components/Button/Button';
 import { CTACard } from '@/components/CTACard/CTACard';
 import { appURL } from '@/constants/urls';
+import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 
 export function Friends() {
+	const { referrals } = useApplicationContext();
 	const onReferealLink = () => {
 		navigator.clipboard.writeText(appURL);
 	};
@@ -27,7 +29,7 @@ export function Friends() {
 	return (
 		<div
 			className={
-				'relative flex h-full flex-col items-center px-[15px] py-[50px]'
+				'relative flex h-full flex-col items-center px-[15px] pt-[30px]'
 			}
 		>
 			<h1 className={'mb-[10px] text-xxl'}>Invite friends!</h1>
@@ -50,9 +52,26 @@ export function Friends() {
 					iconUrl={'/assets/present.png'}
 				/>
 			</div>
+			<div className={'w-full mb-[15px]'}>
+				<span className={'text-start text-md mb-[10px] inline-block'}>Friends list</span>
+				<div className={'flex flex-col gap-y-[10px]'}>
+					{referrals.map((ref) => {
+						return (
+							<div className={'bg-inactive-grey rounded py-[12px] px-[20px] flex flex-col gap-x-[5px]'}>
+								<div>
+									<span className={'text-md'}>{ref.firstName}</span>
+								</div>
+								<div>
+									<span className={'text-md text-[#42C2FF]'}>Lvl {ref.level}</span>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
 			<div
 				className={
-					'absolute bottom-0 left-0 grid w-full gap-y-[10px] px-[15px] pb-[20px]'
+					'justify-self-end grid w-full gap-y-[10px] pb-[20px]'
 				}
 			>
 				<Button onClick={onReferealLink} variant={'outline'}>

@@ -1,5 +1,5 @@
 import apolloClient from '@/api/graphql';
-import { GET_TASKS, GET_USER } from '@/graphql/queries';
+import { GET_REFERRALS, GET_TASKS, GET_USER } from '@/graphql/queries';
 
 import { AddUserPhotoMutation, CoreUserFieldsFragment } from '@/gql/graphql';
 import {
@@ -22,8 +22,10 @@ import { UserPhoto } from '@/interfaces/photo';
 import { photosBucketURL, supabase } from './supabase';
 import { decode } from 'base64-arraybuffer';
 import { nanoid } from 'nanoid';
-import { ADD_USER_PHOTO } from '@/graphql/mutations';
+import { ADD_USER_PHOTO, REFER, REFER_FIRST } from '@/graphql/mutations';
 import { Level, levelToPhotoReward } from '@/constants';
+import { axiosInstance } from '@/api/axios';
+import { Referral } from '@/contexts/ApplicationContext/ApplicationContext';
 
 export async function getUser(
 	userId: string,
@@ -216,4 +218,54 @@ export async function postUserPhoto(
 	}
 
 	return parseGraphQLMutationResponse(data);
+}
+
+export async function refer(referrerTgId: string, referrals: string[]) {
+	const { errors, data } = await apolloClient.mutate({
+		mutation: referrals.length > 1 ? REFER : REFER_FIRST,
+		fetchPolicy: 'no-cache',
+		variables: {
+			referredTgIds: referrals,
+			referrerTgId,
+		}
+	});
+
+	if (errors?.length || !data) {
+		throw new Error();
+	}
+
+	return 'success';
+}
+
+export async function getRawReferrals(userTgId: string) {
+	const { error, data} = await apolloClient.query({
+		query: GET_REFERRALS,
+		fetchPolicy: 'no-cache',
+		variables: {
+			userTgId,
+		}
+	});
+
+	if (error || !data) {
+		throw new Error();
+	}
+
+	const referrals = data.referralsCollection?.edges?.[0]?.node?.referrals;
+	if (!referrals) {
+		return [];
+	}
+
+	return referrals.filter(a => a);
+}
+
+export async function getReferrals(userTgId: string ): Promise<any[]> {
+	const referrals = await getRawReferrals(userTgId);
+
+	if (!referrals) {
+		return [];
+	}
+
+	const { data: referralsData } = await axiosInstance.get(`/referrals?referrals=${referrals}`);
+
+	return referralsData as Referral[];
 }

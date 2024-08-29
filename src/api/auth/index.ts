@@ -33,7 +33,16 @@ export const authApi = {
 			referrerId,
 		};
 
-		const signUpResult = await supabase.auth.signUp(credentials);
+		const signUpResult = await supabase.auth.signUp({
+			...credentials,
+			options: {
+				data: {
+					first_name: user.first_name,
+					last_name: user.last_name,
+					telegram_id: user.id,
+				}
+			}
+		});
 
 		if (!signUpResult.error && !!signUpResult.data.user) {
 			return {

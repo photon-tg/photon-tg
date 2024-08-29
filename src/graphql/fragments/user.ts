@@ -7,8 +7,10 @@ export const CORE_USER_FIELDS = graphql(`
 		energy
 		last_daily_reward
 		last_hourly_reward
-		referrals
 		last_photo
 		created_at
+		first_name
+		last_name
+		telegram_id
 	}
 `);
