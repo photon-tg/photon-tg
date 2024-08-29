@@ -62,7 +62,7 @@ export function Friends() {
 						<div className={'flex flex-col gap-y-[10px]'}>
 							{referrals.map((ref) => {
 								return (
-									<div className={'bg-inactive-grey rounded py-[12px] px-[20px] flex flex-col gap-x-[5px]'}>
+									<div key={ref.firstName} className={'bg-inactive-grey rounded py-[12px] px-[20px] flex flex-col gap-x-[5px]'}>
 										<div>
 											<span className={'text-md'}>{ref.firstName}</span>
 										</div>
