@@ -148,7 +148,7 @@ export function ApplicationContextProvider({
 	// regenerate energy
 	useEffect(() => {
 		let intervalId: NodeJS.Timeout;
-		console.log('regenerate for some', isEnergyFull, energy);
+
 		if (isEnergyFull) {
 			return;
 		}
@@ -212,19 +212,14 @@ export function ApplicationContextProvider({
 				new Date(user.last_hourly_reward),
 			);
 			const passiveIncomeSinceLast = hrsSinceLastHourlyReward * passiveIncome;
-			console.log(
-				passiveIncomeSinceLast,
-				hoursSinceDateUTC(new Date(user.last_hourly_reward)),
-				user.last_hourly_reward,
-				'pass inc',
-			);
+
 			const photosPassiveIncome = photos.reduce((acc, curr) => {
 				const passInc = levelToPhotoPassiveIncome.get(
 					curr.level_at_time as Level,
 				);
 				return passInc ? acc + passInc : acc;
 			}, 0);
-			console.log(photosPassiveIncome, 'ppi')
+
 			const newCoins =
 				user.coins +
 				passiveIncomeSinceLast +

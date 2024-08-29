@@ -38,7 +38,6 @@ export async function GET(request: Request) {
 			status: 500,
 		});
 	}
-	console.log(error, data);
 
 	return new Response(JSON.stringify(data), {
 		status: 200,

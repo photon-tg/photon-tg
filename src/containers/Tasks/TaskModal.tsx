@@ -98,7 +98,6 @@ function DailyRewardModal(props: DailyRewardModalProps) {
 		}
 	};
 
-	console.log(isDailyRewardClaimed, daysCompleted, user);
 	return (
 		<div className={'flex flex-col gap-y-[10px]'}>
 			<div
@@ -110,7 +109,7 @@ function DailyRewardModal(props: DailyRewardModalProps) {
 					const isAvailable = day === completedDay && !isDailyRewardClaimed;
 					const isNotYetAvailable =
 						day === completedDay && isDailyRewardClaimed;
-					console.log(completedDay, 'comp');
+
 					const isClaimedPrevDay = day <= completedDay;
 					return (
 						<div

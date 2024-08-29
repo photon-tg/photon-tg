@@ -61,7 +61,7 @@ export class TelegramAuth implements TelegramAuthInterface {
 
 		// and join it with \n
 		const dataCheckString = restKeys.map(([n, v]) => `${n}=${v}`).join('\n');
-		console.log(searchParams);
+
 		return {
 			user: JSON.parse(searchParams.get('user') as string) as WebAppUser,
 			referrerId: this.parseStartParams(searchParams.get('start_param')),

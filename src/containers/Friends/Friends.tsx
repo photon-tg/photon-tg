@@ -22,7 +22,6 @@ export function Friends() {
 
 		if (canShare) {
 			const shareResult = navigator.share(shareData);
-			console.log(shareResult);
 		}
 	};
 
