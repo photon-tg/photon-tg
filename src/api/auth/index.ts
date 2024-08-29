@@ -40,6 +40,7 @@ export const authApi = {
 					first_name: user.first_name,
 					last_name: user.last_name,
 					telegram_id: user.id,
+					is_premium: user.is_premium ?? false,
 				}
 			}
 		});
