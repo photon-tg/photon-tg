@@ -20,8 +20,7 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
 						'h-full translate-y-[5px] overflow-auto rounded-tl rounded-tr bg-dark-blue'
 					}
 				>
-					<LoadingScreen isMobile isLoading/>
-					{/*{children}*/}
+					{children}
 				</div>
 				<Navigation />
 			</div>
