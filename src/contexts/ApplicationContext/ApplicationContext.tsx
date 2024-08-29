@@ -11,7 +11,6 @@ import {
 	useState,
 } from 'react';
 import { useUserContext } from '../UserContext';
-import { userApi } from '@/api/user';
 import {
 	getUserLevel,
 	getUserPassiveIncome,
@@ -225,7 +224,7 @@ export function ApplicationContextProvider({
 				);
 				return passInc ? acc + passInc : acc;
 			}, 0);
-
+			console.log(photosPassiveIncome, 'ppi')
 			const newCoins =
 				user.coins +
 				passiveIncomeSinceLast +

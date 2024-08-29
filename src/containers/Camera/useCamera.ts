@@ -5,13 +5,14 @@ import { useUserContext } from '@/contexts/UserContext';
 import { postUserPhoto } from '@/api/api';
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 import { CoreUserFieldsFragment } from '@/gql/graphql';
+import { Level, levelToPhotoReward } from '@/constants';
 
 export function useCamera() {
 	const cameraRef = useRef<CameraType | null>(null);
 	const [image, setImage] = useState<string | null>(null);
 	const router = useRouter();
 	const { user, updateLocalUser } = useUserContext();
-	const { level, coins, photos, updatePhotos } = useApplicationContext();
+	const { level, coins, increaseCoins, photos, updatePhotos } = useApplicationContext();
 
 	const takePhoto = useCallback(() => {
 		const base64Image = cameraRef.current?.takePhoto('base64url') as string;
@@ -33,6 +34,7 @@ export function useCamera() {
 				...photos,
 				(postedPhotoData.insertIntouser_photosCollection as any)?.[0],
 			]);
+			increaseCoins((levelToPhotoReward.get(level as Level) as number) + coins);
 			updateLocalUser(
 				postedPhotoData.updateusersCollection[0] as CoreUserFieldsFragment,
 			);
