@@ -167,6 +167,7 @@ export function ApplicationContextProvider({
 
 	useEffect(() => {
 		const initializedApp = async () => {
+			window.Telegram.WebApp.setHeaderColor('#00298d')
 			const photos = await getUserPhotos(user.id);
 
 			if (user.referrerId) {

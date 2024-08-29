@@ -23,7 +23,7 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
 	return (
 		<div
 			className={cn(
-				'w-[${width}] rounded p-[4px]',
+				'w-[${width}] rounded p-[2px]',
 				variant === 'outline' &&
 					!disabled &&
 					'bg-gradient-to-tr from-light-blue from-0% to-sky-blue to-100%',

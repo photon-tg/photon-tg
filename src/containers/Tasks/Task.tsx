@@ -4,6 +4,7 @@ import { useModalContext } from '@/contexts/ModalContext';
 import { TaskModal } from './TaskModal';
 import { PersonalizedTask, RewardByDay, TaskType } from '@/interfaces/Task';
 import { formatNumber } from '@/utils/formatter';
+import { useUserContext } from '@/contexts/UserContext';
 
 interface TaskProps extends PersonalizedTask {}
 
@@ -14,6 +15,7 @@ export function Task(props: TaskProps) {
 	const isClickable = true;
 
 	const { openModal } = useModalContext();
+	const { user } = useUserContext();
 
 	const onClick = () => {
 		openModal(<TaskModal taskId={id} />);
@@ -37,7 +39,7 @@ export function Task(props: TaskProps) {
 					/>
 				</div>
 			</div>
-			{userTask?.completed && (
+			{userTask?.completed || (type === 'daily_reward' && user.isDailyRewardClaimed) && (
 				<div
 					className={
 						'flex h-[45px] w-[45px] items-center justify-center rounded-[50%] bg-gradient-to-r from-text-blue to-[#00E1FF]'
