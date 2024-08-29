@@ -1,5 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react';
 import { Navigation } from '@/components/Navigation/Navigation';
+import { LoadingScreen } from '@/components/LoadingScreen';
 
 export interface LayoutProps {
 	externalChildren?: ReactNode | undefined;
@@ -19,7 +20,8 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
 						'h-full translate-y-[5px] overflow-auto rounded-tl rounded-tr bg-dark-blue'
 					}
 				>
-					{children}
+					<LoadingScreen isMobile isLoading/>
+					{/*{children}*/}
 				</div>
 				<Navigation />
 			</div>

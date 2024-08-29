@@ -8,6 +8,7 @@ import { useApplicationContext } from '@/contexts/ApplicationContext/Application
 export function Friends() {
 	const { referrals } = useApplicationContext();
 	const onReferealLink = () => {
+		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
 		navigator.clipboard.writeText(appURL);
 	};
 
