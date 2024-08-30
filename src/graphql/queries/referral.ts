@@ -1,11 +1,13 @@
 import { graphql } from '@/gql';
 
-export const GET_REFERRALS = graphql(`
-	query GetReferrals($userTgId: String!) {
-		referralsCollection(filter: {id: { eq: $userTgId }}) {
+export const GET_REFERRED = graphql(`
+	query GetReferred($userTgId: String!) {
+		user_referralsCollection(filter: {referral_id: { eq: $userTgId }}) {
 			edges {
 				node {
-					...Referral
+					id
+					referrer_id
+					referral_id
 				}
 			}
 		}

@@ -23,14 +23,16 @@ import {
 
 import { PersonalizedTask } from '@/interfaces/Task';
 import {
-	getRawReferrals,
+	claimReferral,
+	getReferral,
 	getReferrals,
+	getReferrerInfo,
 	getTasks,
 	getUserPhotos,
-	refer,
+	referUser,
 	synchronizeTaps,
 	updateDailyRewardCompletedDays,
-	updatePassiveIncome,
+	updatePassiveIncome
 } from '@/api/api';
 import { CoreUserFieldsFragment, FullUserTaskFragment } from '@/gql/graphql';
 import { daysSinceDate, hoursSinceDateUTC } from '@/utils/date';
@@ -89,6 +91,7 @@ export function ApplicationContextProvider({
 }: PropsWithChildren<{}>) {
 	const { authenticate, updateLocalUser, user } = useUserContext();
 
+	const isInitializing = useRef(false);
 	const [isAppInitialized, setIsAppInitialized] = useState(false);
 	const [energy, setEnergy] = useState<number>(user?.energy as number);
 	const [coins, setCoins] = useState<number>(user?.coins as number);
@@ -166,14 +169,23 @@ export function ApplicationContextProvider({
 	}, [authenticate]);
 
 	useEffect(() => {
-		const initializedApp = async () => {
-			window.Telegram.WebApp.setHeaderColor('#00298d')
-			const photos = await getUserPhotos(user.id);
+		const initializeApp = async () => {
+			isInitializing.current = true;
 
-			if (user.referrerId) {
-				const referrerPrevReferrals = await getRawReferrals(user.referrerId as string);
-				if (!referrerPrevReferrals.includes(user.referrerId)) {
-					refer(user.telegram_id as string, [...(referrerPrevReferrals as string[]), user.telegram_id as string]);
+			window.Telegram.WebApp.setHeaderColor('#00298d');
+
+			const photos = await getUserPhotos(user.id);
+			let coins = user.coins;
+
+			// user.telegram_id !== user.referrerId
+			if (user.referrerId && true) {
+				const userReferral = await getReferral(user.telegram_id as string);
+				if (!userReferral) {
+					const refUser = await getReferrerInfo(user.referrerId);
+					const isPrem = refUser?.[0].is_premium || false;
+					coins = coins + (isPrem ? 25000 : 5000);
+					// Not yet referred previously
+					referUser(user.referrerId, user.telegram_id as string, user.id, coins);
 				}
 			}
 
@@ -221,13 +233,23 @@ export function ApplicationContextProvider({
 				return passInc ? acc + passInc : acc;
 			}, 0);
 
-			const newCoins =
-				user.coins +
+			coins =
+				coins +
 				passiveIncomeSinceLast +
 				hrsSinceLastHourlyReward * photosPassiveIncome;
-			await updatePassiveIncome(user.id, newCoins, new Date().toUTCString());
+			await updatePassiveIncome(user.id, coins, new Date().toUTCString());
 
 			const referrals = await getReferrals(user.telegram_id as string);
+
+			const referralsCoins = referrals.reduce((acc, curr) => {
+				if (!curr?.is_claimed_by_referrer) {
+					acc = acc + (curr.is_premium ? 25000 : 5000);
+				}
+				return acc;
+			}, 0);
+			coins += referralsCoins;
+
+			await claimReferral(user.id, user.telegram_id as string, coins);
 			setReferrals(referrals.map((ref) => ({
 				firstName: ref.first_name,
 				lastName: ref.last_name,
@@ -238,12 +260,16 @@ export function ApplicationContextProvider({
 			setPassiveIncome(getUserPassiveIncome(level) + photosPassiveIncome);
 			setTasks(personalizedTasks ?? []);
 			setEnergy(user.energy as number);
-			setCoins(newCoins);
+			setCoins(coins);
 			setPhotos(photos);
 			setIsAppInitialized(true);
+			isInitializing.current = false;
 		};
+		if (isInitializing.current) {
+			return;
+		}
 
-		initializedApp().then(() => {
+		initializeApp().then(() => {
 			window.Telegram.WebApp.disableVerticalSwipes();
 			window.Telegram.WebApp.ready();
 			!window.Telegram.WebApp.isExpanded && window.Telegram.WebApp.expand();

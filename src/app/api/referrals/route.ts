@@ -9,16 +9,14 @@ const supabase = createClient(
 export async function GET(request: Request) {
 	const url = new URL(request.url);
 	const searchParams = url.searchParams;
-	const referralsIds = searchParams.get('referrals');
+	const referralId = searchParams.get('referral');
+	const referrerId = searchParams.get('referrer');
 
-	if (!referralsIds) {
+	if (!referralId && !referrerId) {
 		return new Response('bad request', {
 			status: 400,
 		});
 	}
-
-	const telegramIds: string[] = referralsIds.split(',');
-	const emails = telegramIds.map((id) => `${id}@photon.com`);
 
 	const { error: signInError } = await supabase.auth.signInWithPassword({
 		email: 'edge-functions@photon.com',
@@ -31,15 +29,37 @@ export async function GET(request: Request) {
 		});
 	}
 
-	const { error, data } = await supabase.from('users').select('coins,first_name,last_name').in('email', emails);
+	if (referrerId) {
+		const { error, data } = await supabase.from('users').select('coins,first_name,last_name,is_premium').eq('telegram_id', referrerId);
 
-	if (error) {
-		return new Response('Error', {
-			status: 500,
+		if (error) {
+			return new Response('Error', {
+				status: 500,
+			});
+		}
+
+		return new Response(JSON.stringify(data), {
+			status: 200,
 		});
 	}
 
-	return new Response(JSON.stringify(data), {
-		status: 200,
-	});
+	if (referralId) {
+		const { data: dataR, error: eb } = await supabase.from('user_referrals').select('referral_id,is_claimed_by_referrer').eq('referrer_id', referralId);
+
+		const usersIds = dataR?.map((ref) => ref?.referral_id) ?? [];
+		const {
+			data
+		} = await supabase.from('users').select('coins,first_name,last_name,is_premium').in('telegram_id', usersIds);
+
+		const mod =  data?.map((a) => {
+			return {
+				...a,
+				is_claimed_by_referrer: dataR?.find((b) => b.referralId === a.telegram_id)?.is_claimed_by_referrer ?? false,
+			}
+		});
+
+		return new Response(JSON.stringify(mod), {
+			status: 200,
+		});
+	}
 }

@@ -1,23 +1,36 @@
 import { graphql } from '@/gql';
 
-export const REFER_FIRST = graphql(`
-	mutation ReferFirst($referredTgIds: [String]!, $referrerTgId: String!) {
-		insertIntoreferralsCollection(objects: [{
-			id: $referrerTgId
-			referrals: $referredTgIds,
+export const REFER_USER = graphql(`
+	mutation ReferUser($referrerTgId: String!, $referralTgId: String!, $coins: Int!, $userId: UUID!) {
+		insertIntouser_referralsCollection(objects: [{
+			referral_id: $referralTgId,
+			referrer_id: $referrerTgId,
+			is_claimed_by_referrer: false,
 		}]) {
 			records {
-				created_at
+				id
+			}
+		}
+
+		updateusersCollection(atMost: 1, set: { coins: $coins }, filter: { id: { eq: $userId } }) {
+			records {
+				...CoreUserFields
 			}
 		}
 	}
 `)
 
-export const REFER = graphql(`
-	mutation Refer($referredTgIds: [String]!, $referrerTgId: String!) {
-		updatereferralsCollection(atMost: 1, set: { referrals: $referredTgIds }, filter: { id: { eq: $referrerTgId } }) {
+export const CLAIM_REFERRAL = graphql(`
+	mutation ClaimReferral($userId: UUID!, $telegramId: String!, $coins: Int!) {
+		updateuser_referralsCollection(set: { is_claimed_by_referrer: true }, filter: {referrer_id: {eq: $telegramId}}) {
 			records {
-				created_at
+				is_claimed_by_referral
+			}
+		}
+
+		updateusersCollection(atMost: 1, set: {coins: $coins}, filter: {id: {eq: $userId}}) {
+			records {
+				...CoreUserFields
 			}
 		}
 	}
