@@ -4,19 +4,21 @@ import { Button } from '@/components/Button/Button';
 import { CTACard } from '@/components/CTACard/CTACard';
 import { appURL } from '@/constants/urls';
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { useUserContext } from '@/contexts/UserContext';
 
 export function Friends() {
 	const { referrals } = useApplicationContext();
+	const { user } = useUserContext();
 	const onReferealLink = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-		navigator.clipboard.writeText(appURL);
+		navigator.clipboard.writeText(`${appURL}?startapp=friendId${user.telegram_id}`);
 	};
 
 	const onShare = async () => {
 		const shareData = {
 			title: 'Photon',
 			text: 'Join Photon!',
-			url: appURL,
+			url: `${appURL}?startapp=friendId${user.telegram_id}`,
 		};
 
 		const canShare = navigator.canShare(shareData);

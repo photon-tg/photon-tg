@@ -60,6 +60,7 @@ interface ApplicationContext {
 	increaseCoins(amount?: number): void;
 	tap(): void;
 	clientReady(): Promise<void>;
+	updatePassiveIncomeLocal(type: 'photo'): void;
 	updateUserTaskProgress(userTask: FullUserTaskFragment): void;
 	maxEnergy: number;
 }
@@ -70,6 +71,7 @@ const initialUserContext: ApplicationContext = {
 	level: 1,
 	progress: 0,
 	passiveIncome: 0,
+	updatePassiveIncomeLocal: () => {},
 	photos: [],
 	referrals: [],
 	updatePhotos() {},
@@ -324,11 +326,18 @@ export function ApplicationContextProvider({
 		setPhotos(photos);
 	}, []);
 
+	const updatePassiveIncomeLocal = useCallback((type) => {
+		if (type === 'photo') {
+			setPassiveIncome(passiveIncome + (levelToPhotoPassiveIncome.get(level)));
+		}
+	}, [passiveIncome]);
+
 	const value = useMemo<ApplicationContext>(
 		() => ({
 			energy,
 			coins,
 			referrals,
+			updatePassiveIncomeLocal,
 			level,
 			progress,
 			passiveIncome,
@@ -347,6 +356,7 @@ export function ApplicationContextProvider({
 			energy,
 			coins,
 			level,
+			updatePassiveIncomeLocal,
 			progress,
 			tasks,
 			passiveIncome,

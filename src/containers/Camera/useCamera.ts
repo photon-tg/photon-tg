@@ -12,7 +12,7 @@ export function useCamera() {
 	const [image, setImage] = useState<string | null>(null);
 	const router = useRouter();
 	const { user, updateLocalUser } = useUserContext();
-	const { level, coins, increaseCoins, photos, updatePhotos } = useApplicationContext();
+	const { level, coins, increaseCoins, photos, updatePhotos, updatePassiveIncomeLocal } = useApplicationContext();
 
 	const takePhoto = useCallback(() => {
 		const base64Image = cameraRef.current?.takePhoto('base64url') as string;
@@ -38,6 +38,7 @@ export function useCamera() {
 			updateLocalUser(
 				postedPhotoData.updateusersCollection[0] as CoreUserFieldsFragment,
 			);
+			updatePassiveIncomeLocal('photo');
 		}
 
 		router.push('/photo/gallery');

@@ -6,6 +6,7 @@ export const REFER_USER = graphql(`
 			referral_id: $referralTgId,
 			referrer_id: $referrerTgId,
 			is_claimed_by_referrer: false,
+			user_id: $userId,
 		}]) {
 			records {
 				id

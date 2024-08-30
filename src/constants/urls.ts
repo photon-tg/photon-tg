@@ -1,3 +1,3 @@
 export const HOME_PAGE = '/photo/gallery';
 
-export const appURL = 't.me/photon_Test1_Bot/photon_test_app/';
+export const appURL = process.env.NEXT_PUBLIC_BOT_URL!;
