@@ -326,9 +326,9 @@ export function ApplicationContextProvider({
 		setPhotos(photos);
 	}, []);
 
-	const updatePassiveIncomeLocal = useCallback((type) => {
+	const updatePassiveIncomeLocal = useCallback((type: 'photo') => {
 		if (type === 'photo') {
-			setPassiveIncome(passiveIncome + (levelToPhotoPassiveIncome.get(level)));
+			setPassiveIncome(passiveIncome + (levelToPhotoPassiveIncome.get(level) as number));
 		}
 	}, [passiveIncome]);
 
