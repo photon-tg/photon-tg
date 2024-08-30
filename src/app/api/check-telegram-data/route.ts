@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 		if (!isDataValid) {
 			return new Response(
 				JSON.stringify({
-					message: 'You are not allowed to use this app outside of telegram',
+					message: 'Validation failure',
 				}),
 				{ status: 403 },
 			);
