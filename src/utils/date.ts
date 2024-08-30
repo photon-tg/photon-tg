@@ -71,3 +71,24 @@ export function formatDate(date: Date) {
 
 	return formattedDate;
 }
+
+export function isNextDay(inputDate: Date): boolean {
+	// Get the current date
+	const now = new Date();
+
+	// Check if the current date is exactly one day after the input date (ignoring time)
+	const inputDay = inputDate.getUTCDate();
+	const inputMonth = inputDate.getUTCMonth();
+	const inputYear = inputDate.getUTCFullYear();
+
+	const currentDay = now.getUTCDate();
+	const currentMonth = now.getUTCMonth();
+	const currentYear = now.getUTCFullYear();
+
+	// If the year and month are the same, check if it's the next day
+	if (inputYear === currentYear && inputMonth === currentMonth) {
+		return currentDay === inputDay + 1;
+	}
+
+	return false;
+}

@@ -13,7 +13,7 @@ import {
 import { authApi } from '@/api/auth';
 import { User } from '@/interfaces/User';
 import { getUser } from '@/api/api';
-import { daysSinceDate } from '@/utils/date';
+import { isNextDay } from '@/utils/date';
 import { useDevice } from '@/hooks/useDevice';
 import { LoadingScreen } from '@/components/LoadingScreen';
 
@@ -106,5 +106,5 @@ function getIsDailyRewardClaimed(lastDailyReward: string | undefined | null) {
 		return false;
 	}
 
-	return daysSinceDate(new Date(lastDailyReward)) === 0;
+	return !isNextDay(new Date(lastDailyReward));
 }
