@@ -10,13 +10,7 @@ import { isDateTodayUTC } from '@/utils/date';
 import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
 import Webcam from 'react-webcam';
-
-const errorMessages: CameraProps['errorMessages'] = {
-	noCameraAccessible: 'No camera accessible',
-	permissionDenied: 'Permission denied',
-	switchCamera: 'Switch camera',
-	canvas: 'Problem occurred',
-};
+import { Layout } from '@/components/Layout/Layout';
 
 export function Camera() {
 	const router = useRouter();
@@ -26,23 +20,25 @@ export function Camera() {
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
-			<div className={'absolute top-[50%] w-full translate-y-[-50%]'}>
-				<div
-					className={
-						'mx-auto flex w-full max-w-[280px] flex-col rounded bg-light-blue px-[30px] py-[24px]'
-					}
-				>
-					<h2 className={'mb-[15px] text-center text-xl'}>
-						Wait for tomorrow!
-					</h2>
-					<div className={'mb-[30px] flex flex-col gap-y-[2px] text-lg'}>
-						You can make photos only once a day
+			<Layout>
+				<div className={'absolute top-[50%] w-full translate-y-[-50%]'}>
+					<div
+						className={
+							'mx-auto flex w-full max-w-[280px] flex-col rounded bg-light-blue px-[30px] py-[24px]'
+						}
+					>
+						<h2 className={'mb-[15px] text-center text-xl'}>
+							Wait for tomorrow!
+						</h2>
+						<div className={'mb-[30px] flex flex-col gap-y-[2px] text-lg'}>
+							You can make photos only once a day
+						</div>
+						<Button onClick={() => router.push('/photo/gallery')} width={'100%'}>
+							Return
+						</Button>
 					</div>
-					<Button onClick={() => router.push('/photo/gallery')} width={'100%'}>
-						Return
-					</Button>
 				</div>
-			</div>
+			</Layout>
 		);
 	}
 
@@ -60,11 +56,6 @@ export function Camera() {
 			>
 				<ArrowIcon />
 			</button>
-			{/*<Camera*/}
-			{/*	facingMode={'user'}*/}
-			{/*	ref={cameraRef}*/}
-			{/*	errorMessages={errorMessages}*/}
-			{/*/>*/}
 			<Webcam
 				width={'100%'}
 				height={'100%'}

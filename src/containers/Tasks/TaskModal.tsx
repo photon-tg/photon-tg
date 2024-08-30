@@ -5,7 +5,6 @@ import { cn } from '@/utils/cn';
 import { RewardByDay } from '@/interfaces/Task';
 import { claimDailyReward } from '@/api/api';
 import {
-	ClaimFirstDailyRewardMutation,
 	CoreUserFieldsFragment,
 	FullUserTaskFragment,
 } from '@/gql/graphql';
