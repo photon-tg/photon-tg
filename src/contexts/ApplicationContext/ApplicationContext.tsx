@@ -183,11 +183,11 @@ export function ApplicationContextProvider({
 				const userReferral = await getReferral(user.telegram_id as string);
 				if (!userReferral) {
 					const refUser = await getReferrerInfo(user.referrerId);
-					if (refUser?.[0]) {
+					if (refUser?.[0]?.id) {
 						const isPrem = refUser?.[0].is_premium || false;
 						coins = coins + (isPrem ? 20000 : 5000);
 						// Not yet referred previously
-						referUser(user.referrerId, user.telegram_id as string, user.id, coins);
+						referUser(user.referrerId, user.telegram_id as string, user.id, refUser?.[0]?.id, coins);
 					}
 				}
 			}

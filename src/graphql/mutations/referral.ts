@@ -1,19 +1,19 @@
 import { graphql } from '@/gql';
 
 export const REFER_USER = graphql(`
-	mutation ReferUser($referrerTgId: String!, $referralTgId: String!, $coins: Int!, $userId: UUID!) {
+	mutation ReferUser($referrerTgId: String!, $referralTgId: String!, $coins: Int!, $referredUserId: UUID!, $referrerUserId: UUID!) {
 		insertIntouser_referralsCollection(objects: [{
 			referral_id: $referralTgId,
 			referrer_id: $referrerTgId,
 			is_claimed_by_referrer: false,
-			user_id: $userId,
+			user_id: $referrerUserId,
 		}]) {
 			records {
 				id
 			}
 		}
 
-		updateusersCollection(atMost: 1, set: { coins: $coins }, filter: { id: { eq: $userId } }) {
+		updateusersCollection(atMost: 1, set: { coins: $coins }, filter: { id: { eq: $referredUserId } }) {
 			records {
 				...CoreUserFields
 			}

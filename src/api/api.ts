@@ -248,7 +248,7 @@ export async function getReferrals(tgId: string): Promise<any[]> {
 	return referralsData as Referral[];
 }
 
-export async function referUser(referrerTgId: string, referralTgId: string, userId: string, coins: number) {
+export async function referUser(referrerTgId: string, referralTgId: string, referredUserId: string, referrerUserId: string, coins: number) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: REFER_USER,
 		fetchPolicy: 'no-cache',
@@ -256,7 +256,8 @@ export async function referUser(referrerTgId: string, referralTgId: string, user
 			referrerTgId,
 			referralTgId,
 			coins,
-			userId,
+			referredUserId,
+			referrerUserId
 		}
 	});
 

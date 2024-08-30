@@ -30,7 +30,7 @@ export async function GET(request: Request) {
 	}
 
 	if (referrerId) {
-		const { error, data } = await supabase.from('users').select('coins,first_name,last_name,is_premium').eq('telegram_id', referrerId);
+		const { error, data } = await supabase.from('users').select('coins,first_name,last_name,is_premium,id').eq('telegram_id', referrerId);
 
 		if (error) {
 			return new Response('Error', {
