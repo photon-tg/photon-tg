@@ -75,6 +75,7 @@ export function Camera() {
 				screenshotFormat={'image/jpeg'}
 				style={{objectFit: 'cover', height: '100%'}}
 				screenshotQuality={1}
+				mirrored={true}
 				ref={cameraRef}
 			/>
 			<div
