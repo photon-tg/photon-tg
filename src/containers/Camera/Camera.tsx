@@ -70,10 +70,10 @@ export function Camera() {
 				height={'100%'}
 				videoConstraints={{
 					facingMode,
-					aspectRatio: 9/16
+					aspectRatio: 4/3
 				}}
 				screenshotFormat={'image/jpeg'}
-				style={{objectFit: 'cover', height: '100%'}}
+				// style={{objectFit: 'cover', height: '100%'}}
 				screenshotQuality={1}
 				mirrored={false}
 				ref={cameraRef}
