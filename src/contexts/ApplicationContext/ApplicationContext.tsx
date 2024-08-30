@@ -333,7 +333,7 @@ export function ApplicationContextProvider({
 	}, [passiveIncome]);
 
 	useEffect(() => {
-		setPassiveIncome((prevState) => prevState + levelToHourlyPassiveIncome.get(level));
+		setPassiveIncome((prevState) => prevState + (levelToHourlyPassiveIncome.get(level) as number));
 	}, [level]);
 
 	const value = useMemo<ApplicationContext>(
