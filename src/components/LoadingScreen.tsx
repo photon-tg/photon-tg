@@ -20,8 +20,9 @@ export function LoadingScreen(props: IndexProps) {
 
 	if (!props.isMobile) {
 		return (
-			<div className={'flex h-full items-center justify-center'}>
-				<h1>Photon is only available on mobile devices</h1>
+			<div className={'flex h-full flex-col gap-y-[30px] items-center justify-center'}>
+				<img width={200} src={'/assets/icons/photon.svg'} />
+				<h1 className={'text-xxl text-center text-[#2b4ca5]'}>Open on your mobile</h1>
 			</div>
 		);
 	}
