@@ -54,7 +54,7 @@ export async function GET(request: Request) {
 		const mod =  data?.map((a) => {
 			return {
 				...a,
-				is_claimed_by_referrer: dataR?.find((b) => b.referralId === a.telegram_id)?.is_claimed_by_referrer ?? false,
+				is_claimed_by_referrer: dataR?.find((b) => (b as any).referralId === (a as any).telegram_id)?.is_claimed_by_referrer ?? false,
 			}
 		});
 

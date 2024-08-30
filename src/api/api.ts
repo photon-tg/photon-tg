@@ -1,5 +1,5 @@
 import apolloClient from '@/api/graphql';
-import { GET_REFERRALS, GET_REFERRED, GET_TASKS, GET_USER } from '@/graphql/queries';
+import { GET_REFERRED, GET_TASKS, GET_USER } from '@/graphql/queries';
 
 import { AddUserPhotoMutation, CoreUserFieldsFragment } from '@/gql/graphql';
 import {
@@ -22,7 +22,7 @@ import { UserPhoto } from '@/interfaces/photo';
 import { photosBucketURL, supabase } from './supabase';
 import { decode } from 'base64-arraybuffer';
 import { nanoid } from 'nanoid';
-import { ADD_USER_PHOTO, CLAIM_REFERRAL, REFER, REFER_FIRST, REFER_USER } from '@/graphql/mutations';
+import { ADD_USER_PHOTO, CLAIM_REFERRAL, REFER_USER } from '@/graphql/mutations';
 import { Level, levelToPhotoReward } from '@/constants';
 import { axiosInstance } from '@/api/axios';
 import { Referral } from '@/contexts/ApplicationContext/ApplicationContext';
@@ -220,23 +220,6 @@ export async function postUserPhoto(
 	return parseGraphQLMutationResponse(data);
 }
 
-export async function refer(referrerTgId: string, referrals: string[]) {
-	const { errors, data } = await apolloClient.mutate({
-		mutation: referrals.length > 1 ? REFER : REFER_FIRST,
-		fetchPolicy: 'no-cache',
-		variables: {
-			referredTgIds: referrals,
-			referrerTgId,
-		}
-	});
-
-	if (errors?.length || !data) {
-		throw new Error();
-	}
-
-	return 'success';
-}
-
 export async function getReferral(userTgId: string) {
 	const { error, data} = await apolloClient.query({
 		query: GET_REFERRED,
@@ -265,7 +248,7 @@ export async function getReferrals(tgId: string): Promise<any[]> {
 	return referralsData as Referral[];
 }
 
-export async function referUser(referrerTgId: string, referralTgId: string, userId: string, coins) {
+export async function referUser(referrerTgId: string, referralTgId: string, userId: string, coins: number) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: REFER_USER,
 		fetchPolicy: 'no-cache',
