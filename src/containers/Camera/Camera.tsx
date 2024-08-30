@@ -67,13 +67,13 @@ export function Camera() {
 			/>
 			<div
 				className={
-					'absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[30px]'
+					'absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[40px]'
 				}
 			>
 				<button />
 				<button
 					onClick={takePhoto}
-					className={'h-[50px] w-[50px] self-center rounded-[50%] border-[5px]'}
+					className={'h-[60px] w-[60px] self-center rounded-[50%] border-[5px]'}
 				/>
 				<button onClick={flip}>
 					<CameraSwitch />
