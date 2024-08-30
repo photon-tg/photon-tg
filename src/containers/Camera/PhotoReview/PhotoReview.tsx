@@ -12,15 +12,15 @@ export function PhotoReview(props: PhotoReviewProps) {
 	const { image, onAccept, onReject } = props;
 
 	return (
-		<div className={'grid grid-rows-[1fr_min-content]'}>
+		<div className={'grid h-full grid-rows-[1fr_min-content]'}>
 			<img className={'h-full w-full object-cover'} src={image} alt={''} />
 			<div
 				className={
-					'absolute bottom-0 flex w-full justify-between px-[10px] pb-[10px]'
+					'absolute bottom-0 flex w-full justify-between px-[20px] pb-[25px]'
 				}
 			>
-				<Button onClick={onReject}>Reject</Button>
-				<Button onClick={onAccept}>Accept</Button>
+				<Button onClick={onReject}  variant={'outline'}>Reject</Button>
+				<Button onClick={onAccept}  variant={'outline'}>Accept</Button>
 			</div>
 		</div>
 	);

@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera as CameraPro, CameraProps } from 'react-camera-pro';
+import { CameraProps } from 'react-camera-pro';
 import { useCamera } from '@/containers/Camera/useCamera';
 import CameraSwitch from '@/../public/assets/icons/cameraswitch.svg';
 import ArrowIcon from '@/../public/assets/icons/Photo/arrow-left.svg';
@@ -9,6 +9,7 @@ import { useUserContext } from '@/contexts/UserContext';
 import { isDateTodayUTC } from '@/utils/date';
 import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
+import Webcam from 'react-webcam';
 
 const errorMessages: CameraProps['errorMessages'] = {
 	noCameraAccessible: 'No camera accessible',
@@ -20,7 +21,7 @@ const errorMessages: CameraProps['errorMessages'] = {
 export function Camera() {
 	const router = useRouter();
 	const { user } = useUserContext();
-	const { cameraRef, takePhoto, flip, image, onReject, onAccept, goBack } =
+	const { cameraRef, takePhoto, flip, facingMode, image, onReject, onAccept, goBack } =
 		useCamera();
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
@@ -52,28 +53,41 @@ export function Camera() {
 	}
 
 	return (
-		<div>
+		<div className={'h-full'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
 			>
 				<ArrowIcon />
 			</button>
-			<CameraPro
-				aspectRatio={0.5265}
-				facingMode={'user'}
+			{/*<Camera*/}
+			{/*	facingMode={'user'}*/}
+			{/*	ref={cameraRef}*/}
+			{/*	errorMessages={errorMessages}*/}
+			{/*/>*/}
+			<Webcam
+				width={'100%'}
+				height={'100%'}
+				videoConstraints={{
+					facingMode
+				}}
+				forceScreenshotSourceSize
+				screenshotFormat={'image/jpeg'}
+				style={{objectFit: 'cover', height: '100%'}}
+				screenshotQuality={1}
+				imageSmoothing
+				mirrored={facingMode === 'user'}
 				ref={cameraRef}
-				errorMessages={errorMessages}
 			/>
 			<div
 				className={
-					'absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[30px]'
+					'absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[40px]'
 				}
 			>
 				<button />
 				<button
 					onClick={takePhoto}
-					className={'h-[50px] w-[50px] self-center rounded-[50%] border-[5px]'}
+					className={'h-[60px] w-[60px] self-center rounded-[50%] border-[5px]'}
 				/>
 				<button onClick={flip}>
 					<CameraSwitch />

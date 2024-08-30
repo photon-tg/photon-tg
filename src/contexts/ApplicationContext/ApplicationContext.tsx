@@ -179,8 +179,7 @@ export function ApplicationContextProvider({
 			const photos = await getUserPhotos(user.id);
 			let coins = user.coins;
 
-			// user.telegram_id !== user.referrerId
-			if (user.referrerId && true) {
+			if (user.referrerId && user.telegram_id !== user.referrerId) {
 				const userReferral = await getReferral(user.telegram_id as string);
 				if (!userReferral) {
 					const refUser = await getReferrerInfo(user.referrerId);
