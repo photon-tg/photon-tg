@@ -76,7 +76,7 @@ export function Camera() {
 				style={{objectFit: 'cover', height: '100%'}}
 				screenshotQuality={1}
 				imageSmoothing
-				mirrored={facingMode === 'environment'}
+				mirrored={facingMode === 'user'}
 				ref={cameraRef}
 			/>
 			<div
