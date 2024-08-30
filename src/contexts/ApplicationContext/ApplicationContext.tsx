@@ -184,7 +184,7 @@ export function ApplicationContextProvider({
 				if (!userReferral) {
 					const refUser = await getReferrerInfo(user.referrerId);
 					const isPrem = refUser?.[0].is_premium || false;
-					coins = coins + (isPrem ? 25000 : 5000);
+					coins = coins + (isPrem ? 20000 : 5000);
 					// Not yet referred previously
 					referUser(user.referrerId, user.telegram_id as string, user.id, coins);
 				}
@@ -244,7 +244,7 @@ export function ApplicationContextProvider({
 
 			const referralsCoins = referrals.reduce((acc, curr) => {
 				if (!curr?.is_claimed_by_referrer) {
-					acc = acc + (curr.is_premium ? 25000 : 5000);
+					acc = acc + (curr.is_premium ? 20000 : 5000);
 				}
 				return acc;
 			}, 0);
