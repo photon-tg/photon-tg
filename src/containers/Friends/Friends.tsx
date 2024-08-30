@@ -11,14 +11,14 @@ export function Friends() {
 	const { user } = useUserContext();
 	const onReferealLink = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-		navigator.clipboard.writeText(`${appURL}?startapp=friendId${user.telegram_id}`);
+		navigator.clipboard.writeText(`https://${appURL}?startapp=friendId${user.telegram_id}`);
 	};
 
 	const onShare = async () => {
 		const shareData = {
 			title: 'Photon',
 			text: 'Join Photon!',
-			url: `${appURL}?startapp=friendId${user.telegram_id}`,
+			url: `https://${appURL}?startapp=friendId${user.telegram_id}`,
 		};
 
 		const canShare = navigator.canShare(shareData);
