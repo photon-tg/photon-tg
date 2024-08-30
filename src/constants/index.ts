@@ -57,9 +57,10 @@ export function getUserLevel(userCoins: number): Level {
 
 export function getUserProgressProcentage(userCoins: number): number {
 	const level = getUserLevel(userCoins);
+	const prevLvlMoney = (level > 1 && levelToCoins.get(level - 1 as Level)) || 0;
 	return userCoins === 0
 		? 0
-		: Math.round((100 * userCoins) / (levelToCoins.get(level) as number));
+		: Math.round((100 * (userCoins - prevLvlMoney) / (levelToCoins.get(level) as number)));
 }
 
 export function getUserPassiveIncome(level: Level): number {
