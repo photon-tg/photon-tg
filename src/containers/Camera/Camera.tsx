@@ -1,6 +1,6 @@
 'use client';
 
-import { Camera as CameraPro, CameraProps } from 'react-camera-pro';
+import { CameraProps } from 'react-camera-pro';
 import { useCamera } from '@/containers/Camera/useCamera';
 import CameraSwitch from '@/../public/assets/icons/cameraswitch.svg';
 import ArrowIcon from '@/../public/assets/icons/Photo/arrow-left.svg';
@@ -9,6 +9,7 @@ import { useUserContext } from '@/contexts/UserContext';
 import { isDateTodayUTC } from '@/utils/date';
 import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
+import Webcam from "react-webcam";
 
 const errorMessages: CameraProps['errorMessages'] = {
 	noCameraAccessible: 'No camera accessible',
@@ -52,18 +53,25 @@ export function Camera() {
 	}
 
 	return (
-		<div>
+		<div className={'h-full'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
 			>
 				<ArrowIcon />
 			</button>
-			<CameraPro
-				aspectRatio={0.5265}
-				facingMode={'user'}
+			{/*<Camera*/}
+			{/*	facingMode={'user'}*/}
+			{/*	ref={cameraRef}*/}
+			{/*	errorMessages={errorMessages}*/}
+			{/*/>*/}
+			<Webcam
+				width={'100%'}
+				height={'100%'}
+				videoConstraints={{ height: 700, aspectRatio: 9/16 }}
+				screenshotFormat={'image/jpeg'}
+				screenshotQuality={1}
 				ref={cameraRef}
-				errorMessages={errorMessages}
 			/>
 			<div
 				className={

@@ -12,7 +12,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 	const { image, onAccept, onReject } = props;
 
 	return (
-		<div className={'grid grid-rows-[1fr_min-content]'}>
+		<div className={'grid h-full grid-rows-[1fr_min-content]'}>
 			<img className={'h-full w-full object-cover'} src={image} alt={''} />
 			<div
 				className={

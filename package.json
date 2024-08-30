@@ -8,7 +8,7 @@
     "start": "npm run prestart && next start",
     "prestart": "npm run graphql:generate",
     "lint": "next lint",
-		"typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "lint:fix": "next lint --fix",
     "prettier": "prettier src/",
     "prettier:fix": "prettier src/ --write",
@@ -29,6 +29,7 @@
     "react": "^18",
     "react-camera-pro": "^1.4.0",
     "react-dom": "^18",
+    "react-webcam": "^7.2.0",
     "styled-components": "^6.1.12",
     "zod": "^3.23.8"
   },
