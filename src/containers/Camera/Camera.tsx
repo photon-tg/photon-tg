@@ -69,6 +69,7 @@ export function Camera() {
 				width={'100%'}
 				height={'100%'}
 				screenshotFormat={'image/jpeg'}
+				style={{objectFit: 'cover', height: '100%'}}
 				screenshotQuality={1}
 				ref={cameraRef}
 			/>

@@ -16,7 +16,7 @@ export function useCamera() {
 	const { level, coins, increaseCoins, photos, updatePhotos, updatePassiveIncomeLocal } = useApplicationContext();
 
 	const takePhoto = useCallback(() => {
-		const base64Image = cameraRef.current?.getScreenshot({ width: 1920, height: 1080 }) as string;
+		const base64Image = cameraRef.current?.getScreenshot() as string;
 		setImage(base64Image);
 	}, [cameraRef]);
 
