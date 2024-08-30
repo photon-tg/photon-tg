@@ -9,7 +9,7 @@ import { useUserContext } from '@/contexts/UserContext';
 import { isDateTodayUTC } from '@/utils/date';
 import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
-import Webcam from "react-webcam";
+import Webcam from 'react-webcam';
 
 const errorMessages: CameraProps['errorMessages'] = {
 	noCameraAccessible: 'No camera accessible',
@@ -68,7 +68,6 @@ export function Camera() {
 			<Webcam
 				width={'100%'}
 				height={'100%'}
-				videoConstraints={{ height: 700, aspectRatio: 9/16 }}
 				screenshotFormat={'image/jpeg'}
 				screenshotQuality={1}
 				ref={cameraRef}
