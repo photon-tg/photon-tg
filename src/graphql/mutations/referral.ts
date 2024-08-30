@@ -23,7 +23,7 @@ export const REFER_USER = graphql(`
 
 export const CLAIM_REFERRAL = graphql(`
 	mutation ClaimReferral($userId: UUID!, $telegramId: String!, $coins: Int!) {
-		updateuser_referralsCollection(set: { is_claimed_by_referrer: true }, filter: {referrer_id: {eq: $telegramId}}) {
+		updateuser_referralsCollection(atMost: 100, set: { is_claimed_by_referrer: true }, filter: {referrer_id: {eq: $telegramId}}) {
 			records {
 				is_claimed_by_referral
 			}
