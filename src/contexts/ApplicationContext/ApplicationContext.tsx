@@ -16,9 +16,9 @@ import {
 	getUserPassiveIncome,
 	getUserProgressProcentage,
 	Level,
-	levelToCoinsPerTap,
+	levelToCoinsPerTap, levelToHourlyPassiveIncome,
 	levelToMaxEnergy,
-	levelToPhotoPassiveIncome,
+	levelToPhotoPassiveIncome
 } from '@/constants';
 
 import { PersonalizedTask } from '@/interfaces/Task';
@@ -331,6 +331,10 @@ export function ApplicationContextProvider({
 			setPassiveIncome(passiveIncome + (levelToPhotoPassiveIncome.get(level) as number));
 		}
 	}, [passiveIncome]);
+
+	useEffect(() => {
+		setPassiveIncome((prevState) => prevState + levelToHourlyPassiveIncome.get(level));
+	}, [level]);
 
 	const value = useMemo<ApplicationContext>(
 		() => ({
