@@ -1,4 +1,4 @@
-import { CameraType } from 'react-camera-pro/dist/components/Camera/types';
+import { CameraType, FacingMode } from 'react-camera-pro/dist/components/Camera/types';
 import { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserContext } from '@/contexts/UserContext';
@@ -11,17 +11,18 @@ import Webcam from 'react-webcam';
 export function useCamera() {
 	const cameraRef = useRef<Webcam | null>(null);
 	const [image, setImage] = useState<string | null>(null);
+	const [facingMode, setFacingMode] = useState<FacingMode>('environment');
 	const router = useRouter();
 	const { user, updateLocalUser } = useUserContext();
 	const { level, coins, increaseCoins, photos, updatePhotos, updatePassiveIncomeLocal } = useApplicationContext();
 
 	const takePhoto = useCallback(() => {
-		const base64Image = cameraRef.current?.getScreenshot() as string;
+		const base64Image = cameraRef.current?.getScreenshot({ width: 1920, height: 1080 }) as string;
 		setImage(base64Image);
 	}, [cameraRef]);
 
 	const flip = useCallback(() => {
-		// cameraRef.current?.();
+		setFacingMode((prev) => prev === 'user' ? 'environment' : 'user');
 	}, []);
 
 	const onAccept = useCallback(async () => {
@@ -70,5 +71,6 @@ export function useCamera() {
 		onReject,
 		onAccept,
 		goBack,
+		facingMode
 	};
 }

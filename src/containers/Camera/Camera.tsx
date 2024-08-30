@@ -21,7 +21,7 @@ const errorMessages: CameraProps['errorMessages'] = {
 export function Camera() {
 	const router = useRouter();
 	const { user } = useUserContext();
-	const { cameraRef, takePhoto, flip, image, onReject, onAccept, goBack } =
+	const { cameraRef, takePhoto, flip, facingMode, image, onReject, onAccept, goBack } =
 		useCamera();
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
@@ -68,6 +68,10 @@ export function Camera() {
 			<Webcam
 				width={'100%'}
 				height={'100%'}
+				videoConstraints={{
+					facingMode,
+					aspectRatio: 16/9
+				}}
 				screenshotFormat={'image/jpeg'}
 				style={{objectFit: 'cover', height: '100%'}}
 				screenshotQuality={1}
