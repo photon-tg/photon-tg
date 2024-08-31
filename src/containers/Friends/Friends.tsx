@@ -15,17 +15,9 @@ export function Friends() {
 	};
 
 	const onShare = async () => {
-		const shareData = {
-			title: 'Photon',
-			text: 'Join Photon!',
-			url: `https://${appURL}?startapp=friendId${user.telegram_id}`,
-		};
-
-		const canShare = navigator.canShare(shareData);
-
-		if (canShare) {
-			const shareResult = navigator.share(shareData);
-		}
+		const url = encodeURIComponent(`https://${appURL}?startapp=friendId${user.telegram_id}`);
+		const text = encodeURIComponent('Join me in Photon!\n 💲+5k coins\n or\n +25k coins if you have telegram Premium');
+		Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${url}&text=${text}`)
 	};
 
 	return (
