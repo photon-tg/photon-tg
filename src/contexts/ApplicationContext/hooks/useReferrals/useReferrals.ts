@@ -14,7 +14,7 @@ export function useReferrals(user: User) {
 	const referralsCache = useRef<Friend[]>([]);
 
 	const initMyReferrals = useCallback(async () => {
-		const referrals = await getFriends();
+		const referrals = await getFriends(user.telegram_id);
 		referralsCache.current = referrals;
 
 		const parsedReferrals = referrals.map((ref) => ({
@@ -25,7 +25,7 @@ export function useReferrals(user: User) {
 		}));
 
 		setReferrals(parsedReferrals);
-	}, []);
+	}, [user.telegram_id]);
 
 	const saveReferrer = useCallback(async (): Promise<number | undefined> => {
 		if (!user.referrerId && user.telegram_id !== user.referrerId) return;
