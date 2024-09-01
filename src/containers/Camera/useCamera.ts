@@ -36,7 +36,7 @@ export function useCamera() {
 				...photos,
 				(postedPhotoData.insertIntouser_photosCollection as any)?.[0],
 			]);
-			increaseCoins((levelToPhotoReward.get(level as Level) as number) + coins);
+			increaseCoins((levelToPhotoReward.get(level as Level) as number));
 			updateLocalUser(
 				postedPhotoData.updateusersCollection[0] as CoreUserFieldsFragment,
 			);
