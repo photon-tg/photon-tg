@@ -55,7 +55,7 @@ function TapArea(props: TapAreaProps) {
 			onTouchStart={onTouchStart}
 			onTouchEnd={onTouchEnd}
 			className={
-				'h-[300px] w-[300px] rounded-[50%] bg-gradient-to-b from-sky-blue from-0% via-saturated-blue via-50% to-deep-blue to-100% px-[12px] py-[12px]'
+			'select-none h-[300px] w-[300px] rounded-[50%] bg-gradient-to-b from-sky-blue from-0% via-saturated-blue via-50% to-deep-blue to-100% px-[12px] py-[12px]'
 			}
 		>
 			<div
