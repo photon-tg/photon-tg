@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 			password: 'redound_chapbook_HOYDEN_rye_begotten_plump_passband',
 		});
 
-		const telegramId = userData.user_metadata.telegram_id ?? tgId?.telegramId;
+		const telegramId = userData?.user_metadata?.telegram_id ?? tgId?.telegramId;
 
 		const userReferralsResponse = await supabase.from('user_referrals')
 			.select('referral_id,is_claimed_by_referrer')
