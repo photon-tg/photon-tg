@@ -255,7 +255,7 @@ export type Friend = {
 }
 
 export async function getFriends(): Promise<Friend[]> {
-	const { data } = await axiosInstance.post('/friends', {
+	const { data } = await axiosInstance.post('/friends', undefined, {
 		headers: {
 			Authorization: `Bearer ${getAuthToken()}`
 		}
