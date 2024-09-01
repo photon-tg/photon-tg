@@ -22,8 +22,8 @@ export async function POST(request: Request) {
 		}
 
 		const tgId = await request.json();
-		console.log((typeof userData === 'string' || !userData.user_metadata) && !tgId?.telegramId, 'id')
-		if ((typeof userData === 'string' || !userData.user_metadata) && !tgId?.telegramId) throw new Error();
+
+		if ((typeof userData === 'string' || !userData?.user_metadata) && !tgId?.telegramId) throw new Error();
 		console.log('hello')
 		await supabase.auth.signInWithPassword({
 			email: 'edge-functions@photon.com',
