@@ -35,7 +35,7 @@ export default function RootLayout({
 				<ApplicationProviders>{children}</ApplicationProviders>
 				<Script
 					src="https://telegram.org/js/telegram-web-app.js"
-					strategy={'beforeInteractive'}
+					strategy={'afterInteractive'}
 				/>
 				<GoogleAnalytics gaId="G-SQ0XS74EJ2" />
 			</body>

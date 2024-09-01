@@ -22,10 +22,10 @@ import { UserPhoto } from '@/interfaces/photo';
 import { photosBucketURL, supabase } from './supabase';
 import { decode } from 'base64-arraybuffer';
 import { nanoid } from 'nanoid';
-import { ADD_USER_PHOTO, CLAIM_REFERRAL, REFER_USER } from '@/graphql/mutations';
+import { ADD_USER_PHOTO, CLAIM_REFERRAL, REFER_USER, UPDATE_USER } from '@/graphql/mutations';
 import { Level, levelToPhotoReward } from '@/constants';
 import { axiosInstance } from '@/api/axios';
-import { Referral } from '@/contexts/ApplicationContext/ApplicationContext';
+import { Referral } from '@/contexts/ApplicationContext/hooks/useReferrals/useReferrals';
 
 export async function getUser(
 	userId: string,
@@ -138,7 +138,6 @@ export async function synchronizeTaps(
 
 export async function updatePassiveIncome(
 	userId: string,
-	coins: number,
 	lastHourlyReward: string,
 ) {
 	const { data, errors } = await apolloClient.mutate({
@@ -146,7 +145,6 @@ export async function updatePassiveIncome(
 		fetchPolicy: 'no-cache',
 		variables: {
 			userId,
-			coins,
 			lastHourlyReward,
 		},
 	});
@@ -243,21 +241,43 @@ export async function getReferrerInfo(tgId: string): Promise<any[]> {
 }
 
 export async function getReferrals(tgId: string): Promise<any[]> {
-	const { data: referralsData } = await axiosInstance.get(`/referrals?referral=${tgId}`);
+	const { data: referralsData } = await axiosInstance.post(`/referrals?referral=${tgId}`);
 
 	return referralsData as Referral[];
 }
 
-export async function referUser(referrerTgId: string, referralTgId: string, referredUserId: string, referrerUserId: string, coins: number) {
+export type Friend = {
+	first_name: string;
+	last_name: string;
+	coins: number;
+	is_premium: boolean;
+	is_claimed_by_referrer: boolean;
+}
+
+export async function getFriends(): Promise<Friend[]> {
+	const { data } = await axiosInstance.post('/friends');
+	if (!data) {
+		return []
+	}
+
+	return data;
+}
+
+export type referUserOptions = {
+	referrerTgId: string;
+	referralTgId: string;
+}
+
+export async function referUser({
+	referrerTgId,
+	referralTgId,
+}: referUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: REFER_USER,
 		fetchPolicy: 'no-cache',
 		variables: {
 			referrerTgId,
 			referralTgId,
-			coins,
-			referredUserId,
-			referrerUserId
 		}
 	});
 
@@ -268,14 +288,34 @@ export async function referUser(referrerTgId: string, referralTgId: string, refe
 	return data;
 }
 
-export async function claimReferral(userId: string, telegramId: string, coins: number) {
+export async function claimReferrals(telegramId: string) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: CLAIM_REFERRAL,
 		fetchPolicy: 'no-cache',
 		variables: {
 			telegramId,
-			coins,
+		}
+	});
+
+	if (errors?.length) {
+		throw new Error();
+	}
+
+	return data;
+}
+
+export type UpdateUserOptions = {
+	userId: string;
+	coins: number;
+}
+
+export async function updateUser({ userId, coins }: UpdateUserOptions) {
+	const { errors, data } = await apolloClient.mutate({
+		mutation: UPDATE_USER,
+		fetchPolicy: 'no-cache',
+		variables: {
 			userId,
+			coins,
 		}
 	});
 

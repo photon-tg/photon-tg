@@ -23,27 +23,16 @@ import {
 
 import { PersonalizedTask } from '@/interfaces/Task';
 import {
-	claimReferral,
-	getReferral,
-	getReferrals,
-	getReferrerInfo,
 	getTasks,
 	getUserPhotos,
-	referUser,
 	synchronizeTaps,
 	updateDailyRewardCompletedDays,
-	updatePassiveIncome
+	updatePassiveIncome, updateUser
 } from '@/api/api';
 import { CoreUserFieldsFragment, FullUserTaskFragment } from '@/gql/graphql';
 import { daysSinceDate, hoursSinceDateUTC } from '@/utils/date';
 import { UserPhoto } from '@/interfaces/photo';
-
-export type Referral = {
-	firstName: string;
-	lastName: string;
-	coins: number;
-	level: number;
-}
+import { Referral, useReferrals } from '@/contexts/ApplicationContext/hooks/useReferrals/useReferrals';
 
 interface ApplicationContext {
 	energy: number;
@@ -92,13 +81,13 @@ export function ApplicationContextProvider({
 	children,
 }: PropsWithChildren<{}>) {
 	const { authenticate, updateLocalUser, user } = useUserContext();
+	const { claimReferrals, initMyReferrals, saveReferrer, referrals } = useReferrals(user);
 
 	const isInitializing = useRef(false);
 	const [isAppInitialized, setIsAppInitialized] = useState(false);
 	const [energy, setEnergy] = useState<number>(user?.energy as number);
 	const [coins, setCoins] = useState<number>(user?.coins as number);
 	const [photos, setPhotos] = useState<UserPhoto[]>([]);
-	const [referrals, setReferrals] = useState<Referral[]>([]);
 	const level = useMemo<Level>(() => getUserLevel(coins), [coins]);
 	const isEnergyFull = useMemo(
 		() => energy >= (levelToMaxEnergy.get(level) as number),
@@ -179,17 +168,11 @@ export function ApplicationContextProvider({
 			const photos = await getUserPhotos(user.id);
 			let coins = user.coins;
 
-			if (user.referrerId && user.telegram_id !== user.referrerId) {
-				const userReferral = await getReferral(user.telegram_id as string);
-				if (!userReferral) {
-					const refUser = await getReferrerInfo(user.referrerId);
-					if (refUser?.[0]?.id) {
-						const isPrem = refUser?.[0].is_premium || false;
-						coins = coins + (isPrem ? 20000 : 5000);
-						// Not yet referred previously
-						referUser(user.referrerId, user.telegram_id as string, user.id, refUser?.[0]?.id, coins);
-					}
-				}
+			await initMyReferrals();
+			const referenceBonusCoins = await saveReferrer();
+
+			if (referenceBonusCoins) {
+				coins += referenceBonusCoins;
 			}
 
 			let personalizedTasks = await getTasks(user.id);
@@ -236,29 +219,19 @@ export function ApplicationContextProvider({
 				return passInc ? acc + passInc : acc;
 			}, 0);
 
-			coins =
-				coins +
-				passiveIncomeSinceLast +
-				hrsSinceLastHourlyReward * photosPassiveIncome;
-			await updatePassiveIncome(user.id, coins, new Date().toUTCString());
+			const referenceCoins = await claimReferrals();
+			coins += referenceCoins;
 
-			const referrals = await getReferrals(user.telegram_id as string);
+			if (coins) {
+				coins =
+					coins +
+					passiveIncomeSinceLast +
+					hrsSinceLastHourlyReward * photosPassiveIncome;
+				await updatePassiveIncome(user.id, new Date().toUTCString());
+			}
 
-			const referralsCoins = referrals.reduce((acc, curr) => {
-				if (!curr?.is_claimed_by_referrer) {
-					acc = acc + (curr.is_premium ? 20000 : 5000);
-				}
-				return acc;
-			}, 0);
-			coins += referralsCoins;
-
-			await claimReferral(user.id, user.telegram_id as string, coins);
-			setReferrals(referrals.map((ref) => ({
-				firstName: ref.first_name,
-				lastName: ref.last_name,
-				level: getUserLevel(ref.coins),
-				coins: ref.coins,
-			})));
+			// set all coins
+			await updateUser({ userId: user.id, coins });
 
 			setPassiveIncome(getUserPassiveIncome(level) + photosPassiveIncome);
 			setTasks(personalizedTasks ?? []);

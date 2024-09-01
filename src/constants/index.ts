@@ -45,6 +45,9 @@ export const levelToPhotoPassiveIncome = new Map<Level, number>([
 	[5, 800],
 ]);
 
+export const USER_REF_BONUS = 5000;
+export const PREMIUM_USER_REF_BONUS = 20000;
+
 export function getUserLevel(userCoins: number): Level {
 	for (const [level, coins] of levelToCoins) {
 		if (userCoins < coins) {

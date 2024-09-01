@@ -16,7 +16,7 @@ export function Friends() {
 
 	const onShare = async () => {
 		const url = encodeURIComponent(`https://${appURL}?startapp=friendId${user.telegram_id}`);
-		const text = encodeURIComponent('Join me in Photon!\n💲+5k coins\nor\n💰+25k coins if you have telegram Premium');
+		const text = encodeURIComponent('Join me in Photon!\n💲+5k coins\nor\n💰+20k coins if you have telegram Premium');
 		Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${url}&text=${text}`)
 	};
 

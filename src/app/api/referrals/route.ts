@@ -6,7 +6,7 @@ const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
 	const url = new URL(request.url);
 	const searchParams = url.searchParams;
 	const referralId = searchParams.get('referral');
