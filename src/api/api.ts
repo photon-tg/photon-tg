@@ -254,8 +254,10 @@ export type Friend = {
 	is_claimed_by_referrer: boolean;
 }
 
-export async function getFriends(): Promise<Friend[]> {
-	const { data } = await axiosInstance.post('/friends', undefined, {
+export async function getFriends(telegramId: string): Promise<Friend[]> {
+	const { data } = await axiosInstance.post('/friends', {
+		telegram_id: telegramId,
+	}, {
 		headers: {
 			Authorization: `Bearer ${getAuthToken()}`
 		}

@@ -15,14 +15,16 @@ export async function POST(request: Request) {
 		const jwtToken = authToken.split('Bearer ')[1];
 		const userData = jwt.verify(jwtToken, process.env.JWT_TOKEN!);
 
-		if (typeof userData !== 'object' || !userData.user_metadata) throw new Error();
+		const tgId = await request.json();
+
+		if (typeof userData !== 'object' || !userData.user_metadata || !tgId.telegramId) throw new Error();
 
 		await supabase.auth.signInWithPassword({
 			email: 'edge-functions@photon.com',
 			password: 'redound_chapbook_HOYDEN_rye_begotten_plump_passband',
 		});
 
-		const telegramId = userData.user_metadata.telegram_id;
+		const telegramId = userData.user_metadata.telegram_id ?? tgId.telegramId;
 
 		const userReferralsResponse = await supabase.from('user_referrals')
 			.select('referral_id,is_claimed_by_referrer')
