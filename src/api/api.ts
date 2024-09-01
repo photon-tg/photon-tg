@@ -333,7 +333,7 @@ export async function updateUser({ userId, coins }: UpdateUserOptions) {
 function getAuthToken(): string {
 	if (window.localStorage) {
 		const tokenJSON = localStorage.getItem(`sb-${process.env.NEXT_PUBLIC_SUPABASE_APP_CODE!}-auth-token`)!;
-		const token = JSON.parse(tokenJSON).access_token;
+		const token = JSON.parse(tokenJSON)?.access_token;
 		return token;
 	}
 
