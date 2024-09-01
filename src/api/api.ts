@@ -255,7 +255,11 @@ export type Friend = {
 }
 
 export async function getFriends(): Promise<Friend[]> {
-	const { data } = await axiosInstance.post('/friends');
+	const { data } = await axiosInstance.post('/friends', {
+		headers: {
+			Authorization: `Bearer ${getAuthToken()}`
+		}
+	});
 	if (!data) {
 		return []
 	}
@@ -324,4 +328,14 @@ export async function updateUser({ userId, coins }: UpdateUserOptions) {
 	}
 
 	return data;
+}
+
+function getAuthToken(): string {
+	if (window.localStorage) {
+		const tokenJSON = localStorage.getItem(`sb-${process.env.NEXT_PUBLIC_SUPABASE_APP_CODE!}-auth-token`)!;
+		const token = JSON.parse(tokenJSON).access_token;
+		return token;
+	}
+
+	return '';
 }
