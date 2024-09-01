@@ -8,29 +8,29 @@ const supabase = createClient(
 
 export async function POST(request: Request) {
 	try {
-		const authToken = request.headers.get('Authorization');
-
-		if (!authToken) throw new Error('No auth token provided');
-
-		const jwtToken = authToken.split('Bearer ')[1];
-		let userData: any;
-
-		try {
-			userData = jwt.verify(jwtToken, process.env.JWT_TOKEN!);
-		} catch(err) {
-
-		}
+		// const authToken = request.headers.get('Authorization');
+		//
+		// if (!authToken) throw new Error('No auth token provided');
+		//
+		// const jwtToken = authToken.split('Bearer ')[1];
+		// let userData: any;
+		//
+		// try {
+		// 	userData = jwt.verify(jwtToken, process.env.JWT_TOKEN!);
+		// } catch(err) {
+		//
+		// }
 
 		const tgId = await request.json();
 
-		if ((typeof userData === 'string' || !userData?.user_metadata) && !tgId?.telegramId) throw new Error();
+		// if ((typeof userData === 'string' || !userData?.user_metadata) && !tgId?.telegramId) throw new Error();
 		console.log('hello')
 		await supabase.auth.signInWithPassword({
 			email: 'edge-functions@photon.com',
 			password: 'redound_chapbook_HOYDEN_rye_begotten_plump_passband',
 		});
-
-		const telegramId = userData?.user_metadata?.telegram_id ?? tgId?.telegramId;
+//userData?.user_metadata?.telegram_id ??
+		const telegramId = tgId?.telegramId;
 
 		const userReferralsResponse = await supabase.from('user_referrals')
 			.select('referral_id,is_claimed_by_referrer')
