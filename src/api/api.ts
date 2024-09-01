@@ -258,9 +258,7 @@ export async function getFriends(telegramId: string): Promise<Friend[]> {
 	const { data } = await axiosInstance.post('/friends', {
 		telegram_id: telegramId,
 	}, {
-		headers: {
-			Authorization: `Bearer ${getAuthToken()}`
-		}
+		withCredentials: true,
 	});
 	if (!data) {
 		return []
@@ -332,12 +330,3 @@ export async function updateUser({ userId, coins }: UpdateUserOptions) {
 	return data;
 }
 
-function getAuthToken(): string {
-	if (window.localStorage) {
-		const tokenJSON = window.localStorage.getItem(`sb-${process.env.NEXT_PUBLIC_SUPABASE_APP_CODE!}-auth-token`)!;
-		const token = JSON.parse(tokenJSON)?.access_token;
-		return token;
-	}
-
-	return '';
-}
