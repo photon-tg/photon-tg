@@ -13,7 +13,13 @@ export async function POST(request: Request) {
 		if (!authToken) throw new Error('No auth token provided');
 
 		const jwtToken = authToken.split('Bearer ')[1];
-		const userData = jwt.verify(jwtToken, process.env.JWT_TOKEN!);
+		let userData: any;
+
+		try {
+			userData = jwt.verify(jwtToken, process.env.JWT_TOKEN!);
+		} catch(err) {
+
+		}
 
 		const tgId = await request.json();
 
