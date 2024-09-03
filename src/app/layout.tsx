@@ -39,7 +39,6 @@ export default function RootLayout({
 				/>
 			<Script
 				id={'gtm'}
-				strategy={'beforeInteractive'}
 				dangerouslySetInnerHTML={{
 					__html: `<!-- Google Tag Manager -->
 						<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -52,7 +51,6 @@ export default function RootLayout({
 			/>
 			<Script
 				id={'gtm-noscript'}
-				strategy={'beforeInteractive'}
 				dangerouslySetInnerHTML={{
 					__html: `<!-- Google Tag Manager (noscript) -->
 						<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-59KV2HBP"
