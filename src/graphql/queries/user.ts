@@ -17,7 +17,7 @@ export const GetUserData = graphql(`
 		$userId: UUID!,
 		$telegramId: String!,
 	) {
-		user_photosCollection(first: 100, offset: 0, filter: { user_id: { eq: $userId } }) {
+		user_photosCollection(orderBy: [{ created_at: DescNullsLast }], first: 100, offset: 0, filter: { user_id: { eq: $userId } }) {
 			edges {
 				node {
 					...UserPhoto,
