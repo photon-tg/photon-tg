@@ -13,5 +13,7 @@ export const CORE_USER_FIELDS = graphql(`
 		last_name
 		telegram_id
 		last_sync
+		is_referred
+		is_premium
 	}
 `);

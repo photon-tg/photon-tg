@@ -109,8 +109,10 @@ export function ApplicationContextProvider({
 		if (isAppInitialized) return;
 
 		async function initApp() {
+			const isFirstTime = user.is_referred !== null;
+
 			const userData = await getUserData(user.id, user.telegram_id);
-			const referenceBonusCoins = await refer() || 0;
+			const referenceBonusCoins = isFirstTime ? (await refer() || 0) : 0;
 			const referralsCoins = await claimReferrals(userData.friends);
 			const photosPassiveIncomeCoins = calculatePhotosPassiveIncome(userData.photos, user.last_hourly_reward);
 
@@ -118,7 +120,7 @@ export function ApplicationContextProvider({
 
 			const nowUTC = new Date().toUTCString();
 			await initDailyReward(userData.tasks);
-			await updateUser({ userId: user.id, coins: coinsAfterRewards, lastHourlyReward: nowUTC, user });
+			await updateUser({ userId: user.id, coins: coinsAfterRewards, lastHourlyReward: nowUTC, user, isReferred: !!referenceBonusCoins });
 
 			dispatch({
 				type: ApplicationActionType.INIT,

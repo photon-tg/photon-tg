@@ -1,12 +1,13 @@
 import { graphql } from '@/gql';
 
 export const UPDATE_USER = graphql(`
-	mutation UpdateUser($userId: UUID!, $coins: Int!, $lastHourlyReward: Datetime!) {
+	mutation UpdateUser($userId: UUID!, $coins: Int!, $lastHourlyReward: Datetime!, $isReferred: Boolean) {
 		updateusersCollection(
 			atMost: 1,
 			set: {
 				coins: $coins,
-				last_hourly_reward: $lastHourlyReward
+				last_hourly_reward: $lastHourlyReward,
+				is_referred: $isReferred
 			}
 			filter: { id: { eq: $userId } }
 		) {
