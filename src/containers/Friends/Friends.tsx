@@ -59,11 +59,11 @@ export function Friends() {
 							{referrals.map((ref) => {
 								return (
 									<div key={ref.referral_id} className={'bg-[#215295] rounded py-[9px] px-[15px] flex flex-col gap-y-[8px]'}>
-										<span className={'text-md'}>{ref.users.first_name} {ref.users.last_name}</span>
+										<span className={'text-md'}>{ref.users?.first_name} {ref.users?.last_name}</span>
 										<div className={'flex gap-x-[5px] items-center'}>
-											<span className={'text-md text-[#42C2FF]'}>Lvl {getUserLevel(ref.users.coins)}</span>
+											<span className={'text-md text-[#42C2FF]'}>Lvl {getUserLevel(ref.users?.coins)}</span>
 											<div className={'w-[4px] h-[4px] rounded-[50%] bg-[#5a8cd1]'}></div>
-											<Money withoutPlus amount={ref.users.coins} size={'xxs'} />
+											<Money withoutPlus amount={ref.users?.coins} size={'xxs'} />
 										</div>
 									</div>
 								);
