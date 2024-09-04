@@ -23,7 +23,7 @@ export function CTACard(props: CTACardProps) {
 				<div className={'flex items-center gap-x-[10px]'}>
 					<Money size={'md'} amount={profit} />
 					{description && (
-						<p className={'text-sm text-[#939393]'}>{description}</p>
+						<p className={'text-sm text-[#4b83cf]'}>{description}</p>
 					)}
 				</div>
 			</div>
