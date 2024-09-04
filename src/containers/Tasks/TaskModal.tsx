@@ -25,7 +25,8 @@ export function TaskModal(props: TaskModalProps) {
 	return (
 		<div className={'flex flex-col'}>
 			<img
-				className={'mx-auto mb-[5px] w-[100px]'}
+				width={200}
+				className={'mx-auto mb-[5px]'}
 				src={task.images?.url || ''}
 			/>
 			<span className={'mb-[10px] text-center text-xxl'}>{task.name}</span>

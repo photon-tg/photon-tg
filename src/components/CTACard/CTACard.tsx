@@ -13,10 +13,10 @@ export function CTACard(props: CTACardProps) {
 
 	return (
 		<article
-			className={`grid w-full grid-cols-[max-content_1fr] gap-x-[10px] rounded bg-light-blue px-[12px] py-[10px] ${clickable && 'active:bg-[#183368]'}`}
+			className={`grid w-full grid-cols-[max-content_1fr] gap-x-[10px] rounded bg-[#205295] px-[12px] py-[10px] ${clickable && 'active:bg-[#183368]'}`}
 		>
 			<div>
-				<img src={iconUrl} />
+				<img width={45} src={iconUrl} />
 			</div>
 			<div className={'grid gap-y-[5px]'}>
 				<span className={'text-lg font-medium max-w-[80%]'}>{title}</span>

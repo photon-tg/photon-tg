@@ -14,7 +14,7 @@ export function Profile() {
 				<img
 					height={63}
 					width={63}
-					src={user.telegram?.photo_url || '/assets/icons/test.png'}
+					src={user.telegram?.photo_url || '/assets/icons/user.svg'}
 					className={'rounded'}
 					alt={'avatar'}
 				/>
@@ -33,7 +33,7 @@ export function Profile() {
 					</div>
 				</div>
 			</div>
-			<div className={'grid rounded bg-dark-blue px-[20px] py-[10px]'}>
+			<div className={'grid rounded bg-[#041837] px-[20px] py-[10px]'}>
 				<span className={'text-md'}>Profit per hour</span>
 				<div className={'flex gap-x-[5px] text-md'}>
 					<Coin /> +{passiveIncome}

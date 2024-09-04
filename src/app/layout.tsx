@@ -31,7 +31,7 @@ export default function RootLayout({
 		<GoogleAnalytics gaId={'G-SQ0XS74EJ2'} />
 			<body
 				className={
-					'h-full bg-gradient-to-b from-saturated-blue from-0% to-dark-black to-100% bg-no-repeat'
+					'h-full bg-gradient-to-b from-[#0A2647] from-0% to-[#062243] to-100% bg-no-repeat'
 				}
 			>
 				<ApplicationProviders>{children}</ApplicationProviders>

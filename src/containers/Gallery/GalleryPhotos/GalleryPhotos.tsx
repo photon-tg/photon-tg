@@ -79,7 +79,7 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
 								}
 							/>
 							<div className={'flex items-center gap-x-[5px] text-md'}>
-								<Calendar /> {formatDate(new Date(selectedImage.created_at))}
+								<Calendar width={18} height={18} /> {formatDate(new Date(selectedImage.created_at))}
 							</div>
 						</div>
 					</div>

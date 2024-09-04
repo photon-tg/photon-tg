@@ -11,13 +11,13 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
 
 	return (
 		<main
-			className={`grid ${externalChildren ? 'grid-rows-[min-content_1fr]' : 'grid-rows-1'} mx-auto h-full w-full max-w-[375px] px-[5px] pt-[5px] overflow-hidden`}
+			className={`grid ${externalChildren ? 'grid-rows-[min-content_1fr]' : 'grid-rows-1'} mx-auto h-full w-full max-w-[375px] px-[0px] pt-[5px] overflow-hidden`}
 		>
 			{externalChildren}
 			<div className={'grid h-full w-full grid-rows-[1fr_min-content]'}>
 				<div
 					className={
-						'h-full translate-y-[5px] overflow-auto rounded-tl rounded-tr bg-dark-blue'
+						'h-full translate-y-[5px] overflow-auto rounded-tl rounded-tr bg-[#041837]'
 					}
 				>
 					{children}

@@ -38,13 +38,13 @@ export function Friends() {
 						title={'Invite a friend'}
 						description={'for you and your friend'}
 						profit={5000}
-						iconUrl={'/assets/present.png'}
+						iconUrl={'/assets/icons/present.svg'}
 					/>
 					<CTACard
 						title={'Invite a friend with Telegram premium'}
 						description={'for you and your friend'}
 						profit={20000}
-						iconUrl={'/assets/icons/presents.png'}
+						iconUrl={'/assets/icons/presents.svg'}
 					/>
 				</div>
 				<div className={'w-full mb-[15px]'}>

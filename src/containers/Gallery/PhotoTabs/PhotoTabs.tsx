@@ -46,7 +46,10 @@ export interface TabProps {
 export function Tab({ name, icon, url, isActive, onClick }: TabProps) {
 	return (
 		<Link
-			className={`flex w-[130px] flex-col items-center gap-y-[6px] rounded bg-inactive-grey px-[30px] py-[8px] ${isActive && 'bg-light-blue'}`}
+			style={{
+				backgroundColor: isActive ? '#155596' : '#102547',
+			}}
+			className={'flex w-[130px] flex-col items-center gap-y-[6px] rounded px-[30px] py-[8px]'}
 			href={url}
 			onClick={onClick}
 		>

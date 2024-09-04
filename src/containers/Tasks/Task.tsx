@@ -23,12 +23,12 @@ export function Task(props: TaskProps) {
 	};
 
 	return (
-		<article
+		<button
 			onClick={onClick}
-			className={`grid w-full grid-cols-[max-content_1fr_max-content] gap-x-[10px] rounded bg-light-blue px-[12px] py-[10px] ${isClickable && 'active:bg-[#183368]'}`}
+			className={`grid text-start w-full grid-cols-[max-content_1fr_max-content] gap-x-[10px] rounded bg-[#205295] px-[12px] py-[10px] ${isClickable && 'active:bg-[#183368]'}`}
 		>
 			<div>
-				<img width={43} src={task.images?.url || ''} />
+				<img width={45} src={task.images?.url || ''} />
 			</div>
 			<div className={'grid gap-y-[5px]'}>
 				<span className={'text-lg font-medium'}>{task.name}</span>
@@ -49,7 +49,7 @@ export function Task(props: TaskProps) {
 					<Tick />
 				</div>
 			)}
-		</article>
+		</button>
 	);
 }
 
