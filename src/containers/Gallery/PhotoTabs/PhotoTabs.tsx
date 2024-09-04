@@ -6,13 +6,13 @@ import Link from 'next/link';
 const tabs = [
 	{
 		name: 'Gallery',
-		icon: '/assets/icons/Photo/gallery.png',
+		icon: '/assets/icons/gallery.svg',
 		url: '/photo/gallery',
 		id: 1,
 	},
 	{
 		name: 'Camera',
-		icon: '/assets/icons/Photo/camera.png',
+		icon: '/assets/icons/camera-photo.svg',
 		url: '/photo/camera',
 		id: 2,
 	},
@@ -53,7 +53,7 @@ export function Tab({ name, icon, url, isActive, onClick }: TabProps) {
 			href={url}
 			onClick={onClick}
 		>
-			<img src={icon} />
+			<img width={40} src={icon} />
 			<span className={'text-xsm'}>{name}</span>
 		</Link>
 	);
