@@ -7,7 +7,7 @@ export function Tap() {
 	const { coins, maxEnergy, energy, onTap } = useApplicationContext();
 
 	return (
-		<div unselectable={'on'} onSelectCapture={(e) => {e.preventDefault();}} className={'flex h-full items-center justify-center'}>
+		<div onSelectCapture={(e) => {e.preventDefault();}} className={'flex h-full items-center justify-center'}>
 			<div
 				className={
 					'grid-rows-[repeat(3, min-content)] grid items-center justify-center gap-y-[15px]'
@@ -43,9 +43,10 @@ function TapArea(props: TapAreaProps) {
 
 	useEffect(() => {
 		if (tapAreaRef.current) {
-			tapAreaRef.current.onselectstart = (e) => {e.preventDefault(); return false;}
+			tapAreaRef.current.addEventListener('touchmove', (event) => event.preventDefault(), { passive: false });
+			tapAreaRef.current.addEventListener('touchstart', (e) => e.preventDefault());
 		}
-	}, [tapAreaRef.current]);
+	}, []);
 
 	const onTouchStart = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
@@ -58,11 +59,8 @@ function TapArea(props: TapAreaProps) {
 	};
 
 	return (
-		<button ref={tapAreaRef} unselectable={'on'} onSelectCapture={(e) => e.preventDefault() } onSelect={(e) => {e.preventDefault()}} onTouchStart={onTouchStart}
-						onTouchEnd={onTouchEnd} className={'relative'}>
-			<div className={'top-0 left-0 absolute bg-[transparent] w-full h-full z-40'}></div>
+		<button ref={tapAreaRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
 			<div
-				unselectable={'on'}
 					className={
 					'pointer-events-none select-none h-[300px] w-[300px] rounded-[50%] bg-gradient-to-b from-[#5EB3DC] from-0% via-[#11419B] via-50% to-[#0F3F99] to-100% px-[12px] py-[12px] shadow-[0_0_93px_5px_rgba(8,74,199,0.45)]'
 					}
