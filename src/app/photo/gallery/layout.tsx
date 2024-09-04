@@ -10,7 +10,7 @@ export default function GalleryLayout({
 		<Layout>
 			<div className={'grid h-full grid-rows-[1fr_min-content]'}>
 				{children}
-				<div className={'pb-[15px]'}>
+				<div className={'pb-[20px]'}>
 					<PhotoTabs />
 				</div>
 			</div>

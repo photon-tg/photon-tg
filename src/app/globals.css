@@ -4,7 +4,6 @@
 
 * {
 	box-sizing: border-box;
-	user-select: none;
 }
 
 html {
@@ -17,3 +16,7 @@ body {
 	color: white;
 }
 
+p, span, h1,h2,h3 {
+	user-select: none !important;
+	pointer-events: none;
+}
