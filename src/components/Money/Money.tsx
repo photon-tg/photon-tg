@@ -6,10 +6,11 @@ export interface MoneyProps {
 	amount: number;
 	isCompact?: boolean;
 	size?: MoneySize;
+	withoutPlus?: boolean;
 }
 
 export function Money(props: MoneyProps) {
-	const { amount, isCompact = false, size = 'md' } = props;
+	const { amount, isCompact = false, withoutPlus = false, size = 'md' } = props;
 
 	const sizeMap: Record<
 		MoneySize,
@@ -56,7 +57,7 @@ export function Money(props: MoneyProps) {
 				height={img.height}
 				src={'/assets/icons/photon.svg'}
 			/>
-			+{isCompact ? formatNumber(amount) : amount}
+			{!withoutPlus && '+'}{isCompact ? formatNumber(amount) : amount}
 		</div>
 	);
 }

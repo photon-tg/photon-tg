@@ -63,7 +63,7 @@ export function Friends() {
 										<div className={'flex gap-x-[5px] items-center'}>
 											<span className={'text-md text-[#42C2FF]'}>Lvl {getUserLevel(ref.users.coins)}</span>
 											<div className={'w-[4px] h-[4px] rounded-[50%] bg-[#5a8cd1]'}></div>
-											<Money amount={ref.users.coins} size={'xxs'} />
+											<Money withoutPlus amount={ref.users.coins} size={'xxs'} />
 										</div>
 									</div>
 								);
