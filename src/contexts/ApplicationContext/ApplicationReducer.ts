@@ -8,7 +8,7 @@ import {
 	levelToMaxEnergy,
 	levelToPhotoPassiveIncome
 } from '@/constants';
-import { isNextDay } from '@/utils/date';
+import { daysSinceDate } from '@/utils/date';
 
 export interface ApplicationState {
 	coins: number;
@@ -192,5 +192,5 @@ function getIsDailyRewardClaimed(lastDailyReward: string | undefined | null) {
 		return false;
 	}
 
-	return !isNextDay(lastDailyReward);
+	return daysSinceDate(lastDailyReward) === 0;
 }

@@ -245,7 +245,7 @@ export function ApplicationContextProvider({
 			claimTask,
 			lastPhoto: state.lastPhoto,
 		}),
-		[state.energy, state.coins, state.level, state.progress, state.passiveCoins, state.photos, state.maxEnergy, state.isDailyRewardClaimed, state.tasks, state.lastPhoto, referrals, addPhoto, isAppInitialized, onTap, claimTask],
+		[addPhoto, claimTask, isAppInitialized, onTap, state.coins, state.energy, state.friends, state.isDailyRewardClaimed, state.lastPhoto, state.level, state.maxEnergy, state.passiveCoins, state.photos, state.progress, state.tasks],
 	);
 
 	return (

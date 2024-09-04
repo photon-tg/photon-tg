@@ -14,9 +14,10 @@ export function isDateTodayUTC(date: Date | null): boolean {
 	);
 }
 
-export function daysSinceDate(inputDate: Date): number {
+export function daysSinceDate(input: string): number {
 	// Get the current time in the user's local timezone
 	const now = new Date();
+	const inputDate = new Date(input);
 
 	// Convert the UTC input date to the local timezone equivalent
 	const inputLocalDate = new Date(
@@ -126,3 +127,4 @@ export function hoursSinceDate(inputDate: string | Date, decimalPlaces: number =
 
 	return roundedHours;
 }
+
