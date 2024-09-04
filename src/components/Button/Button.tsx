@@ -30,7 +30,7 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
 				variant === 'filled' &&
 					!disabled &&
 					'bg-gradient-to-tr from-sky-blue to-saturated-blue',
-				disabled && 'bg-inactive-grey',
+				disabled && 'bg-[#1b2b50]',
 			)}
 		>
 			<button
@@ -40,11 +40,11 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
 					'w-full rounded px-[30px] py-[15px] text-center text-lg font-semibold',
 					variant === 'outline' &&
 						!disabled &&
-						'bg-dark-blue active:bg-gradient-to-tr active:from-light-blue active:from-0% active:to-sky-blue active:to-100%',
+						'bg-[#041837] active:bg-gradient-to-tr active:from-light-blue active:from-0% active:to-sky-blue active:to-100%',
 					variant === 'filled' &&
 						!disabled &&
 						'bg-gradient-to-tr from-sky-blue to-saturated-blue',
-					disabled && 'bg-inactive-grey',
+					disabled && 'bg-[#1b2b50]',
 				)}
 			>
 				{children}

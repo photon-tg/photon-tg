@@ -103,10 +103,10 @@ function Day(props: DayProps) {
 	return (
 		<div
 			className={cn(
-				'flex flex-col gap-y-[2px] overflow-hidden rounded bg-inactive-grey px-[13px] py-[13px]',
+				'flex flex-col gap-y-[2px] overflow-hidden rounded bg-[#1b2b50] px-[13px] py-[13px]',
 				isAvailable && 'border-[2px] border-[yellow]',
-				isDayCompleted && 'bg-light-blue',
-				isNotYetAvailable && 'bg-inactive-grey',
+				isDayCompleted && 'bg-[#0F3F99]',
+				isNotYetAvailable && 'bg-[#1b2b50]',
 			)}
 		>
 			<span className={'mb-[15px] text-md'}>Day {day.day}</span>
