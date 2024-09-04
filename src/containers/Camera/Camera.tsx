@@ -23,7 +23,7 @@ export function Camera() {
 				<div className={'absolute top-[50%] w-full translate-y-[-50%]'}>
 					<div
 						className={
-							'mx-auto flex w-full max-w-[280px] flex-col rounded bg-light-blue px-[30px] py-[24px]'
+							'mx-auto flex w-full max-w-[280px] flex-col rounded bg-[#062243] px-[30px] py-[24px]'
 						}
 					>
 						<h2 className={'mb-[15px] text-center text-xl'}>

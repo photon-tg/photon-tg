@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 export function EmptyMessage() {
 	const router = useRouter();
 	return (
-		<div className={'flex flex-col rounded bg-light-blue px-[30px] py-[24px]'}>
+		<div className={'flex flex-col rounded bg-[#062243] px-[30px] py-[24px]'}>
 			<h2 className={'mb-[15px] text-center text-xl'}>Your gallery is empty</h2>
 			<div className={'mb-[30px] text-lg'}>
 				Make your first photo and earn
