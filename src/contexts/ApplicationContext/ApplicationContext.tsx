@@ -109,7 +109,7 @@ export function ApplicationContextProvider({
 		if (isAppInitialized) return;
 
 		async function initApp() {
-			const isFirstTime = user.is_referred !== null;
+			const isFirstTime = user.is_referred === null;
 
 			const userData = await getUserData(user.id, user.telegram_id);
 			const referenceBonusCoins = isFirstTime ? (await refer() || 0) : 0;
