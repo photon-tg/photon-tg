@@ -18,27 +18,17 @@ export function daysSinceDate(input: string): number {
 	// Get the current time in the user's local timezone
 	const now = new Date();
 	const inputDate = new Date(input);
-
-	// Convert the UTC input date to the local timezone equivalent
-	const inputLocalDate = new Date(
-		inputDate.getUTCFullYear(),
-		inputDate.getUTCMonth(),
-		inputDate.getUTCDate(),
-		0, 0, 0 // Strip the time for comparison
-	);
-
 	// Get the current date in the user's local timezone (ignoring time)
-	const currentLocalDate = new Date(
-		now.getFullYear(),
-		now.getMonth(),
-		now.getDate(),
-		0, 0, 0 // Strip the time for comparison
-	);
+
+	const localCurrentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+	// Convert the UTC input date to the local date in the user's timezone (ignoring time)
+	const localInputDate = new Date(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate());
 
 	// Calculate the difference in time (milliseconds)
-	const diffInMillis = currentLocalDate.getTime() - inputLocalDate.getTime();
+	const diffInMillis = localCurrentDate.getTime() - localInputDate.getTime();
 
-	// Convert milliseconds to days
+	// Convert milliseconds to full calendar days
 	const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
 
 	// Return the number of full calendar days that have passed
