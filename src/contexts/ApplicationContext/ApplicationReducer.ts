@@ -22,6 +22,7 @@ export interface ApplicationState {
 	progress: number;
 	maxEnergy: number;
 	isDailyRewardClaimed: boolean;
+	lastPhoto: string | null | undefined;
 }
 
 export const applicationStateInitialValue: ApplicationState = {
@@ -36,6 +37,7 @@ export const applicationStateInitialValue: ApplicationState = {
 	maxEnergy: 0,
 	progress: 0,
 	isDailyRewardClaimed: false,
+	lastPhoto: null,
 }
 
 export function applicationReducer(state = applicationStateInitialValue, action: ApplicationAction): ApplicationState {
@@ -54,6 +56,7 @@ export function applicationReducer(state = applicationStateInitialValue, action:
 				maxEnergy: levelToMaxEnergy.get(level)!,
 				progress: getUserLevelProgress(action.payload.coins),
 				isDailyRewardClaimed: getIsDailyRewardClaimed(action.payload.lastDailyReward),
+				lastPhoto: action.payload.lastPhoto,
 				level,
 			}
 		}
@@ -162,6 +165,7 @@ export type InitActionPayload = {
 	friends: ReferralFragment[] | undefined;
 	referred: ReferralFragment | undefined;
 	lastDailyReward?: string | null;
+	lastPhoto: string | null | undefined;
 };
 
 function calculatePassiveCoins(photos?: UserPhoto[]) {

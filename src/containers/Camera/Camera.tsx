@@ -1,24 +1,23 @@
 'use client';
 
-import { CameraProps } from 'react-camera-pro';
 import { useCamera } from '@/containers/Camera/useCamera';
 import CameraSwitch from '@/../public/assets/icons/cameraswitch.svg';
 import ArrowIcon from '@/../public/assets/icons/Photo/arrow-left.svg';
 import { PhotoReview } from '@/containers/Camera/PhotoReview/PhotoReview';
-import { useUserContext } from '@/contexts/UserContext';
 import { isDateTodayUTC } from '@/utils/date';
 import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
 import Webcam from 'react-webcam';
 import { Layout } from '@/components/Layout/Layout';
+import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 
 export function Camera() {
 	const router = useRouter();
-	const { user } = useUserContext();
+	const { lastPhoto } = useApplicationContext();
 	const { cameraRef, takePhoto, flip, facingMode, image, onReject, onAccept, goBack } =
 		useCamera();
 
-	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
+	if (lastPhoto && isDateTodayUTC(new Date(lastPhoto))) {
 		return (
 			<Layout>
 				<div className={'absolute top-[50%] w-full translate-y-[-50%]'}>

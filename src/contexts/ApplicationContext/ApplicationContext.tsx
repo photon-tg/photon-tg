@@ -49,6 +49,7 @@ interface ApplicationContext {
 	referrals: Referral[];
 	maxEnergy: number;
 	isDailyRewardClaimed: boolean;
+	lastPhoto?: string | null;
 	addPhoto(photo: string): Promise<void>;
 	onTap(): void;
 	claimTask(type: 'daily_reward', task: PersonalizedTask): Promise<void>;
@@ -129,6 +130,7 @@ export function ApplicationContextProvider({
 					friends: userData.friends,
 					referred: userData.referred,
 					lastDailyReward: user.last_daily_reward,
+					lastPhoto: user.last_photo,
 				}
 			});
 		}
@@ -239,6 +241,7 @@ export function ApplicationContextProvider({
 			isAppInitialized,
 			onTap,
 			claimTask,
+			lastPhoto: state.lastPhoto,
 		}),
 		[state.energy, state.coins, state.level, state.progress, state.passiveCoins, state.photos, state.maxEnergy, state.isDailyRewardClaimed, state.tasks, referrals, addPhoto, isAppInitialized, onTap, claimTask],
 	);
