@@ -1,6 +1,6 @@
 import { User } from '@/interfaces/User';
 import { useCallback, useRef, useState } from 'react';
-import { claimReferrals as claimReferralsReq, Friend, getFriends, getReferral, referUser } from '@/api/api';
+import { claimReferrals as claimReferralsReq, Friend, getFriend, getFriends, getReferral, referUser } from '@/api/api';
 import { getUserLevel, PREMIUM_USER_REF_BONUS, USER_REF_BONUS } from '@/constants';
 import { ReferralFragment } from '@/gql/graphql';
 export type Referral = {
@@ -35,7 +35,10 @@ export function useReferrals(user: User) {
 		const referenceData = await getReferral(user.telegram_id);
 		if (referenceData) return 0;
 
-		const bonusCoins = user.telegram.is_premium ? PREMIUM_USER_REF_BONUS : USER_REF_BONUS;
+		const referrer = await getFriend(user.referrerId);
+		const isReferrerPremium = referrer.is_premium ?? false;
+
+		const bonusCoins = isReferrerPremium ? PREMIUM_USER_REF_BONUS : USER_REF_BONUS;
 		try {
 			await referUser({ referralTgId: user.telegram_id, referrerTgId: user.referrerId });
 		} catch (err) {

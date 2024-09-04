@@ -310,6 +310,14 @@ export async function getReferral(userTgId: string) {
 	return data.user_referralsCollection?.edges?.[0]?.node;
 }
 
+export async function getFriend(friendTgId: string): Promise<{ is_premium: boolean }> {
+	const { data } = await axiosInstance.post('/referral', {
+		telegramId: friendTgId,
+	});
+
+	return data;
+}
+
 export async function getReferrerInfo(tgId: string): Promise<any[]> {
 	const { data: referralsData } = await axiosInstance.get(`/referrals?referrer=${tgId}`);
 

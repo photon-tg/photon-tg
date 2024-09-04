@@ -1,6 +1,6 @@
 import { formatNumber } from '@/utils/formatter';
 
-export type MoneySize = 'xs' | 'md' | 'xl';
+export type MoneySize = 'xxs' | 'xs' | 'md' | 'xl';
 
 export interface MoneyProps {
 	amount: number;
@@ -15,6 +15,13 @@ export function Money(props: MoneyProps) {
 		MoneySize,
 		{ img: { width: number; height: number }; text: string }
 	> = {
+		xxs: {
+			img: {
+				width: 15,
+				height: 15,
+			},
+			text: 'text-sm gap-x-[3px]',
+		},
 		xs: {
 			img: {
 				width: 22,

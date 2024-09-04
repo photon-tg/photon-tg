@@ -5,6 +5,8 @@ import { CTACard } from '@/components/CTACard/CTACard';
 import { appURL } from '@/constants/urls';
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 import { useUserContext } from '@/contexts/UserContext';
+import { getUserLevel } from '@/constants';
+import { Money } from '@/components/Money/Money';
 
 export function Friends() {
 	const { referrals } = useApplicationContext();
@@ -56,12 +58,12 @@ export function Friends() {
 						<div className={'flex flex-col gap-y-[10px]'}>
 							{referrals.map((ref) => {
 								return (
-									<div key={ref.firstName} className={'bg-inactive-grey rounded py-[12px] px-[20px] flex flex-col gap-x-[5px]'}>
-										<div>
-											<span className={'text-md'}>{ref.firstName}</span>
-										</div>
-										<div>
-											<span className={'text-md text-[#42C2FF]'}>Lvl {ref.level}</span>
+									<div key={ref.referral_id} className={'bg-[#215295] rounded py-[9px] px-[15px] flex flex-col gap-y-[8px]'}>
+										<span className={'text-md'}>{ref.users.first_name} {ref.users.last_name}</span>
+										<div className={'flex gap-x-[5px] items-center'}>
+											<span className={'text-md text-[#42C2FF]'}>Lvl {getUserLevel(ref.users.coins)}</span>
+											<div className={'w-[4px] h-[4px] rounded-[50%] bg-[#5a8cd1]'}></div>
+											<Money amount={ref.users.coins} size={'xxs'} />
 										</div>
 									</div>
 								);

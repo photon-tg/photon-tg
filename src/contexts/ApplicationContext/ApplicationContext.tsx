@@ -25,7 +25,7 @@ import {
 	synchronizeTaps,
 	updateUser
 } from '@/api/api';
-import { UserPhotoFragment } from '@/gql/graphql';
+import { ReferralFragment, UserPhotoFragment } from '@/gql/graphql';
 import { hoursSinceDate } from '@/utils/date';
 import { UserPhoto } from '@/interfaces/photo';
 import { Referral, useReferrals } from '@/contexts/ApplicationContext/hooks/useReferrals/useReferrals';
@@ -46,7 +46,7 @@ interface ApplicationContext {
 	photos: UserPhoto[];
 	tasks: PersonalizedTask[];
 	isAppInitialized: boolean;
-	referrals: Referral[];
+	referrals: ReferralFragment[];
 	maxEnergy: number;
 	isDailyRewardClaimed: boolean;
 	lastPhoto?: string | null;
@@ -235,7 +235,7 @@ export function ApplicationContextProvider({
 			photos: state.photos,
 			maxEnergy: state.maxEnergy,
 			isDailyRewardClaimed: state.isDailyRewardClaimed,
-			referrals,
+			referrals: state.friends,
 			addPhoto,
 			tasks: state.tasks,
 			isAppInitialized,
@@ -243,7 +243,7 @@ export function ApplicationContextProvider({
 			claimTask,
 			lastPhoto: state.lastPhoto,
 		}),
-		[state.energy, state.coins, state.level, state.progress, state.passiveCoins, state.photos, state.maxEnergy, state.isDailyRewardClaimed, state.tasks, referrals, addPhoto, isAppInitialized, onTap, claimTask],
+		[state.energy, state.coins, state.level, state.progress, state.passiveCoins, state.photos, state.maxEnergy, state.isDailyRewardClaimed, state.tasks, state.lastPhoto, referrals, addPhoto, isAppInitialized, onTap, claimTask],
 	);
 
 	return (

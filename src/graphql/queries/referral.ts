@@ -8,6 +8,9 @@ export const GET_REFERRED = graphql(`
 					id
 					referrer_id
 					referral_id
+					users {
+						is_premium
+					}
 				}
 			}
 		}
