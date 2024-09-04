@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 
 export function Tap() {
-	const { coins, maxEnergy, energy, tap } = useApplicationContext();
+	const { coins, maxEnergy, energy, onTap } = useApplicationContext();
 
 	return (
 		<div className={'flex h-full items-center justify-center'}>
@@ -21,7 +21,7 @@ export function Tap() {
 					<img width={40} height={40} src={'/assets/icons/photon.svg'} />
 					{coins}
 				</span>
-				<TapArea onTap={tap} />
+				<TapArea onTap={onTap} />
 				<div className={'flex items-center justify-center gap-x-[10px]'}>
 					<img className={'w-[10px]'} src={'/assets/icons/energy.svg'} />
 					{energy} / {maxEnergy}

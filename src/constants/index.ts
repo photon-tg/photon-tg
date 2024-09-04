@@ -21,13 +21,6 @@ export const levelToMaxEnergy = new Map<Level, number>([
 	[4, 2500],
 	[5, 3000],
 ]);
-export const levelToHourlyPassiveIncome = new Map<Level, number>([
-	[1, 50],
-	[2, 100],
-	[3, 200],
-	[4, 400],
-	[5, 800],
-]);
 
 export const levelToPhotoReward = new Map<Level, number>([
 	[1, 5000],
@@ -58,7 +51,7 @@ export function getUserLevel(userCoins: number): Level {
 	return 1;
 }
 
-export function getUserProgressProcentage(userCoins: number): number {
+export function getUserLevelProgress(userCoins: number): number {
 	const level = getUserLevel(userCoins);
 	const prevLvlMoney = (level > 1 && levelToCoins.get(level - 1 as Level)) || 0;
 	return userCoins === 0
@@ -66,6 +59,3 @@ export function getUserProgressProcentage(userCoins: number): number {
 		: Math.round((100 * (userCoins - prevLvlMoney) / (levelToCoins.get(level) as number)));
 }
 
-export function getUserPassiveIncome(level: Level): number {
-	return levelToHourlyPassiveIncome.get(level) as number;
-}

@@ -19,14 +19,14 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 
 interface UserContext {
 	user: User;
-	authenticate(): Promise<User | null>;
+	authenticate(): Promise<void>;
 	updateLocalUser(user: Partial<User>): User;
 }
 
 const initialUserContext: UserContext = {
 	user: null!,
-	authenticate(): Promise<User> { return Promise.resolve(null!) },
-	updateLocalUser(user: Partial<User>): User { return null! },
+	authenticate() { return Promise.resolve() },
+	updateLocalUser() { return null! },
 };
 
 const UserContext = createContext<UserContext>(initialUserContext);
@@ -36,11 +36,7 @@ export function UserContextProvider({ children }: PropsWithChildren<{}>) {
 	const [user, setUser] = useState<User>(null!);
 
 	const modifyUser = useCallback((userData: Partial<User>): User => {
-		const isDailyRewardClaimed = getIsDailyRewardClaimed(
-			userData.last_daily_reward,
-		);
-
-		return { ...userData, isDailyRewardClaimed } as User;
+		return userData as User;
 	}, []);
 
 	const authenticate = useCallback(async () => {
@@ -54,11 +50,10 @@ export function UserContextProvider({ children }: PropsWithChildren<{}>) {
 
 		const fullUserData: User = modifyUser({ ...authData, ...userData });
 		setUser(fullUserData);
-		return fullUserData;
 	}, [modifyUser]);
 
 	useEffect(() => {
-		if (!!user) {
+		if (!!user || !isMobile) {
 			return;
 		}
 
@@ -99,12 +94,4 @@ export function useUserContext() {
 	}
 
 	return useContext(UserContext);
-}
-
-function getIsDailyRewardClaimed(lastDailyReward: string | undefined | null) {
-	if (!lastDailyReward) {
-		return false;
-	}
-
-	return !isNextDay(new Date(lastDailyReward));
 }

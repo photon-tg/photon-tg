@@ -11,7 +11,7 @@ export function TasksList() {
 			<span className={'mb-[15px] block text-lg font-medium'}>Daily tasks</span>
 			<div className={'flex flex-col gap-y-[10px]'}>
 				{tasks.map((task) => (
-					<Task key={task.id} {...task} />
+					<Task key={task.id} task={task} />
 				))}
 			</div>
 		</div>

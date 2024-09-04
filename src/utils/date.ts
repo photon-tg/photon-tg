@@ -15,16 +15,32 @@ export function isDateTodayUTC(date: Date | null): boolean {
 }
 
 export function daysSinceDate(inputDate: Date): number {
-	// Get the current date and the input date as UTC timestamps
+	// Get the current time in the user's local timezone
 	const now = new Date();
-	const currentTimestamp = now.getTime(); // current time in milliseconds
-	const inputTimestamp = inputDate.getTime(); // input time in milliseconds
 
-	// Calculate the difference in milliseconds and convert it to days
-	const diffInMillis = currentTimestamp - inputTimestamp;
+	// Convert the UTC input date to the local timezone equivalent
+	const inputLocalDate = new Date(
+		inputDate.getUTCFullYear(),
+		inputDate.getUTCMonth(),
+		inputDate.getUTCDate(),
+		0, 0, 0 // Strip the time for comparison
+	);
+
+	// Get the current date in the user's local timezone (ignoring time)
+	const currentLocalDate = new Date(
+		now.getFullYear(),
+		now.getMonth(),
+		now.getDate(),
+		0, 0, 0 // Strip the time for comparison
+	);
+
+	// Calculate the difference in time (milliseconds)
+	const diffInMillis = currentLocalDate.getTime() - inputLocalDate.getTime();
+
+	// Convert milliseconds to days
 	const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
 
-	// Return the floor value of the difference in days
+	// Return the number of full calendar days that have passed
 	return Math.floor(diffInDays);
 }
 
@@ -72,9 +88,11 @@ export function formatDate(date: Date) {
 	return formattedDate;
 }
 
-export function isNextDay(inputDate: Date): boolean {
+export function isNextDay(input: string): boolean {
 	// Get the current date
 	const now = new Date();
+
+	const inputDate = new Date(input);
 
 	// Check if the current date is exactly one day after the input date (ignoring time)
 	const inputDay = inputDate.getUTCDate();
@@ -91,4 +109,20 @@ export function isNextDay(inputDate: Date): boolean {
 	}
 
 	return false;
+}
+
+export function hoursSinceDate(inputDate: string | Date, decimalPlaces: number = 2): number {
+	const pastDate = new Date(inputDate);
+	const currentDate = new Date();
+
+	// Get the difference in milliseconds
+	const timeDifferenceMs = currentDate.getTime() - pastDate.getTime();
+
+	// Convert milliseconds to hours
+	const hoursDifference = timeDifferenceMs / (60 * 60 * 1000);
+
+	// Round to the specified number of decimal places
+	const roundedHours = parseFloat(hoursDifference.toFixed(decimalPlaces));
+
+	return roundedHours;
 }

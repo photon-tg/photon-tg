@@ -7,6 +7,9 @@ export const FULL_USER_TASK = graphql(`
 		created_at
 		days_completed
 		task_id
+		tasks {
+			...FullTask
+		}
 	}
 `);
 

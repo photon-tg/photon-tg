@@ -3,22 +3,23 @@ import Tick from '@/../public/assets/icons/tick.svg';
 import { useModalContext } from '@/contexts/ModalContext';
 import { TaskModal } from './TaskModal';
 import { PersonalizedTask, RewardByDay, TaskType } from '@/interfaces/Task';
-import { formatNumber } from '@/utils/formatter';
-import { useUserContext } from '@/contexts/UserContext';
 
-interface TaskProps extends PersonalizedTask {}
+import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+
+interface TaskProps {
+	task: PersonalizedTask;
+}
 
 export function Task(props: TaskProps) {
-	const { name, images,  id, userTask, rewardByDay, reward_coins, type } =
-		props;
+	const { task } = props;
 
 	const isClickable = true;
 
 	const { openModal } = useModalContext();
-	const { user } = useUserContext();
+	const { isDailyRewardClaimed } = useApplicationContext();
 
 	const onClick = () => {
-		openModal(<TaskModal taskId={id} />);
+		openModal(<TaskModal taskId={task.id} />);
 	};
 
 	return (
@@ -27,19 +28,19 @@ export function Task(props: TaskProps) {
 			className={`grid w-full grid-cols-[max-content_1fr_max-content] gap-x-[10px] rounded bg-light-blue px-[12px] py-[10px] ${isClickable && 'active:bg-[#183368]'}`}
 		>
 			<div>
-				<img width={43} src={images?.url || ''} />
+				<img width={43} src={task.images?.url || ''} />
 			</div>
 			<div className={'grid gap-y-[5px]'}>
-				<span className={'text-lg font-medium'}>{name}</span>
+				<span className={'text-lg font-medium'}>{task.name}</span>
 				<div className={'flex items-center gap-x-[10px]'}>
 					<Money
 						size={'md'}
 						isCompact
-						amount={getTaskRewardAmount(type, rewardByDay, reward_coins)}
+						amount={getTaskRewardAmount(task.type, task.rewardByDay, task.reward_coins)}
 					/>
 				</div>
 			</div>
-			{userTask?.completed || (type === 'daily_reward' && user.isDailyRewardClaimed) && (
+			{task.userTask?.completed || (task.type === 'daily_reward' && isDailyRewardClaimed) && (
 				<div
 					className={
 						'flex h-[45px] w-[45px] items-center justify-center rounded-[50%] bg-gradient-to-r from-text-blue to-[#00E1FF]'

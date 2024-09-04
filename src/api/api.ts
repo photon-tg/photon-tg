@@ -1,9 +1,8 @@
 import apolloClient from '@/api/graphql';
-import { GET_REFERRED, GET_TASKS, GET_USER } from '@/graphql/queries';
+import { GET_REFERRED, GET_TASKS, GET_USER, GetUserData } from '@/graphql/queries';
 
-import { AddUserPhotoMutation, CoreUserFieldsFragment } from '@/gql/graphql';
+import { CoreUserFieldsFragment, ReferralFragment, UserPhotoFragment } from '@/gql/graphql';
 import {
-	OmitTypenameAndUnwrapRecords,
 	parseGraphQLMutationResponse,
 	parseTasks,
 } from '@/api/parsers';
@@ -11,6 +10,7 @@ import { PersonalizedTask } from '@/interfaces/Task';
 import {
 	CLAIM_DAILY_REWARD,
 	CLAIM_FIRST_DAILY_REWARD,
+	CLAIM_FIRST_TASK, CLAIM_TASK,
 	UPDATE_DAILY_REWARD_COMPLETED_DAYS,
 } from '@/graphql/mutations/task';
 import {
@@ -26,6 +26,7 @@ import { ADD_USER_PHOTO, CLAIM_REFERRAL, REFER_USER, UPDATE_USER } from '@/graph
 import { Level, levelToPhotoReward } from '@/constants';
 import { axiosInstance } from '@/api/axios';
 import { Referral } from '@/contexts/ApplicationContext/hooks/useReferrals/useReferrals';
+import { User } from '@/interfaces/User';
 
 export async function getUser(
 	userId: string,
@@ -114,6 +115,78 @@ export async function claimDailyReward(
 	return parseGraphQLMutationResponse(data);
 }
 
+export type ClaimTaskParams = {
+	userId: string,
+	userTaskId?: string,
+	taskId: string;
+	daysCompleted: number,
+	coins: number,
+	isCompleted: boolean,
+	lastDailyReward?: string | null,
+}
+
+export async function claimFirstTask(params: ClaimTaskParams): Promise<PersonalizedTask> {
+	const { data, errors } = await apolloClient.mutate({
+		mutation: CLAIM_FIRST_TASK,
+		fetchPolicy: 'no-cache',
+		variables: {
+			userId: params.userId,
+			taskId: params.taskId,
+			lastDailyReward: params.lastDailyReward ?? null,
+			daysCompleted: params.daysCompleted,
+			coins: params.coins,
+			completed: params.isCompleted,
+		},
+	});
+
+	if (errors?.length || !data) {
+		throw new Error();
+	}
+
+	const fullTask = data.insertIntouser_tasksCollection?.records[0];
+
+	if (!fullTask) {
+		throw new Error();
+	}
+
+	const task = fullTask.tasks;
+
+	return {
+		...task,
+		userTask: fullTask,
+	};
+}
+
+export async function claimTask(params: ClaimTaskParams): Promise<PersonalizedTask> {
+	const { data, errors } = await apolloClient.mutate({
+		mutation: CLAIM_TASK,
+		fetchPolicy: 'no-cache',
+		variables: {
+			userId: params.userId,
+			userTaskId: params.userTaskId!,
+			lastDailyReward: params.lastDailyReward ?? null,
+			daysCompleted: params.daysCompleted,
+			coins: params.coins,
+			completed: params.isCompleted,
+		},
+	});
+
+
+	if (errors?.length || !data) {
+		throw new Error();
+	}
+
+	const fullTask = data.updateuser_tasksCollection.records[0];
+	const task = fullTask.tasks;
+
+	return {
+		...task,
+		userTask: fullTask,
+	};
+}
+
+
+
 export async function synchronizeTaps(
 	userId: string,
 	coins: number,
@@ -126,6 +199,7 @@ export async function synchronizeTaps(
 			userId,
 			coins,
 			energy,
+			lastSync: new Date().toUTCString(),
 		},
 	});
 
@@ -184,7 +258,7 @@ export async function postUserPhoto(
 	imageBase64: string,
 	level: number,
 	coins: number,
-): Promise<OmitTypenameAndUnwrapRecords<AddUserPhotoMutation>> {
+): Promise<{ photo: UserPhotoFragment | undefined }> {
 	const image = decode(imageBase64.split('base64,')[1]);
 
 	const imageId = nanoid();
@@ -215,7 +289,9 @@ export async function postUserPhoto(
 		throw new Error();
 	}
 
-	return parseGraphQLMutationResponse(data);
+	return {
+		photo: data.insertIntouser_photosCollection?.records?.[0],
+	}
 }
 
 export async function getReferral(userTgId: string) {
@@ -309,17 +385,20 @@ export async function claimReferrals(telegramId: string) {
 }
 
 export type UpdateUserOptions = {
-	userId: string;
-	coins: number;
+	userId?: string;
+	coins?: number;
+	lastHourlyReward?: string;
+	user: User;
 }
 
-export async function updateUser({ userId, coins }: UpdateUserOptions) {
+export async function updateUser({ userId, coins, lastHourlyReward, user }: UpdateUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_USER,
 		fetchPolicy: 'no-cache',
 		variables: {
-			userId,
-			coins,
+			userId: userId ?? user.id,
+			coins: coins ?? user.coins,
+			lastHourlyReward: lastHourlyReward ?? user.last_hourly_reward,
 		}
 	});
 
@@ -330,3 +409,44 @@ export async function updateUser({ userId, coins }: UpdateUserOptions) {
 	return data;
 }
 
+export async function getUserData(userId: string, telegramId: string) {
+	const { error, data } = await apolloClient.query({
+		query: GetUserData,
+		fetchPolicy: 'no-cache',
+		variables: {
+			userId,
+			telegramId,
+		}
+	});
+
+	if (error) {
+		throw new Error();
+	}
+
+	const photos: UserPhoto[] | undefined = data.user_photosCollection?.edges.map(({ node: photo }) => {
+		return photo;
+	});
+
+	const tasks: PersonalizedTask[] | undefined = data.tasksCollection?.edges.map(({ node: task }) => {
+		const userTask = data.user_tasksCollection?.edges.find(({ node: userTask }) => userTask.task_id === task.id)?.node;
+		console.log(data);
+		return {
+			...task,
+			userTask,
+		}
+	});
+
+	const referrals: ReferralFragment[] | undefined = data.user_referralsCollection?.edges.map(({ node: referral }) => {
+		return referral;
+	});
+
+	const friends = referrals?.filter((friend) => friend.referrer_id === telegramId);
+	const referred = referrals?.filter((referral) => referral.referral_id === telegramId)?.[0];
+
+	return {
+		photos,
+		tasks,
+		friends,
+		referred,
+	}
+}

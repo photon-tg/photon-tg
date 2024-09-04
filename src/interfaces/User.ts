@@ -7,6 +7,4 @@ export type AuthData = {
 };
 
 export type User = CoreUserFieldsFragment &
-	AuthData & {
-		isDailyRewardClaimed: boolean;
-	};
+	AuthData;

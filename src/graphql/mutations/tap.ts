@@ -1,10 +1,10 @@
 import { graphql } from '@/gql';
 
 export const SYNCHRONIZE_TAPS = graphql(`
-	mutation SynchronizeTaps($userId: UUID!, $coins: Int!, $energy: Int!) {
+	mutation SynchronizeTaps($userId: UUID!, $coins: Int!, $energy: Int!, $lastSync: Datetime) {
 		updateusersCollection(
 			atMost: 1
-			set: { coins: $coins, energy: $energy }
+			set: { coins: $coins, energy: $energy, last_sync: $lastSync }
 			filter: { id: { eq: $userId } }
 		) {
 			records {

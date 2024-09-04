@@ -14,7 +14,7 @@ export function useCamera() {
 	const [facingMode, setFacingMode] = useState<FacingMode>('environment');
 	const router = useRouter();
 	const { user, updateLocalUser } = useUserContext();
-	const { level, coins, increaseCoins, photos, updatePhotos, updatePassiveIncomeLocal } = useApplicationContext();
+	const { addPhoto } = useApplicationContext();
 
 	const takePhoto = useCallback(() => {
 		const base64Image = cameraRef.current?.getScreenshot() as string;
@@ -30,30 +30,10 @@ export function useCamera() {
 			return;
 		}
 
-		const postedPhotoData = await postUserPhoto(user.id, image!, level, coins);
-		if (postedPhotoData) {
-			updatePhotos([
-				...photos,
-				(postedPhotoData.insertIntouser_photosCollection as any)?.[0],
-			]);
-			increaseCoins((levelToPhotoReward.get(level as Level) as number));
-			updateLocalUser(
-				postedPhotoData.updateusersCollection[0] as CoreUserFieldsFragment,
-			);
-			updatePassiveIncomeLocal('photo');
-		}
+		await addPhoto(image!);
 
 		router.push('/photo/gallery');
-	}, [
-		coins,
-		image,
-		level,
-		photos,
-		router,
-		updateLocalUser,
-		updatePhotos,
-		user,
-	]);
+	}, [addPhoto, image, router, user]);
 
 	const onReject = useCallback(() => {
 		setImage(null);

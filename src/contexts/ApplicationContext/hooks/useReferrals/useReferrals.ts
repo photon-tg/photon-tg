@@ -2,6 +2,7 @@ import { User } from '@/interfaces/User';
 import { useCallback, useRef, useState } from 'react';
 import { claimReferrals as claimReferralsReq, Friend, getFriends, getReferral, referUser } from '@/api/api';
 import { getUserLevel, PREMIUM_USER_REF_BONUS, USER_REF_BONUS } from '@/constants';
+import { ReferralFragment } from '@/gql/graphql';
 export type Referral = {
 	firstName: string;
 	lastName: string;
@@ -27,38 +28,46 @@ export function useReferrals(user: User) {
 		setReferrals(parsedReferrals);
 	}, [user.telegram_id]);
 
-	const saveReferrer = useCallback(async (): Promise<number | undefined> => {
-		if (!user.referrerId && user.telegram_id !== user.referrerId) return;
+	const refer = useCallback(async (): Promise<number> => {
+		if (!user.referrerId || user.telegram_id === user.referrerId) return 0;
 
 		/* check if user already referred */
 		const referenceData = await getReferral(user.telegram_id);
-		if (referenceData) return;
+		if (referenceData) return 0;
 
 		const bonusCoins = user.telegram.is_premium ? PREMIUM_USER_REF_BONUS : USER_REF_BONUS;
+		try {
+			await referUser({ referralTgId: user.telegram_id, referrerTgId: user.referrerId });
+		} catch (err) {
+			return 0;
+		}
 
-		await referUser({ referralTgId: user.telegram_id, referrerTgId: user.referrerId });
 		return bonusCoins;
 	}, [user]);
 
-	const claimReferrals = useCallback(async (): Promise<number> => {
-		const bonusCoins = referralsCache.current.reduce((totalCoins, referral) => {
+	const claimReferrals = useCallback(async (friends: ReferralFragment[] | undefined): Promise<number> => {
+		const bonusCoins = friends?.reduce((totalCoins, referral) => {
 			if (referral.is_claimed_by_referrer) return totalCoins;
 
-			const bonusPerReferral = referral.is_premium ? PREMIUM_USER_REF_BONUS : USER_REF_BONUS;
+			const bonusPerReferral = referral.users.is_premium ? PREMIUM_USER_REF_BONUS : USER_REF_BONUS;
 
 			return totalCoins + bonusPerReferral;
 		}, 0);
 
-		if (bonusCoins) {
-			await claimReferralsReq(user.telegram_id);
+		try {
+			if (bonusCoins) {
+				await claimReferralsReq(user.telegram_id);
+			}
+		} catch(err) {
+			// TODO
 		}
 
-		return bonusCoins;
+		return bonusCoins || 0;
 	}, [user.telegram_id])
 
 	return {
 		initMyReferrals,
-		saveReferrer,
+		refer,
 		claimReferrals,
 		referrals,
 	}

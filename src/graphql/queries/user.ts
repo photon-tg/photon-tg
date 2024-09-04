@@ -11,3 +11,42 @@ export const GET_USER = graphql(`
 		}
 	}
 `);
+
+export const GetUserData = graphql(`
+	query GetUserData(
+		$userId: UUID!,
+		$telegramId: String!,
+	) {
+		user_photosCollection(first: 100, offset: 0, filter: { user_id: { eq: $userId } }) {
+			edges {
+				node {
+					...UserPhoto,
+				}
+			}
+		}
+
+		user_referralsCollection(first: 100, offset: 0, filter: { or: [{ referrer_id: { eq: $telegramId } }, { referral_id: { eq: $telegramId } }] }) {
+			edges {
+				node {
+					...Referral,
+				}
+			}
+		}
+
+		tasksCollection(first: 100, offset: 0) {
+			edges {
+				node {
+					...FullTask
+				}
+			}
+		}
+
+		user_tasksCollection(first: 100, offset: 0, filter: { user_id: { eq: $userId } }) {
+			edges {
+				node {
+					...FullUserTask
+				}
+			}
+		}
+	}
+`)

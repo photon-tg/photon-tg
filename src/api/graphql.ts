@@ -6,6 +6,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { supabase } from './supabase';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 
 const cache = new InMemoryCache({
 	dataIdFromObject(responseObject) {
@@ -32,6 +33,13 @@ const authLink = setContext(async (_, { headers }) => {
 		},
 	};
 });
+
+
+if (process.env.NODE_ENV === 'development') {
+	// Adds messages only in a dev environment
+	loadDevMessages();
+	loadErrorMessages();
+}
 
 const apolloClient = new ApolloClient({
 	link: authLink.concat(httpLink),
