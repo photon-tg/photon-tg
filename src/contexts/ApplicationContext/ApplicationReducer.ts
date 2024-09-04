@@ -192,5 +192,5 @@ function getIsDailyRewardClaimed(lastDailyReward: string | undefined | null) {
 		return false;
 	}
 
-	return daysSinceDate(lastDailyReward) === 0;
+	return daysSinceDate(lastDailyReward) < 1;
 }
