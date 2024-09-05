@@ -80,7 +80,7 @@ export function applicationReducer(state = applicationStateInitialValue, action:
 		}
 
 		case ApplicationActionType.ADD_PHOTO: {
-			const newPhotos = [...state.photos, action.payload.photo];
+			const newPhotos = [...state.photos, action.payload.photo].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 			const newCoins = action.payload.coinsForPhoto + state.coins;
 			return {
 				...state,
