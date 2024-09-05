@@ -1,11 +1,10 @@
-import { CameraType, FacingMode } from 'react-camera-pro/dist/components/Camera/types';
+import { FacingMode } from 'react-camera-pro/dist/components/Camera/types';
 import { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserContext } from '@/contexts/UserContext';
-import { postUserPhoto } from '@/api/api';
+
 import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
-import { CoreUserFieldsFragment } from '@/gql/graphql';
-import { Level, levelToPhotoReward } from '@/constants';
+
 import Webcam from 'react-webcam';
 
 export function useCamera() {

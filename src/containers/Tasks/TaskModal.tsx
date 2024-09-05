@@ -61,9 +61,9 @@ function DailyRewardModal(props: DailyRewardModalProps) {
 	const onClaim = () => {
 		claimTask('daily_reward', task);
 	};
-	console.log(task);
+
 	return (
-		<div className={'flex flex-col gap-y-[10px]'}>
+		<div className={'flex flex-col gap-y-[10px] mb-[20px]'}>
 			<div
 				style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}
 				className={'grid max-h-[250px] gap-[10px] overflow-y-scroll'}
@@ -103,8 +103,8 @@ function Day(props: DayProps) {
 	return (
 		<div
 			className={cn(
-				'flex flex-col gap-y-[2px] overflow-hidden rounded bg-[#1b2b50] px-[13px] py-[13px]',
-				isAvailable && 'border-[2px] border-[yellow]',
+				'border-[2px] border-[transparent] flex flex-col gap-y-[2px] overflow-hidden rounded bg-[#1b2b50] px-[11px] py-[11px]',
+				isAvailable && ' border-[yellow]',
 				isDayCompleted && 'bg-[#0F3F99]',
 				isNotYetAvailable && 'bg-[#1b2b50]',
 			)}

@@ -68,7 +68,7 @@ export async function updateDailyRewardCompletedDays(
 	userId: string,
 	userTaskId: string,
 	completedDays: number,
-) {
+): Promise<PersonalizedTask> {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_DAILY_REWARD_COMPLETED_DAYS,
 		fetchPolicy: 'no-cache',
@@ -82,8 +82,14 @@ export async function updateDailyRewardCompletedDays(
 	if (errors?.length || !data) {
 		throw new Error();
 	}
+	const fullTask = data.updateuser_tasksCollection.records[0];
 
-	return;
+	return {
+		...fullTask.tasks,
+		userTask: {
+			...fullTask
+		}
+	};
 }
 
 export async function claimDailyReward(
@@ -396,11 +402,12 @@ export type UpdateUserOptions = {
 	userId?: string;
 	coins?: number;
 	lastHourlyReward?: string;
+	lastDailyReward?: string | null;
 	user: User;
 	isReferred?: boolean;
 }
 
-export async function updateUser({ userId, coins, lastHourlyReward, user, isReferred }: UpdateUserOptions) {
+export async function updateUser({ userId, coins, lastHourlyReward, lastDailyReward, user, isReferred }: UpdateUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_USER,
 		fetchPolicy: 'no-cache',
@@ -409,6 +416,7 @@ export async function updateUser({ userId, coins, lastHourlyReward, user, isRefe
 			coins: coins ?? user.coins,
 			lastHourlyReward: lastHourlyReward ?? user.last_hourly_reward,
 			isReferred: isReferred ?? user.is_referred,
+			lastDailyReward: lastDailyReward ?? user.last_daily_reward,
 		}
 	});
 

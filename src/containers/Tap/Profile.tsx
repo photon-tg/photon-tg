@@ -22,7 +22,7 @@ export function Profile() {
 					<span className={'mb-[7px] text-md'}>
 						{user?.telegram.first_name}
 					</span>
-					<span className={'text-md font-semibold text-sky-blue'}>
+					<span className={'text-md font-semibold text-sky-blue mb-[3px]'}>
 						Level {level}
 					</span>
 					<div className={'h-[9px] w-full rounded bg-[#2E3F69]'}>
