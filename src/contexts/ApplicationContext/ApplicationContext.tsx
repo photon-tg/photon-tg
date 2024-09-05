@@ -13,7 +13,8 @@ import {
 } from 'react';
 import { useUserContext } from '../UserContext';
 import {
-	Level,
+	getUserLevel,
+	Level, levelToMaxEnergy,
 	levelToPhotoPassiveIncome, levelToPhotoReward
 } from '@/constants';
 
@@ -26,7 +27,7 @@ import {
 	updateUser
 } from '@/api/api';
 import { ReferralFragment, UserPhotoFragment } from '@/gql/graphql';
-import { hoursSinceDate } from '@/utils/date';
+import { calculateEnergyGained, hoursSinceDate } from '@/utils/date';
 import { UserPhoto } from '@/interfaces/photo';
 import { Referral, useReferrals } from '@/contexts/ApplicationContext/hooks/useReferrals/useReferrals';
 import {
@@ -121,6 +122,11 @@ export function ApplicationContextProvider({
 
 			const coinsAfterRewards = user.coins + referenceBonusCoins + photosPassiveIncomeCoins + referralsCoins;
 
+			const { newEnergy } = calculateEnergyGained(user.last_sync, user.energy);
+
+			const maxEnergy = levelToMaxEnergy.get(getUserLevel(user.coins))!;
+			const updatedEnergy = newEnergy > maxEnergy ? maxEnergy : newEnergy;
+
 			const nowUTC = new Date().toUTCString();
 
 			await updateUser({ userId: user.id, coins: coinsAfterRewards, lastHourlyReward: nowUTC, user, isReferred: !!referenceBonusCoins });
@@ -129,7 +135,7 @@ export function ApplicationContextProvider({
 				type: ApplicationActionType.INIT,
 				payload: {
 					coins: coinsAfterRewards,
-					energy: user.energy,
+					energy: updatedEnergy,
 					photos: userData.photos,
 					tasks: updatedTasks ?? userData.tasks,
 					friends: userData.friends,

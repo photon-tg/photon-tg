@@ -405,9 +405,10 @@ export type UpdateUserOptions = {
 	lastDailyReward?: string | null;
 	user: User;
 	isReferred?: boolean;
+	energy?: number;
 }
 
-export async function updateUser({ userId, coins, lastHourlyReward, lastDailyReward, user, isReferred }: UpdateUserOptions) {
+export async function updateUser({ userId, coins, lastHourlyReward, energy, lastDailyReward, user, isReferred }: UpdateUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_USER,
 		fetchPolicy: 'no-cache',
@@ -417,6 +418,7 @@ export async function updateUser({ userId, coins, lastHourlyReward, lastDailyRew
 			lastHourlyReward: lastHourlyReward ?? user.last_hourly_reward,
 			isReferred: isReferred ?? user.is_referred,
 			lastDailyReward: lastDailyReward ?? user.last_daily_reward,
+			energy: energy ?? user.energy,
 		}
 	});
 
