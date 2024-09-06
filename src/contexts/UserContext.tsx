@@ -53,7 +53,7 @@ export function UserContextProvider({ children }: PropsWithChildren<{}>) {
 	}, [modifyUser]);
 
 	useEffect(() => {
-		if (!!user) {
+		if (!!user || !isMobile) {
 			return;
 		}
 
