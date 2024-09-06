@@ -6,7 +6,7 @@ import { useUserContext } from '@/contexts/UserContext';
 
 export function Profile() {
 	const { progress, passiveIncome, level } = useApplicationContext();
-	const { user } = useUserContext();
+	const { user } = useUserContext()
 
 	return (
 		<div className={'mb-[5px] grid grid-cols-2 gap-x-[10px] pt-[5px]'}>
