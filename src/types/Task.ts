@@ -1,4 +1,4 @@
-import { FullTaskFragment, FullUserTaskFragment } from '@/gql/graphql';
+import { FullTaskFragment, UserTaskFragment } from '@/gql/graphql';
 
 export interface RewardByDay {
 	day: number;
@@ -12,5 +12,5 @@ export type FullTask = FullTaskFragment & {
 };
 
 export type PersonalizedTask = FullTask & {
-	userTask?: FullUserTaskFragment;
+	userTask?: UserTaskFragment;
 };

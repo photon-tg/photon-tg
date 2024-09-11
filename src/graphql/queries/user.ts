@@ -44,7 +44,7 @@ export const GetUserData = graphql(`
 		user_tasksCollection(first: 100, offset: 0, filter: { user_id: { eq: $userId } }) {
 			edges {
 				node {
-					...FullUserTask
+					...UserTask
 				}
 			}
 		}

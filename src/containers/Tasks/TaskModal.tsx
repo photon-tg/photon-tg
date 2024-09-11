@@ -1,10 +1,13 @@
 import { Button } from '@/components/Button/Button';
 import { Money } from '@/components/Money/Money';
-import { useUserContext } from '@/contexts/UserContext';
 import { cn } from '@/utils/cn';
-import { PersonalizedTask, RewardByDay } from '@/interfaces/Task';
+import { PersonalizedTask, RewardByDay } from '@/types/Task';
 
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { userIsDailyRewardClaimedSelector, userSelector, userTasksSelector } from '@/model/user/selectors';
+import { applicationTasksSelector } from '@/model/application/selectors';
+import { operationClaimTask } from '@/model/user/operations';
+import { TaskFragment, UserTaskFragment } from '@/gql/graphql';
 
 export interface TaskModalProps {
 	taskId: string;
@@ -12,11 +15,13 @@ export interface TaskModalProps {
 
 export function TaskModal(props: TaskModalProps) {
 	const { taskId } = props;
-	const { tasks, isDailyRewardClaimed } = useApplicationContext();
-
+	const tasks = useSelector(applicationTasksSelector);
+	const userTasks = useSelector(userTasksSelector);
+	const isDailyRewardClaimed = useSelector(userIsDailyRewardClaimedSelector);
+	const userTask = userTasks.find((task) => task.tasks.id === taskId);
 	const task = tasks.find((task) => task.id === taskId);
 
-	const { user } = useUserContext();
+	const user = useSelector(userSelector);
 
 	if (!task) {
 		return null;
@@ -38,6 +43,7 @@ export function TaskModal(props: TaskModalProps) {
 					isDailyRewardClaimed={isDailyRewardClaimed}
 					lastClaimedDailyReward={user.last_daily_reward}
 					task={task}
+					userTask={userTask}
 				/>
 			)}
 		</div>
@@ -47,19 +53,21 @@ export function TaskModal(props: TaskModalProps) {
 interface DailyRewardModalProps {
 	isDailyRewardClaimed?: boolean;
 	lastClaimedDailyReward?: string | null;
-	task: PersonalizedTask;
+	task: TaskFragment;
+	userTask?: UserTaskFragment;
 }
 
 function DailyRewardModal(props: DailyRewardModalProps) {
 	const {
 		task,
+		userTask,
 		isDailyRewardClaimed,
 	} = props;
 
-	const { claimTask } = useApplicationContext();
+	const dispatch = useDispatch();
 
 	const onClaim = () => {
-		claimTask('daily_reward', task);
+		dispatch(operationClaimTask({ type: 'daily_reward', userTask, task }))
 	};
 
 	return (
@@ -68,8 +76,8 @@ function DailyRewardModal(props: DailyRewardModalProps) {
 				style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}
 				className={'grid max-h-[250px] gap-[10px] overflow-y-scroll'}
 			>
-				{task.rewardByDay?.map((day) =>
-					<Day key={day.day} day={day} task={task} isDailyRewardClaimed={isDailyRewardClaimed} />
+				{(JSON.parse(task.reward_by_day || '') as RewardByDay[])?.map((day) =>
+					<Day key={day.day} day={day} task={task} userTask={userTask} isDailyRewardClaimed={isDailyRewardClaimed} />
 				)}
 			</div>
 			<Button
@@ -84,22 +92,23 @@ function DailyRewardModal(props: DailyRewardModalProps) {
 }
 
 interface DayProps {
-	task: PersonalizedTask,
+	task: TaskFragment;
+	userTask?: UserTaskFragment;
 	isDailyRewardClaimed?: boolean;
 	lastClaimedDailyReward?: string | null;
 	day: RewardByDay;
 }
 
 function Day(props: DayProps) {
-	const { task, isDailyRewardClaimed, lastClaimedDailyReward, day } = props;
+	const { task, userTask, isDailyRewardClaimed, lastClaimedDailyReward, day } = props;
 
-	const completedDays = task.userTask?.days_completed || 0;
+	const completedDays = userTask?.days_completed || 0;
 	const isDayCompleted = day.day <= completedDays;
 	const isAvailable = day.day === (completedDays + 1) && !isDailyRewardClaimed;
 	const isNotYetAvailable =
 		day.day === (completedDays + 1) && isDailyRewardClaimed;
 
-
+	console.log(userTask, isDailyRewardClaimed, day, 'day');
 	return (
 		<div
 			className={cn(

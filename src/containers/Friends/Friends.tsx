@@ -3,14 +3,14 @@
 import { Button } from '@/components/Button/Button';
 import { CTACard } from '@/components/CTACard/CTACard';
 import { appURL } from '@/constants/urls';
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
-import { useUserContext } from '@/contexts/UserContext';
 import { getUserLevel } from '@/constants';
 import { Money } from '@/components/Money/Money';
+import { useSelector } from 'react-redux';
+import { userReferralsSelector, userSelector } from '@/model/user/selectors';
 
 export function Friends() {
-	const { referrals } = useApplicationContext();
-	const { user } = useUserContext();
+	const referrals = useSelector(userReferralsSelector);
+	const user = useSelector(userSelector);
 	const onReferealLink = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
 		navigator.clipboard.writeText(`https://${appURL}?startapp=friendId${user.telegram_id}`);
@@ -58,12 +58,12 @@ export function Friends() {
 						<div className={'flex flex-col gap-y-[10px]'}>
 							{referrals.map((ref) => {
 								return (
-									<div key={ref.referral_id} className={'bg-[#215295] rounded py-[9px] px-[15px] flex flex-col gap-y-[8px]'}>
-										<span className={'text-md'}>{ref.users?.first_name} {ref.users?.last_name}</span>
+									<div key={ref.telegram_id} className={'bg-[#215295] rounded py-[9px] px-[15px] flex flex-col gap-y-[8px]'}>
+										<span className={'text-md'}>{ref?.first_name} {ref?.last_name}</span>
 										<div className={'flex gap-x-[5px] items-center'}>
-											<span className={'text-md text-[#42C2FF]'}>Lvl {getUserLevel(ref.users?.coins)}</span>
+											<span className={'text-md text-[#42C2FF]'}>Lvl {getUserLevel(ref?.coins)}</span>
 											<div className={'w-[4px] h-[4px] rounded-[50%] bg-[#5a8cd1]'}></div>
-											<Money withoutPlus amount={ref.users?.coins} size={'xxs'} />
+											<Money withoutPlus amount={ref?.coins} size={'xxs'} />
 										</div>
 									</div>
 								);

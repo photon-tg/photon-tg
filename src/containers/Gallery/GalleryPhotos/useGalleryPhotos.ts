@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { UserPhoto } from '@/interfaces/photo';
+import { UserPhoto } from '@/types/photo';
 
 export const PHOTOS_PER_PAGE = 8;
 

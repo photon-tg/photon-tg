@@ -3,5 +3,5 @@
   "rules": {
     "quotes": [2, "single"]
   },
-	"ignorePatterns": ["src/gql/"]
+	"ignorePatterns": ["src/gql/", "src/types/supabase.ts"]
 }

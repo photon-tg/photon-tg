@@ -2,9 +2,10 @@ import { Money } from '@/components/Money/Money';
 import Tick from '@/../public/assets/icons/tick.svg';
 import { useModalContext } from '@/contexts/ModalContext';
 import { TaskModal } from './TaskModal';
-import { PersonalizedTask, RewardByDay, TaskType } from '@/interfaces/Task';
+import { PersonalizedTask, RewardByDay, TaskType } from '@/types/Task';
 
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { useSelector } from 'react-redux';
+import { userIsDailyRewardClaimedSelector } from '@/model/user/selectors';
 
 interface TaskProps {
 	task: PersonalizedTask;
@@ -16,7 +17,7 @@ export function Task(props: TaskProps) {
 	const isClickable = true;
 
 	const { openModal } = useModalContext();
-	const { isDailyRewardClaimed } = useApplicationContext();
+	const isDailyRewardClaimed = useSelector(userIsDailyRewardClaimedSelector);
 
 	const onClick = () => {
 		openModal(<TaskModal taskId={task.id} />);

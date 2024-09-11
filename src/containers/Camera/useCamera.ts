@@ -1,22 +1,27 @@
 import { FacingMode } from 'react-camera-pro/dist/components/Camera/types';
 import { useCallback, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUserContext } from '@/contexts/UserContext';
-
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 
 import Webcam from 'react-webcam';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '@/model/user/selectors';
+import { operationUploadPhoto } from '@/model/user/operations';
 
 export function useCamera() {
 	const cameraRef = useRef<Webcam | null>(null);
 	const [image, setImage] = useState<string | null>(null);
-	const [facingMode, setFacingMode] = useState<FacingMode>('environment');
+	const [facingMode, setFacingMode] = useState<FacingMode>('user');
 	const router = useRouter();
-	const { user, updateLocalUser } = useUserContext();
-	const { addPhoto } = useApplicationContext();
+	const user = useSelector(userSelector);
+	const dispatch = useDispatch();
 
 	const takePhoto = useCallback(() => {
-		const base64Image = cameraRef.current?.getScreenshot() as string;
+		const base64Image = cameraRef.current?.getScreenshot();
+
+		if (!base64Image) {
+			return;
+		}
+
 		setImage(base64Image);
 	}, [cameraRef]);
 
@@ -29,10 +34,8 @@ export function useCamera() {
 			return;
 		}
 
-		await addPhoto(image!);
-
-		router.push('/photo/gallery');
-	}, [addPhoto, image, router, user]);
+		dispatch(operationUploadPhoto(image!))
+	}, [dispatch, image, user]);
 
 	const onReject = useCallback(() => {
 		setImage(null);

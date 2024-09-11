@@ -139,3 +139,7 @@ export function calculateEnergyGained(lastSyncDateUTC: string, currentEnergy: nu
 		energyGained,
 	}
 }
+
+export function getNow() {
+	return new Date().toUTCString();
+}

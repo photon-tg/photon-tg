@@ -1,0 +1,59 @@
+import { CoreUserFieldsFragment, UserPhotoFragment, UserTaskFragment } from '@/gql/graphql';
+
+export interface UserCredentials {
+	email: string;
+	password: string;
+}
+
+export interface SignUpData {
+	first_name: string,
+	last_name?: string,
+	telegram_id: string,
+	is_premium?: boolean,
+}
+
+export enum UserErrorType {
+	INVALID_DATA_CHECK_STRING = 'INVALID_DATA_CHECK_STRING',
+	SERVER_ERROR = 'SERVER_ERROR',
+}
+
+export interface UserStateMeta {
+	isLoading: boolean;
+	referrerId: string | null;
+	error: null | UserErrorType;
+}
+
+export interface UninitializedUserState {
+	data: {
+		telegramUser: null;
+		user: null;
+		photos: null;
+		tasks: null;
+		referrals: null;
+		isDailyRewardClaimed: boolean;
+		passiveIncome: null;
+	};
+	meta: UserStateMeta;
+}
+
+export interface RegisteredUserState {
+	data: {
+		telegramUser: WebAppUser;
+		user: CoreUserFieldsFragment;
+		photos: UserPhotoFragment[];
+		tasks: UserTaskFragment[];
+		referrals: ReferralData[];
+		isDailyRewardClaimed: boolean;
+		passiveIncome: number;
+	};
+	meta: UserStateMeta;
+}
+
+export interface ReferralData {
+	coins: number;
+	first_name: string;
+	last_name: string;
+	is_premium: boolean;
+	telegram_id: string;
+	is_claimed_by_referrer: boolean;
+}

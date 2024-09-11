@@ -4,8 +4,7 @@ import {
 } from '@/containers/Gallery/GalleryPhotos/useGalleryPhotos';
 import ArrowLeft from '@/../public/assets/icons/Photo/arrow-left.svg';
 import Calendar from '@/../public/assets/icons/calendar.svg';
-import { useUserContext } from '@/contexts/UserContext';
-import { UserPhoto } from '@/interfaces/photo';
+import { UserPhoto } from '@/types/photo';
 import { Money } from '@/components/Money/Money';
 import { Level, levelToPhotoReward } from '@/constants';
 import { formatDate } from '@/utils/date';
@@ -26,8 +25,6 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
 		hasPrevPage,
 		hasNextPage,
 	} = useGalleryPhotos(photos);
-	const { user } = useUserContext();
-
 	const galleryStart = page * PHOTOS_PER_PAGE;
 	const galleryEnd = galleryStart + PHOTOS_PER_PAGE;
 

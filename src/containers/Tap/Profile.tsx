@@ -1,12 +1,14 @@
 'use client';
 
 import Coin from '@/../public/assets/icons/photon.svg';
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
-import { useUserContext } from '@/contexts/UserContext';
+import { useSelector } from 'react-redux';
+import { userDataSelector, userPassiveIncomeSelector } from '@/model/user/selectors';
+import { getUserLevel, getUserLevelProgress } from '@/constants';
 
 export function Profile() {
-	const { progress, passiveIncome, level } = useApplicationContext();
-	const { user } = useUserContext()
+	const passiveIncome = useSelector(userPassiveIncomeSelector);
+	console.log(passiveIncome, 'passive')
+	const user = useSelector(userDataSelector);
 
 	return (
 		<div className={'mb-[5px] grid grid-cols-2 gap-x-[10px] pt-[5px]'}>
@@ -14,21 +16,21 @@ export function Profile() {
 				<img
 					height={63}
 					width={63}
-					src={user.telegram?.photo_url || '/assets/icons/user.svg'}
+					src={user?.telegramUser.photo_url || '/assets/icons/user.svg'}
 					className={'rounded'}
 					alt={'avatar'}
 				/>
 				<div className={'grid content-start'}>
 					<span className={'mb-[7px] text-md'}>
-						{user?.telegram.first_name}
+						{user.user.first_name}
 					</span>
 					<span className={'text-md font-semibold text-sky-blue mb-[3px]'}>
-						Level {level}
+						Level {getUserLevel(user.user.coins)}
 					</span>
 					<div className={'h-[9px] w-full rounded bg-[#2E3F69]'}>
 						<div
 							className={'h-full rounded bg-sky-blue'}
-							style={{ width: `${progress}%` }}
+							style={{ width: `${getUserLevelProgress(user.user.coins)}%` }}
 						></div>
 					</div>
 				</div>

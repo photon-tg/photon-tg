@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Montserrat } from 'next/font/google';
 import './globals.css';
+import 'symbol-observable';
 import Script from 'next/script';
 import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google';
 

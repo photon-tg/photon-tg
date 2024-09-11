@@ -30,7 +30,7 @@ export const CLAIM_FIRST_TASK = graphql(`
 			]
 		) {
 			records {
-				...FullUserTask
+				...UserTask
 			}
 		}
 	}
@@ -61,7 +61,7 @@ export const CLAIM_TASK = graphql(`
 			filter: { id: { eq: $userTaskId }, user_id: { eq: $userId } }
 		) {
 			records {
-				...FullUserTask
+				...UserTask
 			}
 		}
 	}
@@ -100,7 +100,7 @@ export const CLAIM_DAILY_REWARD = graphql(`
 			filter: { id: { eq: $userTaskId }, user_id: { eq: $userId } }
 		) {
 			records {
-				...FullUserTask
+				...UserTask
 			}
 		}
 	}
@@ -136,7 +136,7 @@ export const CLAIM_FIRST_DAILY_REWARD = graphql(`
 			]
 		) {
 			records {
-				...FullUserTask
+				...UserTask
 			}
 		}
 	}
@@ -154,7 +154,7 @@ export const UPDATE_DAILY_REWARD_COMPLETED_DAYS = graphql(`
 			filter: { user_id: { eq: $userId }, id: { eq: $userTaskId } }
 		) {
 			records {
-				...FullUserTask
+				...UserTask
 			}
 		}
 	}

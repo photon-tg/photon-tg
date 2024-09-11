@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { userSelector } from '@/model/user/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserLevel, levelToMaxEnergy } from '@/constants';
+import { operationTap } from '@/model/user/operations';
 
 export function Tap() {
-	const { coins, maxEnergy, energy, onTap } = useApplicationContext();
-
+	const dispatch = useDispatch();
+	const user = useSelector(userSelector);
 	return (
 		<div onSelectCapture={(e) => {e.preventDefault();}} className={'flex h-full items-center justify-center'}>
 			<div
@@ -19,12 +22,12 @@ export function Tap() {
 					}
 				>
 					<img width={40} height={40} src={'/assets/icons/photon.svg'} />
-					{coins}
+					{user.coins}
 				</span>
-				<TapArea onTap={onTap} />
+				<TapArea onTap={() => { dispatch(operationTap()) }} />
 				<div className={'flex items-center justify-center gap-x-[10px]'}>
 					<img className={'w-[10px]'} src={'/assets/icons/energy.svg'} />
-					{energy} / {maxEnergy}
+					{user.energy} / {levelToMaxEnergy.get(getUserLevel(user.coins))}
 				</div>
 			</div>
 		</div>

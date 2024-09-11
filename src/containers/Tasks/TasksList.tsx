@@ -1,10 +1,11 @@
 'use client';
 
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
 import { Task } from './Task';
+import { useSelector } from 'react-redux';
+import { applicationTasksSelector } from '@/model/application/selectors';
 
 export function TasksList() {
-	const { tasks } = useApplicationContext();
+	const tasks = useSelector(applicationTasksSelector);
 
 	return (
 		<div>

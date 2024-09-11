@@ -3,15 +3,16 @@
 import { EmptyMessage } from '@/containers/Gallery/EmptyMessage/EmptyMessage';
 import { GalleryPhotos } from '@/containers/Gallery/GalleryPhotos/GalleryPhotos';
 
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
-import { UserPhoto } from '@/interfaces/photo';
+import { UserPhoto } from '@/types/photo';
+import { useSelector } from 'react-redux';
+import { userPhotosSelector } from '@/model/user/selectors';
 
 export interface GalleryProps {
 	photos: UserPhoto[];
 }
 
 export function Gallery() {
-	const { photos } = useApplicationContext();
+	const photos = useSelector(userPhotosSelector);
 	return (
 		<div
 			className={

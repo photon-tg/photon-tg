@@ -1,0 +1,74 @@
+import { SignUpData, UserCredentials } from '@/model/user/types';
+import { daysSinceDate } from '@/utils/date';
+import { TaskFragment,  UserTaskFragment } from '@/gql/graphql';
+import { Level, levelToPhotoPassiveIncome } from '@/constants';
+import { RewardByDay } from '@/types/Task';
+import { UserPhoto } from '@/types/photo';
+
+export function getUserCredentials(telegramId: string): UserCredentials {
+	return {
+		email: `${telegramId}@photon.com`,
+		password: telegramId,
+	}
+}
+
+export function getSignUpData(telegramUser: WebAppUser, telegramId: string): SignUpData {
+	return {
+		first_name: telegramUser.first_name,
+		last_name: telegramUser.last_name,
+		is_premium: telegramUser.is_premium ?? false,
+		telegram_id: telegramId,
+	}
+}
+
+export function getIsDailyRewardClaimed(lastDailyReward: string | undefined | null) {
+	if (!lastDailyReward) {
+		return false;
+	}
+
+	return daysSinceDate(lastDailyReward) < 1;
+}
+
+export type ClaimRewardHelperRT = {
+	lastDailyReward?: string;
+	completedDays: number;
+	isCompleted: boolean;
+	rewardCoins: number;
+}
+
+export function claimTaskHelper(type: 'daily_reward', task: TaskFragment, userTask?: UserTaskFragment): ClaimRewardHelperRT | undefined {
+	switch (type) {
+		case 'daily_reward': {
+			const previousCompletedDays = userTask?.days_completed || 0;
+			const completedDays = previousCompletedDays + 1;
+			const rewardByDay: RewardByDay[] = JSON.parse(task.reward_by_day || '');
+			const rewardCoins = rewardByDay?.find(
+				({ day }) => day === completedDays,
+			)?.reward;
+
+			if (!rewardCoins) {
+				throw new Error();
+			}
+
+			const lastDailyReward = new Date().toUTCString();
+			const isCompleted = completedDays === 10;
+
+			return {
+				rewardCoins,
+				isCompleted,
+				completedDays,
+				lastDailyReward,
+			}
+		}
+
+		default:
+			return;
+	}
+}
+
+export function calculatePassiveIncome(photos?: UserPhoto[] | null) {
+	return photos?.reduce((total, photo) => {
+		const photoPassiveIncome = levelToPhotoPassiveIncome.get(photo.level_at_time as Level)! || 0;
+		return total + photoPassiveIncome;
+	}, 0) ?? 0;
+}

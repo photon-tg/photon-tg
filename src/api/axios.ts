@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 
 export const axiosInstance = axios.create({
 	baseURL: '/api',
@@ -18,3 +18,5 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig): InternalAxi
 
 	return config;
 }
+
+export default axiosInstance;

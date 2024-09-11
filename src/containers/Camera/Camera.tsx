@@ -9,15 +9,16 @@ import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
 import Webcam from 'react-webcam';
 import { Layout } from '@/components/Layout/Layout';
-import { useApplicationContext } from '@/contexts/ApplicationContext/ApplicationContext';
+import { useSelector } from 'react-redux';
+import { userSelector } from '@/model/user/selectors';
 
 export function Camera() {
 	const router = useRouter();
-	const { lastPhoto } = useApplicationContext();
+	const user = useSelector(userSelector);
 	const { cameraRef, takePhoto, flip, facingMode, image, onReject, onAccept, goBack } =
 		useCamera();
 
-	if (lastPhoto && isDateTodayUTC(new Date(lastPhoto))) {
+	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
 			<Layout>
 				<div className={'absolute top-[50%] w-full translate-y-[-50%]'}>
@@ -63,7 +64,7 @@ export function Camera() {
 				}}
 				forceScreenshotSourceSize
 				screenshotFormat={'image/jpeg'}
-				style={{objectFit: 'cover', height: '100%'}}
+				style={{ objectFit: 'cover', height: '100%' }}
 				screenshotQuality={1}
 				imageSmoothing
 				mirrored={facingMode === 'user'}
