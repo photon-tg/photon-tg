@@ -16,7 +16,7 @@ import { operationInitUser } from '@/model/user/operations';
 import { HOME_PAGE } from '@/constants/urls';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { getUserLevel, levelToMaxEnergy } from '@/constants';
-import { userEnergyAdd } from '@/model/user/actions';
+import { userEnergyAdd, userEnergySet } from '@/model/user/actions';
 
 export interface AppContext {
 
@@ -59,7 +59,10 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		if (isUserLoading || !isApplicationInitialized) return;
 		let intervalId: NodeJS.Timeout;
 
-		if (user.energy === levelToMaxEnergy.get(getUserLevel(user.coins))) return;
+		if (user.energy >= levelToMaxEnergy.get(getUserLevel(user.coins))!) {
+			dispatch(userEnergySet(levelToMaxEnergy.get(getUserLevel(user.coins))!));
+			return;
+		}
 
 		function regenerateEnergy() {
 			dispatch(userEnergyAdd(3));

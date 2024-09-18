@@ -15,24 +15,22 @@ export function isDateTodayUTC(date: Date | null): boolean {
 }
 
 export function daysSinceDate(input: string): number {
-	// Get the current time in the user's local timezone
-	const now = new Date();
-	const inputDate = new Date(input);
-	// Get the current date in the user's local timezone (ignoring time)
+	// Convert both dates to UTC midnight by using setUTCHours(0, 0, 0, 0)
+	let startDate = new Date(input);
+	let endDate = new Date(new Date().toUTCString());
 
-	const localCurrentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+	// Set time to midnight (UTC) for both dates
+	startDate.setUTCHours(0, 0, 0, 0);
+	endDate.setUTCHours(0, 0, 0, 0);
 
-	// Convert the UTC input date to the local date in the user's timezone (ignoring time)
-	const localInputDate = new Date(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate());
+	// Calculate the difference in milliseconds
+	let diffInMs = endDate.getTime() - startDate.getTime();
 
-	// Calculate the difference in time (milliseconds)
-	const diffInMillis = localCurrentDate.getTime() - localInputDate.getTime();
+	// Convert milliseconds to full days
+	let diffInDays = diffInMs / (1000 * 60 * 60 * 24);
 
-	// Convert milliseconds to full calendar days
-	const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
-
-	// Return the number of full calendar days that have passed
-	return Math.floor(diffInDays);
+	// Return the absolute value of the difference in days
+	return Math.abs(diffInDays);
 }
 
 export function hoursSinceDateUTC(inputDate: Date): number {
@@ -142,4 +140,26 @@ export function calculateEnergyGained(lastSyncDateUTC: string, currentEnergy: nu
 
 export function getNow() {
 	return new Date().toUTCString();
+}
+
+interface TimeSubtraction {
+	days?: number;
+	hours?: number;
+	minutes?: number;
+	seconds?: number;
+}
+
+export function subtractTime(
+	date: Date | string,
+	{ days = 0, hours = 0, minutes = 0, seconds = 0 }: TimeSubtraction = {},
+): string {
+	const newDate = new Date(date); // Clone the passed date to avoid mutating it
+
+	// Subtract days, hours, minutes, and seconds
+	newDate.setUTCDate(newDate.getUTCDate() - days);
+	newDate.setUTCHours(newDate.getUTCHours() - hours);
+	newDate.setUTCMinutes(newDate.getUTCMinutes() - minutes);
+	newDate.setUTCSeconds(newDate.getUTCSeconds() - seconds);
+
+	return newDate.toUTCString();
 }

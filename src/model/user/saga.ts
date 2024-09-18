@@ -27,10 +27,15 @@ import {
 import { ValidatedTelegramUser } from '@/app/api/check-telegram-data/route';
 import { AxiosResponse } from 'axios';
 import {
-	userCoinsAdd, userEnergyReduce,
+	userCoinsAdd,
+	userEnergyReduce,
 	userEnergySet,
-	userErrorSet, userIsLoadingSet,
-	userLastDailyRewardSet, userLastHourlyRewardSet, userPassiveIncomeRecalculate, userPassiveIncomeSet,
+	userErrorSet,
+	userIsLoadingSet,
+	userLastDailyRewardSet,
+	userLastHourlyRewardSet,
+	userPassiveIncomeRecalculate,
+	userPhotosIsUploadingSet,
 	userPhotosSet,
 	userReferralsSet,
 	userReferredIdSet,
@@ -39,7 +44,7 @@ import {
 	userTaskUpdate,
 	userTelegramUserSet
 } from '@/model/user/actions';
-import { claimTaskHelper, getSignUpData, getUserCredentials } from '@/model/user/utils';
+import { claimTaskHelper, getPassiveIncome, getSignUpData, getUserCredentials } from '@/model/user/utils';
 import { ReferralData, SignUpData, UserCredentials, UserErrorType } from '@/model/user/types';
 import { AuthResponse, AuthTokenResponsePassword } from '@supabase/auth-js';
 import {
@@ -66,16 +71,16 @@ import {
 import { parseNodes } from '@/utils/graphql';
 import { ReferralsDataResponse } from '@/app/api/referrals-data/route';
 import { applicationTasksSelector } from '@/model/application/selectors';
-import { calculateEnergyGained, daysSinceDate, getNow, hoursSinceDate } from '@/utils/date';
+import { calculateEnergyGained, daysSinceDate, getNow } from '@/utils/date';
 import {
 	getUserLevel,
 	Level, levelToCoinsPerTap,
 	levelToMaxEnergy,
-	levelToPhotoPassiveIncome, levelToPhotoReward,
+	levelToPhotoReward,
 	PREMIUM_USER_REF_BONUS,
 	USER_REF_BONUS
 } from '@/constants';
-import { referUser, updateUser } from '@/api/api';
+import { referUser, updateUser, UpdateUserOptions } from '@/api/api';
 import { nanoid } from 'nanoid';
 import { decode } from 'base64-arraybuffer';
 
@@ -181,11 +186,25 @@ export function* operationInitUserWorker() {
 		const referrals = referralsResponse.data.data;
 
 		yield put(userReferralsSet(referrals));
-		yield put(operationInitDailyReward());
-		yield put(operationReferrerSet());
-		yield put(operationClaimReferrals());
-		yield put(operationPayPassiveIncome());
-		yield put(operationRestorePassiveEnergy());
+
+		yield call(operationInitDailyRewardWorker);
+		yield call(operationReferrerSetWorker);
+		yield call(operationClaimReferralsWorker);
+		yield call(operationPayPassiveIncomeWorker);
+		yield call(operationRestorePassiveEnergyWorker);
+
+		const user: CoreUserFieldsFragment = yield select(userSelector);
+
+		yield call(updateUser, {
+			userId,
+			user,
+			isReferred: user.is_referred,
+			lastHourlyReward: user.last_hourly_reward,
+			lastDailyReward: user.last_daily_reward,
+			energy: user.energy,
+			coins: user.coins
+		} as UpdateUserOptions);
+
 		yield put(userPassiveIncomeRecalculate());
 		yield put(userIsLoadingSet(false));
 
@@ -201,7 +220,7 @@ export function* operationInitDailyRewardWorker() {
 	const user: CoreUserFieldsFragment = yield select(userSelector);
 	const userTasks: UserTaskFragment[] = yield select(userTasksSelector);
 	const dailyRewardTask: TaskFragment = yield tasks.find((task) => task.id === 'daily_reward');
-	const userDailyRewardTask: UserTaskFragment = yield userTasks.find(userTask => userTask.task_id === dailyRewardTask.id)!;
+	const userDailyRewardTask: UserTaskFragment = yield userTasks.find(userTask => userTask.task_id === dailyRewardTask?.id)!;
 
 	yield put(userLastDailyRewardSet(user.last_daily_reward ?? null));
 
@@ -307,20 +326,12 @@ export function* operationPayPassiveIncomeWorker() {
 	const photos: UserPhotoFragment[] = yield select(userPhotosSelector);
 	const lastHourlyReward: string = yield select(userLastHourlyRewardSelector);
 
-	const photosPassiveIncome: number = yield photos.reduce((total, photo) => {
-		/* means that we will calculate passive since the photo creation time */
-		const isDoneAfterLastReward = new Date(photo.created_at) > new Date(lastHourlyReward);
-		const lastClaimedReward = isDoneAfterLastReward ? photo.created_at : lastHourlyReward;
-		const hoursSinceLastReward = hoursSinceDate(lastClaimedReward);
-		const photoPassiveIncomePerHour = levelToPhotoPassiveIncome.get(photo.level_at_time as Level) ?? 0;
-		const reward = hoursSinceLastReward * photoPassiveIncomePerHour;
-
-		return total + reward;
-	}, 0);
-
-	const roundedPhotosPassiveIncome = Math.round(photosPassiveIncome || 0);
-
-	yield put(userCoinsAdd(roundedPhotosPassiveIncome));
+	const passiveIncome: number = yield call(getPassiveIncome, photos, lastHourlyReward);
+	console.log(passiveIncome, 'pass')
+	if (passiveIncome) {
+		yield put(userCoinsAdd(passiveIncome));
+		yield put(userLastHourlyRewardSet(new Date().toISOString()));
+	}
 }
 
 export function* operationRestorePassiveEnergyWorker() {
@@ -334,34 +345,41 @@ export function* operationRestorePassiveEnergyWorker() {
 }
 
 function* operationUploadPhotoWorker({ payload: photo }: PayloadAction<string>) {
-	const userId: string = yield select(userIdSelector);
-	const coins: number = yield select(userCoinsSelector);
-	const photos: UserPhotoFragment[] = yield select(userPhotosSelector);
-	const photoId: string = yield call(nanoid);
-	const photoArrayBuffer = decode(photo.split('base64,')[1]);
+	try {
+		yield put(userPhotosIsUploadingSet(true));
+		const userId: string = yield select(userIdSelector);
+		const coins: number = yield select(userCoinsSelector);
+		const photos: UserPhotoFragment[] = yield select(userPhotosSelector);
+		const photoId: string = yield call(nanoid);
+		const photoArrayBuffer = decode(photo.split('base64,')[1]);
 
-	const uploadPhotoToBucketResponse: Awaited<ReturnType<typeof uploadPhotoToBucket>> = yield call(uploadPhotoToBucket, userId, photoId, photoArrayBuffer);
+		const uploadPhotoToBucketResponse: Awaited<ReturnType<typeof uploadPhotoToBucket>> = yield call(uploadPhotoToBucket, userId, photoId, photoArrayBuffer);
 
-	if (uploadPhotoToBucketResponse.error) {
-		return;
+		if (uploadPhotoToBucketResponse.error) {
+			return;
+		}
+
+		const level = getUserLevel(coins);
+		const coinsForPhoto = levelToPhotoReward.get(level)!;
+		const newCoins = coinsForPhoto + coins;
+
+		const uploadedPhotoResponse: FetchResult<AddUserPhotoMutation> = yield call(uploadPhoto, userId, photoId, level, newCoins, new Date().toUTCString());
+		const uploadedPhoto = uploadedPhotoResponse.data?.insertIntouser_photosCollection?.records[0];
+
+		if (uploadedPhotoResponse.errors?.length || !uploadedPhoto) {
+			return;
+		}
+
+		const newPhotos = [...photos, uploadedPhoto].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+		yield put(userCoinsAdd(coinsForPhoto));
+		yield put(userPhotosSet(newPhotos));
+		yield put(userPassiveIncomeRecalculate());
+		window.location.href = '/gallery';
+	} catch (error) {
+	} finally {
+		yield put(userPhotosIsUploadingSet(false));
 	}
-
-	const level = getUserLevel(coins);
-	const newCoins = levelToPhotoReward.get(level)! + coins;
-
-	const uploadedPhotoResponse: FetchResult<AddUserPhotoMutation> = yield call(uploadPhoto, userId, photoId, level, newCoins, new Date().toUTCString());
-	const uploadedPhoto = uploadedPhotoResponse.data?.insertIntouser_photosCollection?.records[0];
-
-	if (uploadedPhotoResponse.errors?.length || !uploadedPhoto) {
-		return;
-	}
-
-	const newPhotos = [...photos, uploadedPhoto].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-
-	yield put(userPhotosSet(newPhotos));
-	yield take(userPhotosSet.type);
-	yield put(userPassiveIncomeRecalculate());
-	yield call(window.push, '/photo/gallery');
 }
 
 function* operationTapWorker() {
@@ -402,7 +420,7 @@ export function* operationClaimTaskWorker({ payload: taskPayload }: PayloadActio
 			taskId: task.id,
 			isCompleted: updatedTaskData?.isCompleted ?? false,
 			userTaskId: userTask?.id,
-			coins: newCoins,
+			coins: newCoins + user.coins,
 			daysCompleted: updatedTaskData?.completedDays ?? 0,
 			lastDailyReward: updatedTaskData?.lastDailyReward ?? user.last_daily_reward,
 			userId: user.id,
@@ -433,7 +451,6 @@ export function* operationClaimTaskWorker({ payload: taskPayload }: PayloadActio
 			return;
 		}
 
-		yield put(userCoinsAdd(newCoins));
 		yield put(userSet(updatedUser));
 		yield put(userTaskUpdate(claimedTask));
 	} catch (error) {

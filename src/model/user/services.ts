@@ -64,15 +64,17 @@ export const updateDailyRewardCompletedDays = async (
 	userId: string,
 	userTaskId: string,
 	completedDays: number,
-) => apolloClient.mutate({
-	mutation: UPDATE_DAILY_REWARD_COMPLETED_DAYS,
-	fetchPolicy: 'no-cache',
-	variables: {
-		userId,
-		userTaskId,
-		completedDays,
-	},
-});
+) => {
+	return apolloClient.mutate({
+		mutation: UPDATE_DAILY_REWARD_COMPLETED_DAYS,
+		fetchPolicy: 'no-cache',
+		variables: {
+			userId,
+			userTaskId,
+			completedDays,
+		},
+	});
+}
 
 export const getReferral = (telegramId: string) => apolloClient.query({
 	query: GetReferral,

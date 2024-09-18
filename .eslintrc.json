@@ -3,5 +3,13 @@
   "rules": {
     "quotes": [2, "single"]
   },
-	"ignorePatterns": ["src/gql/", "src/types/supabase.ts", "src/app/api/", "src/utils/**/*.ts"]
+	"ignorePatterns": ["src/gql/", "src/types/supabase.ts", "src/app/api/", "src/utils/**/*.ts"],
+	"overrides": [
+		{
+			"files": ["./**/*.test.ts"],
+			"env": {
+				"jest": true
+			}
+		}
+	]
 }

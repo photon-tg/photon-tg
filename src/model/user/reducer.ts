@@ -1,12 +1,22 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { RegisteredUserState, UninitializedUserState } from '@/model/user/types';
 import {
-	userCoinsAdd, userEnergyAdd, userEnergyReduce, userEnergySet,
-	userErrorSet, userIsLoadingSet, userLastDailyRewardSet, userPassiveIncomeRecalculate, userPassiveIncomeSet,
-	userPhotosSet, userReferralsSet,
+	userCoinsAdd,
+	userEnergyAdd,
+	userEnergyReduce,
+	userEnergySet,
+	userErrorSet,
+	userIsLoadingSet,
+	userLastDailyRewardSet, userLastHourlyRewardSet,
+	userPassiveIncomeRecalculate,
+	userPassiveIncomeSet,
+	userPhotosIsUploadingSet,
+	userPhotosSet,
+	userReferralsSet,
 	userReferredIdSet,
 	userSet,
-	userTasksSet, userTaskUpdate,
+	userTasksSet,
+	userTaskUpdate,
 	userTelegramUserSet
 } from '@/model/user/actions';
 import { calculatePassiveIncome, getIsDailyRewardClaimed } from '@/model/user/utils';
@@ -15,7 +25,12 @@ export const getInitialState = (): RegisteredUserState | UninitializedUserState 
 	data: {
 		telegramUser: null,
 		user: null,
-		photos: null,
+		photos: {
+			meta: {
+				isUploading: false,
+			},
+			data: null,
+		},
 		tasks: null,
 		referrals: null,
 		isDailyRewardClaimed: false,
@@ -35,7 +50,7 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 		.addCase(userSet, (draftState, { payload: user }) => {
 			draftState.data.user = user;
 			draftState.data.isDailyRewardClaimed = getIsDailyRewardClaimed(user.last_daily_reward);
-			draftState.data.passiveIncome = calculatePassiveIncome(draftState.data.photos);
+			draftState.data.passiveIncome = calculatePassiveIncome(draftState.data.photos.data);
 		})
 		.addCase(userErrorSet, (draftState, { payload: error }) => {
 			draftState.meta.error = error;
@@ -50,7 +65,7 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 			draftState.meta.referrerId = referrerId;
 		})
 		.addCase(userPhotosSet, (draftState, { payload: photos }) => {
-			draftState.data.photos = photos;
+			draftState.data.photos.data = photos;
 		})
 		.addCase(userTasksSet, (draftState, { payload: tasks }) => {
 			draftState.data.tasks = tasks;
@@ -65,6 +80,11 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 			if (draftState.data.user) {
 				draftState.data.user.last_daily_reward = lastDailyReward;
 				draftState.data.isDailyRewardClaimed = getIsDailyRewardClaimed(lastDailyReward);
+			}
+		})
+		.addCase(userLastHourlyRewardSet, (draftState, { payload: lastHourlyReward }) => {
+			if (draftState.data.user) {
+				draftState.data.user.last_hourly_reward = lastHourlyReward;
 			}
 		})
 		.addCase(userCoinsAdd, (draftState, { payload: coins }) => {
@@ -94,7 +114,12 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 		})
 		.addCase(userPassiveIncomeRecalculate, (draftState) => {
 			if (draftState.data.user) {
-				draftState.data.passiveIncome = calculatePassiveIncome(draftState.data.photos);
+				draftState.data.passiveIncome = calculatePassiveIncome(draftState.data.photos.data);
+			}
+		})
+		.addCase(userPhotosIsUploadingSet, (draftState, { payload: isUploading }) => {
+			if (draftState.data.user) {
+				draftState.data.photos.meta.isUploading = isUploading;
 			}
 		})
 );

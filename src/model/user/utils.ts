@@ -1,6 +1,6 @@
 import { SignUpData, UserCredentials } from '@/model/user/types';
-import { daysSinceDate } from '@/utils/date';
-import { TaskFragment,  UserTaskFragment } from '@/gql/graphql';
+import { daysSinceDate, hoursSinceDate } from '@/utils/date';
+import { TaskFragment, UserPhotoFragment, UserTaskFragment } from '@/gql/graphql';
 import { Level, levelToPhotoPassiveIncome } from '@/constants';
 import { RewardByDay } from '@/types/Task';
 import { UserPhoto } from '@/types/photo';
@@ -25,7 +25,7 @@ export function getIsDailyRewardClaimed(lastDailyReward: string | undefined | nu
 	if (!lastDailyReward) {
 		return false;
 	}
-
+console.log(daysSinceDate(lastDailyReward), 'dayay')
 	return daysSinceDate(lastDailyReward) < 1;
 }
 
@@ -71,4 +71,22 @@ export function calculatePassiveIncome(photos?: UserPhoto[] | null) {
 		const photoPassiveIncome = levelToPhotoPassiveIncome.get(photo.level_at_time as Level)! || 0;
 		return total + photoPassiveIncome;
 	}, 0) ?? 0;
+}
+
+export function getPassiveIncome(photos: UserPhotoFragment[], lastHourlyReward: string) {
+	const photosPassiveIncome: number = photos.reduce((total, photo) => {
+		/* means that we will calculate passive since the photo creation time */
+		const isDoneAfterLastReward = new Date(photo.created_at) > new Date(lastHourlyReward);
+		const lastClaimedReward = isDoneAfterLastReward ? photo.created_at : lastHourlyReward;
+		const hoursSinceLastReward = hoursSinceDate(lastClaimedReward);
+		console.log(hoursSinceLastReward)
+		const photoPassiveIncomePerHour = levelToPhotoPassiveIncome.get(photo.level_at_time as Level) ?? 0;
+		let hours = hoursSinceLastReward > 3 ? 3 : hoursSinceLastReward;
+		const reward = hours * photoPassiveIncomePerHour;
+
+		return total + reward;
+	}, 0);
+
+	const roundedPhotosPassiveIncome = Math.round(photosPassiveIncome || 0);
+	return roundedPhotosPassiveIncome;
 }

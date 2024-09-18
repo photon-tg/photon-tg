@@ -9,7 +9,8 @@ export const userReferrerSelector = (state: AppState) => state.user.meta.referre
 export const userTelegramSelector = (state: AppState) => state.user.data.telegramUser;
 export const userTelegramIdSelector = (state: AppState) => state.user.data.telegramUser.id;
 export const userTasksSelector = (state: AppState) => state.user.data.tasks;
-export const userPhotosSelector = (state: AppState) => state.user.data.photos;
+export const userPhotosUploadingSelector = (state: AppState) => state.user.data.photos.meta.isUploading;
+export const userPhotosSelector = (state: AppState) => state.user.data.photos.data;
 export const userLastHourlyRewardSelector = (state: AppState) => state.user.data.user.last_hourly_reward;
 export const userIsDailyRewardClaimedSelector = (state: AppState) => state.user.data.isDailyRewardClaimed;
 export const userReferralsSelector = (state: AppState) => state.user.data.referrals;

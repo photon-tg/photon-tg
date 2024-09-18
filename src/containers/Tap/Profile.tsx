@@ -7,7 +7,6 @@ import { getUserLevel, getUserLevelProgress } from '@/constants';
 
 export function Profile() {
 	const passiveIncome = useSelector(userPassiveIncomeSelector);
-	console.log(passiveIncome, 'passive')
 	const user = useSelector(userDataSelector);
 
 	return (

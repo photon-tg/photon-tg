@@ -27,7 +27,12 @@ export interface UninitializedUserState {
 	data: {
 		telegramUser: null;
 		user: null;
-		photos: null;
+		photos: {
+			meta: {
+				isUploading: boolean;
+			}
+			data: null;
+		};
 		tasks: null;
 		referrals: null;
 		isDailyRewardClaimed: boolean;
@@ -40,7 +45,12 @@ export interface RegisteredUserState {
 	data: {
 		telegramUser: WebAppUser;
 		user: CoreUserFieldsFragment;
-		photos: UserPhotoFragment[];
+		photos: {
+			meta: {
+				isUploading: boolean;
+			}
+			data: UserPhotoFragment[];
+		};
 		tasks: UserTaskFragment[];
 		referrals: ReferralData[];
 		isDailyRewardClaimed: boolean;

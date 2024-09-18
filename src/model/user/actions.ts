@@ -8,6 +8,7 @@ export const userReferredIdSet = createAction<string>('user/referrerId/set');
 export const userErrorSet = createAction<UserErrorType>('user/error/set');
 export const userIsLoadingSet = createAction<boolean>('user/isLoading/set');
 export const userPhotosSet = createAction<UserPhotoFragment[]>('user/photos/set');
+export const userPhotosIsUploadingSet = createAction<boolean>('user/photos/isUploading/set');
 export const userTasksSet = createAction<UserTaskFragment[]>('user/tasks/set');
 export const userLastDailyRewardSet = createAction<string | null>('user/lastDailyReward/set');
 export const userLastHourlyRewardSet = createAction<string>('user/lastHourlyReward/set');
