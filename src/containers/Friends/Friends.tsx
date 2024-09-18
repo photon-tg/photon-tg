@@ -13,25 +13,35 @@ export function Friends() {
 	const user = useSelector(userSelector);
 	const onReferealLink = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
-		navigator.clipboard.writeText(`https://${appURL}?startapp=friendId${user.telegram_id}`);
+		navigator.clipboard.writeText(
+			`https://${appURL}?startapp=friendId${user.telegram_id}`,
+		);
 	};
 
 	const onShare = async () => {
-		const url = encodeURIComponent(`https://${appURL}?startapp=friendId${user.telegram_id}`);
-		const text = encodeURIComponent('Join me in Photon!\n💲+5k coins\nor\n💰+20k coins if you have telegram Premium');
-		Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${url}&text=${text}`)
+		const url = encodeURIComponent(
+			`https://${appURL}?startapp=friendId${user.telegram_id}`,
+		);
+		const text = encodeURIComponent(
+			'Join me in Photon!\n💲+5k coins\nor\n💰+20k coins if you have telegram Premium',
+		);
+		Telegram.WebApp.openTelegramLink(
+			`https://t.me/share/url?url=${url}&text=${text}`,
+		);
 	};
 
 	return (
 		<div
 			className={
-				'gap-y-[10px] flex h-full flex-col items-center px-[15px] pt-[30px] justify-between'
+				'flex h-full flex-col items-center justify-between gap-y-[10px] px-[15px] pt-[30px]'
 			}
 		>
-			<div className={'flex flex-col items-center relative overflow-auto'}>
+			<div className={'relative flex flex-col items-center overflow-auto'}>
 				<h1 className={'mb-[10px] text-xxl'}>Invite friends!</h1>
 				<p
-					className={'mb-[20px] max-w-[230px] text-center text-sm text-text-blue'}
+					className={
+						'mb-[20px] max-w-[230px] text-center text-sm text-text-blue'
+					}
 				>
 					you and your friend will receive bonuses for participation
 				</p>
@@ -49,20 +59,39 @@ export function Friends() {
 						iconUrl={'/assets/icons/presents.svg'}
 					/>
 				</div>
-				<div className={'w-full mb-[15px]'}>
-					<span className={'text-start text-md mb-[10px] inline-block'}>Friends list</span>
+				<div className={'mb-[15px] w-full'}>
+					<span className={'mb-[10px] inline-block text-start text-md'}>
+						Friends list
+					</span>
 					{!referrals?.length && (
-						<div className={'text-inactive-grey text-md font-semibold text-[16px] text-center'}>Empty</div>
+						<div
+							className={
+								'text-center text-[16px] text-md font-semibold text-inactive-grey'
+							}
+						>
+							Empty
+						</div>
 					)}
 					{!!referrals?.length && (
 						<div className={'flex flex-col gap-y-[10px]'}>
 							{referrals.map((ref) => {
 								return (
-									<div key={ref.telegram_id} className={'bg-[#215295] rounded py-[9px] px-[15px] flex flex-col gap-y-[8px]'}>
-										<span className={'text-md'}>{ref?.first_name} {ref?.last_name}</span>
-										<div className={'flex gap-x-[5px] items-center'}>
-											<span className={'text-md text-[#42C2FF]'}>Lvl {getUserLevel(ref?.coins)}</span>
-											<div className={'w-[4px] h-[4px] rounded-[50%] bg-[#5a8cd1]'}></div>
+									<div
+										key={ref.telegram_id}
+										className={
+											'flex flex-col gap-y-[8px] rounded bg-[#215295] px-[15px] py-[9px]'
+										}
+									>
+										<span className={'text-md'}>
+											{ref?.first_name} {ref?.last_name}
+										</span>
+										<div className={'flex items-center gap-x-[5px]'}>
+											<span className={'text-md text-[#42C2FF]'}>
+												Lvl {getUserLevel(ref?.coins)}
+											</span>
+											<div
+												className={'h-[4px] w-[4px] rounded-[50%] bg-[#5a8cd1]'}
+											></div>
 											<Money withoutPlus amount={ref?.coins} size={'xxs'} />
 										</div>
 									</div>
@@ -72,11 +101,7 @@ export function Friends() {
 					)}
 				</div>
 			</div>
-			<div
-				className={
-					'justify-self-end grid w-full gap-y-[10px] pb-[20px]'
-				}
-			>
+			<div className={'grid w-full gap-y-[10px] justify-self-end pb-[20px]'}>
 				<Button onClick={onReferealLink} variant={'outline'}>
 					Copy referral link
 				</Button>

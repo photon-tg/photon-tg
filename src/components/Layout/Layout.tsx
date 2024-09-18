@@ -11,17 +11,15 @@ export function Layout(props: PropsWithChildren<LayoutProps>) {
 
 	return (
 		<main
-			className={`grid ${externalChildren ? 'grid-rows-[min-content_1fr]' : 'grid-rows-1'} mx-auto h-full w-full max-w-[375px] px-[0px] pt-[5px] relative overflow-hidden`}
+			className={`grid ${externalChildren ? 'grid-rows-[min-content_1fr]' : 'grid-rows-1'} relative mx-auto h-full w-full max-w-[375px] overflow-hidden px-[0px] pt-[5px]`}
 		>
 			{externalChildren}
-			<div className={'grid h-full w-full grid-rows-[1fr_min-content] bg-[#041837] rounded-tl rounded-tr'}>
-				<div
-					className={
-						'h-full overflow-auto'
-					}
-				>
-					{children}
-				</div>
+			<div
+				className={
+					'grid h-full w-full grid-rows-[1fr_min-content] rounded-tl rounded-tr bg-[#041837]'
+				}
+			>
+				<div className={'h-full overflow-auto'}>{children}</div>
 				<Navigation />
 			</div>
 		</main>

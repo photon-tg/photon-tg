@@ -1,11 +1,6 @@
 'use client';
 
-import {
-	createContext,
-	PropsWithChildren,
-	useEffect,
-	useMemo,
-} from 'react';
+import { createContext, PropsWithChildren, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDevice } from '@/hooks/useDevice';
@@ -18,13 +13,9 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 import { getUserLevel, levelToMaxEnergy } from '@/constants';
 import { userEnergyAdd, userEnergySet } from '@/model/user/actions';
 
-export interface AppContext {
+export interface AppContext {}
 
-}
-
-const initialAppContext: AppContext = {
-
-};
+const initialAppContext: AppContext = {};
 
 export const AppContext = createContext<AppContext>(initialAppContext);
 
@@ -32,7 +23,9 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { isMobile, isDetected } = useDevice();
-	const isApplicationInitialized = useSelector(applicationIsInitializedSelector);
+	const isApplicationInitialized = useSelector(
+		applicationIsInitializedSelector,
+	);
 	const isUserLoading = useSelector(userIsLoadingSelector);
 	const user = useSelector(userSelector);
 
@@ -52,7 +45,6 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		if (!isUserLoading) {
 			router.replace(HOME_PAGE);
 		}
-
 	}, [isUserLoading, router]);
 
 	useEffect(() => {
@@ -73,17 +65,27 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [dispatch, isApplicationInitialized, isUserLoading, user?.coins, user?.energy]);
+	}, [
+		dispatch,
+		isApplicationInitialized,
+		isUserLoading,
+		user?.coins,
+		user?.energy,
+	]);
 
-	const value = useMemo(
-		() => ({}),
-		[],
-	);
+	const value = useMemo(() => ({}), []);
 
 	const shouldChildrenRender = isDetected && !isUserLoading && isMobile;
 	return (
 		<AppContext.Provider value={value}>
-			{shouldChildrenRender ? children : <LoadingScreen isLoading={!isDetected || isUserLoading} isMobile={isMobile} />}
+			{shouldChildrenRender ? (
+				children
+			) : (
+				<LoadingScreen
+					isLoading={!isDetected || isUserLoading}
+					isMobile={isMobile}
+				/>
+			)}
 		</AppContext.Provider>
 	);
 }

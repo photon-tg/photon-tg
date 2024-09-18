@@ -1,7 +1,12 @@
 import { graphql } from '@/gql';
 
 export const SYNCHRONIZE_TAPS = graphql(`
-	mutation SynchronizeTaps($userId: UUID!, $coins: Int!, $energy: Int!, $lastSync: Datetime) {
+	mutation SynchronizeTaps(
+		$userId: UUID!
+		$coins: Int!
+		$energy: Int!
+		$lastSync: Datetime
+	) {
 		updateusersCollection(
 			atMost: 1
 			set: { coins: $coins, energy: $energy, last_sync: $lastSync }
@@ -15,10 +20,7 @@ export const SYNCHRONIZE_TAPS = graphql(`
 `);
 
 export const UPDATE_PASSIVE_INCOME = graphql(`
-	mutation UpdatePassiveIncome(
-		$userId: UUID!
-		$lastHourlyReward: Datetime!
-	) {
+	mutation UpdatePassiveIncome($userId: UUID!, $lastHourlyReward: Datetime!) {
 		updateusersCollection(
 			atMost: 1
 			set: { last_hourly_reward: $lastHourlyReward }

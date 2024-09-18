@@ -28,8 +28,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<html className={inter.className} lang={'en'}>
-		<GoogleTagManager gtmId="GTM-59KV2HBP" />
-		<GoogleAnalytics gaId={'G-SQ0XS74EJ2'} />
+			<GoogleTagManager gtmId="GTM-59KV2HBP" />
+			<GoogleAnalytics gaId={'G-SQ0XS74EJ2'} />
 			<body
 				className={
 					'h-full bg-gradient-to-b from-[#0A2647] from-0% to-[#062243] to-100% bg-no-repeat'

@@ -4,7 +4,11 @@ import { cn } from '@/utils/cn';
 import { PersonalizedTask, RewardByDay } from '@/types/Task';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { userIsDailyRewardClaimedSelector, userSelector, userTasksSelector } from '@/model/user/selectors';
+import {
+	userIsDailyRewardClaimedSelector,
+	userSelector,
+	userTasksSelector,
+} from '@/model/user/selectors';
 import { applicationTasksSelector } from '@/model/application/selectors';
 import { operationClaimTask } from '@/model/user/operations';
 import { TaskFragment, UserTaskFragment } from '@/gql/graphql';
@@ -58,27 +62,29 @@ interface DailyRewardModalProps {
 }
 
 function DailyRewardModal(props: DailyRewardModalProps) {
-	const {
-		task,
-		userTask,
-		isDailyRewardClaimed,
-	} = props;
+	const { task, userTask, isDailyRewardClaimed } = props;
 
 	const dispatch = useDispatch();
 
 	const onClaim = () => {
-		dispatch(operationClaimTask({ type: 'daily_reward', userTask, task }))
+		dispatch(operationClaimTask({ type: 'daily_reward', userTask, task }));
 	};
 
 	return (
-		<div className={'flex flex-col gap-y-[10px] mb-[20px]'}>
+		<div className={'mb-[20px] flex flex-col gap-y-[10px]'}>
 			<div
 				style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}
 				className={'grid max-h-[250px] gap-[10px] overflow-y-scroll'}
 			>
-				{(JSON.parse(task.reward_by_day || '') as RewardByDay[])?.map((day) =>
-					<Day key={day.day} day={day} task={task} userTask={userTask} isDailyRewardClaimed={isDailyRewardClaimed} />
-				)}
+				{(JSON.parse(task.reward_by_day || '') as RewardByDay[])?.map((day) => (
+					<Day
+						key={day.day}
+						day={day}
+						task={task}
+						userTask={userTask}
+						isDailyRewardClaimed={isDailyRewardClaimed}
+					/>
+				))}
 			</div>
 			<Button
 				disabled={isDailyRewardClaimed}
@@ -100,20 +106,21 @@ interface DayProps {
 }
 
 function Day(props: DayProps) {
-	const { task, userTask, isDailyRewardClaimed, lastClaimedDailyReward, day } = props;
+	const { task, userTask, isDailyRewardClaimed, lastClaimedDailyReward, day } =
+		props;
 
 	const completedDays = userTask?.days_completed || 0;
 	const isDayCompleted = day.day <= completedDays;
-	const isAvailable = day.day === (completedDays + 1) && !isDailyRewardClaimed;
+	const isAvailable = day.day === completedDays + 1 && !isDailyRewardClaimed;
 	const isNotYetAvailable =
-		day.day === (completedDays + 1) && isDailyRewardClaimed;
+		day.day === completedDays + 1 && isDailyRewardClaimed;
 
 	console.log(userTask, isDailyRewardClaimed, day, 'day');
 	return (
 		<div
 			className={cn(
-				'border-[2px] border-[transparent] flex flex-col gap-y-[2px] overflow-hidden rounded bg-[#1b2b50] px-[11px] py-[11px]',
-				isAvailable && ' border-[yellow]',
+				'flex flex-col gap-y-[2px] overflow-hidden rounded border-[2px] border-[transparent] bg-[#1b2b50] px-[11px] py-[11px]',
+				isAvailable && 'border-[yellow]',
 				isDayCompleted && 'bg-[#0F3F99]',
 				isNotYetAvailable && 'bg-[#1b2b50]',
 			)}
@@ -121,5 +128,5 @@ function Day(props: DayProps) {
 			<span className={'mb-[15px] text-md'}>Day {day.day}</span>
 			<Money isCompact amount={day.reward} size={'xs'} />
 		</div>
-	)
+	);
 }

@@ -6,5 +6,4 @@ export type AuthData = {
 	referrerId: string | null;
 };
 
-export type User = CoreUserFieldsFragment &
-	AuthData;
+export type User = CoreUserFieldsFragment & AuthData;

@@ -7,14 +7,14 @@ export enum ApplicationErrorType {
 
 export type Task = FullTaskFragment & {
 	rewardByDay: RewardByDay[];
-}
+};
 
 export interface ApplicationState {
 	data: {
 		tasks: Task[];
-	}
+	};
 	meta: {
 		error: ApplicationErrorType | null;
 		isInitialized: boolean;
-	}
+	};
 }

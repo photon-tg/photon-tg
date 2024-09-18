@@ -19,9 +19,7 @@ export function ApplicationProviders({ children }: PropsWithChildren<{}>) {
 		<ApolloProvider client={apolloClient}>
 			<Provider store={storeRef.current!}>
 				<ModalContextProvider>
-					<AppContextProvider>
-						{children}
-					</AppContextProvider>
+					<AppContextProvider>{children}</AppContextProvider>
 				</ModalContextProvider>
 			</Provider>
 		</ApolloProvider>

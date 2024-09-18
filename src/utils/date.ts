@@ -100,7 +100,10 @@ export function isNextDay(input: string): boolean {
 	return false;
 }
 
-export function hoursSinceDate(inputDate: string | Date, decimalPlaces: number = 2): number {
+export function hoursSinceDate(
+	inputDate: string | Date,
+	decimalPlaces: number = 2,
+): number {
 	const pastDate = new Date(inputDate);
 	const currentDate = new Date();
 
@@ -116,7 +119,10 @@ export function hoursSinceDate(inputDate: string | Date, decimalPlaces: number =
 	return roundedHours;
 }
 
-export function calculateEnergyGained(lastSyncDateUTC: string, currentEnergy: number): { newEnergy: number; energyGained: number } {
+export function calculateEnergyGained(
+	lastSyncDateUTC: string,
+	currentEnergy: number,
+): { newEnergy: number; energyGained: number } {
 	// Get current UTC time
 	const currentDateUTC = new Date();
 
@@ -124,7 +130,9 @@ export function calculateEnergyGained(lastSyncDateUTC: string, currentEnergy: nu
 	const lastSyncDate = new Date(lastSyncDateUTC);
 
 	// Calculate the time difference in seconds
-	const timeDifferenceInSeconds = Math.floor((currentDateUTC.getTime() - lastSyncDate.getTime()) / 1000);
+	const timeDifferenceInSeconds = Math.floor(
+		(currentDateUTC.getTime() - lastSyncDate.getTime()) / 1000,
+	);
 
 	// Assuming 1 energy per second
 	const energyGained = timeDifferenceInSeconds * 3;
@@ -135,7 +143,7 @@ export function calculateEnergyGained(lastSyncDateUTC: string, currentEnergy: nu
 	return {
 		newEnergy,
 		energyGained,
-	}
+	};
 }
 
 export function getNow() {

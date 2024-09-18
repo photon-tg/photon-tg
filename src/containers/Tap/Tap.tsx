@@ -10,7 +10,12 @@ export function Tap() {
 	const dispatch = useDispatch();
 	const user = useSelector(userSelector);
 	return (
-		<div onSelectCapture={(e) => {e.preventDefault();}} className={'flex h-full items-center justify-center'}>
+		<div
+			onSelectCapture={(e) => {
+				e.preventDefault();
+			}}
+			className={'flex h-full items-center justify-center'}
+		>
 			<div
 				className={
 					'grid-rows-[repeat(3, min-content)] grid items-center justify-center gap-y-[15px]'
@@ -24,7 +29,11 @@ export function Tap() {
 					<img width={40} height={40} src={'/assets/icons/photon.svg'} />
 					{user.coins}
 				</span>
-				<TapArea onTap={() => { dispatch(operationTap()) }} />
+				<TapArea
+					onTap={() => {
+						dispatch(operationTap());
+					}}
+				/>
 				<div className={'flex items-center justify-center gap-x-[10px]'}>
 					<img className={'w-[10px]'} src={'/assets/icons/energy.svg'} />
 					{user.energy} / {levelToMaxEnergy.get(getUserLevel(user.coins))}
@@ -46,8 +55,14 @@ function TapArea(props: TapAreaProps) {
 
 	useEffect(() => {
 		if (tapAreaRef.current) {
-			tapAreaRef.current.addEventListener('touchmove', (event) => event.preventDefault(), { passive: false });
-			tapAreaRef.current.addEventListener('touchstart', (e) => e.preventDefault());
+			tapAreaRef.current.addEventListener(
+				'touchmove',
+				(event) => event.preventDefault(),
+				{ passive: false },
+			);
+			tapAreaRef.current.addEventListener('touchstart', (e) =>
+				e.preventDefault(),
+			);
 		}
 	}, []);
 
@@ -62,20 +77,29 @@ function TapArea(props: TapAreaProps) {
 	};
 
 	return (
-		<button ref={tapAreaRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+		<button
+			ref={tapAreaRef}
+			onTouchStart={onTouchStart}
+			onTouchEnd={onTouchEnd}
+		>
 			<div
-					className={
-					'pointer-events-none select-none h-[300px] w-[300px] rounded-[50%] bg-gradient-to-b from-[#5EB3DC] from-0% via-[#11419B] via-50% to-[#0F3F99] to-100% px-[12px] py-[12px] shadow-[0_0_93px_5px_rgba(8,74,199,0.45)]'
-					}
+				className={
+					'pointer-events-none h-[300px] w-[300px] select-none rounded-[50%] bg-gradient-to-b from-[#5EB3DC] from-0% via-[#11419B] via-50% to-[#0F3F99] to-100% px-[12px] py-[12px] shadow-[0_0_93px_5px_rgba(8,74,199,0.45)]'
+				}
+			>
+				<div
+					className={`pointer-events-none flex h-full w-full items-center justify-center rounded-[50%] ${isPressed ? 'bg-[#072047]' : 'bg-[#07224c]'}`}
 				>
-					<div
-						className={`pointer-events-none flex h-full w-full items-center justify-center rounded-[50%] ${isPressed ? 'bg-[#072047]' : 'bg-[#07224c]'}`}
-					>
-						<img unselectable={'on'} style={{
+					<img
+						unselectable={'on'}
+						style={{
 							scale: isPressed ? '1.03' : '1',
-						}} className={'w-[80%] select-none pointer-events-none'} src={'/assets/camera-big.png'} />
-					</div>
+						}}
+						className={'pointer-events-none w-[80%] select-none'}
+						src={'/assets/camera-big.png'}
+					/>
 				</div>
-			</button>
+			</div>
+		</button>
 	);
 }

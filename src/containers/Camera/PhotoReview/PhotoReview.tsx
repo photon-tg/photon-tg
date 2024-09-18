@@ -22,8 +22,20 @@ export function PhotoReview(props: PhotoReviewProps) {
 					'absolute bottom-0 flex w-full justify-between px-[20px] pb-[25px]'
 				}
 			>
-				<Button disabled={isPhotoUploading} onClick={onReject} variant={'outline'}>Reject</Button>
-				<Button disabled={isPhotoUploading} onClick={onAccept} variant={'outline'}>Accept</Button>
+				<Button
+					disabled={isPhotoUploading}
+					onClick={onReject}
+					variant={'outline'}
+				>
+					Reject
+				</Button>
+				<Button
+					disabled={isPhotoUploading}
+					onClick={onAccept}
+					variant={'outline'}
+				>
+					Accept
+				</Button>
 			</div>
 		</div>
 	);

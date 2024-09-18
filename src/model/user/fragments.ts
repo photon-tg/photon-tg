@@ -15,19 +15,19 @@ export const UserTask = graphql(`
 
 export const Referral = graphql(`
 	fragment Referral on user_referrals {
-		id,
-		referral_id,
-		referrer_id,
-		is_claimed_by_referrer,
+		id
+		referral_id
+		referrer_id
+		is_claimed_by_referrer
 		users {
-			id,
-			is_premium,
-			coins,
+			id
+			is_premium
+			coins
 			first_name
-			last_name,
+			last_name
 		}
 	}
-`)
+`);
 
 export const UserPhoto = graphql(`
 	fragment UserPhoto on user_photos {

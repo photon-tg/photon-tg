@@ -19,7 +19,7 @@ export function CTACard(props: CTACardProps) {
 				<img width={45} src={iconUrl} />
 			</div>
 			<div className={'grid gap-y-[5px]'}>
-				<span className={'text-lg font-medium max-w-[80%]'}>{title}</span>
+				<span className={'max-w-[80%] text-lg font-medium'}>{title}</span>
 				<div className={'flex items-center gap-x-[10px]'}>
 					<Money size={'md'} amount={profit} />
 					{description && (

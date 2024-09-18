@@ -1,10 +1,8 @@
 import apolloClient from '@/api/graphql';
 import { CoreUserFieldsFragment } from '@/gql/graphql';
-import {
-	SYNCHRONIZE_TAPS,
-} from '@/graphql/mutations/tap';
+import { SYNCHRONIZE_TAPS } from '@/graphql/mutations/tap';
 
-import {  REFER_USER, UPDATE_USER } from '@/graphql/mutations';
+import { REFER_USER, UPDATE_USER } from '@/graphql/mutations';
 
 export async function synchronizeTaps(
 	userId: string,
@@ -29,13 +27,12 @@ export async function synchronizeTaps(
 	return data;
 }
 
-
 export type referUserOptions = {
 	referrerTgId: string;
 	referralTgId: string;
 	userId: string;
 	coins: number;
-}
+};
 
 export async function referUser({
 	referrerTgId,
@@ -51,7 +48,7 @@ export async function referUser({
 			referralTgId,
 			userId,
 			coins,
-		}
+		},
 	});
 
 	if (errors?.length) {
@@ -69,9 +66,17 @@ export type UpdateUserOptions = {
 	user: CoreUserFieldsFragment;
 	isReferred?: boolean;
 	energy?: number;
-}
+};
 
-export async function updateUser({ userId, coins, lastHourlyReward, energy, lastDailyReward, user, isReferred }: UpdateUserOptions) {
+export async function updateUser({
+	userId,
+	coins,
+	lastHourlyReward,
+	energy,
+	lastDailyReward,
+	user,
+	isReferred,
+}: UpdateUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_USER,
 		fetchPolicy: 'no-cache',
@@ -82,7 +87,7 @@ export async function updateUser({ userId, coins, lastHourlyReward, energy, last
 			isReferred: isReferred ?? user.is_referred,
 			lastDailyReward: lastDailyReward ?? user.last_daily_reward,
 			energy: energy ?? user.energy,
-		}
+		},
 	});
 
 	if (errors?.length) {

@@ -13,17 +13,21 @@ export function EmptyMessage() {
 				Make your first photo and earn
 				<Money />
 			</div>
-			<Button onClick={() => router.push('/photo/camera')} width={'100%'}>Take a photo</Button>
+			<Button onClick={() => router.push('/photo/camera')} width={'100%'}>
+				Take a photo
+			</Button>
 		</div>
 	);
 }
 
 function Money() {
 	return (
-		<div
-			className={'inline-block'}
-		>
-			<div className={'flex items-center gap-x-[5px] font-semibold text-sky-blue translate-y-[4px] translate-x-[7px]'}>
+		<div className={'inline-block'}>
+			<div
+				className={
+					'flex translate-x-[7px] translate-y-[4px] items-center gap-x-[5px] font-semibold text-sky-blue'
+				}
+			>
 				<Coin />
 				+5000
 			</div>

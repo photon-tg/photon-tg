@@ -34,7 +34,6 @@ const authLink = setContext(async (_, { headers }) => {
 	};
 });
 
-
 if (process.env.NODE_ENV === 'development') {
 	// Adds messages only in a dev environment
 	loadDevMessages();

@@ -30,7 +30,10 @@ export async function POST(request: Request) {
 	}
 
 	if (referrerId) {
-		const { error, data } = await supabase.from('users').select('coins,first_name,last_name,is_premium,id').eq('telegram_id', referrerId);
+		const { error, data } = await supabase
+			.from('users')
+			.select('coins,first_name,last_name,is_premium,id')
+			.eq('telegram_id', referrerId);
 
 		if (error) {
 			return new Response('Error', {
@@ -44,18 +47,24 @@ export async function POST(request: Request) {
 	}
 
 	if (referralId) {
-		const { data: dataR, error: eb } = await supabase.from('user_referrals').select('referral_id,is_claimed_by_referrer').eq('referrer_id', referralId);
+		const { data: dataR, error: eb } = await supabase
+			.from('user_referrals')
+			.select('referral_id,is_claimed_by_referrer')
+			.eq('referrer_id', referralId);
 
 		const usersIds = dataR?.map((ref) => ref?.referral_id) ?? [];
-		const {
-			data
-		} = await supabase.from('users').select('coins,first_name,last_name,is_premium').in('telegram_id', usersIds);
+		const { data } = await supabase
+			.from('users')
+			.select('coins,first_name,last_name,is_premium')
+			.in('telegram_id', usersIds);
 
-		const mod =  data?.map((a) => {
+		const mod = data?.map((a) => {
 			return {
 				...a,
-				is_claimed_by_referrer: dataR?.find((b) => (b as any).referralId === (a as any).telegram_id)?.is_claimed_by_referrer ?? false,
-			}
+				is_claimed_by_referrer:
+					dataR?.find((b) => (b as any).referralId === (a as any).telegram_id)
+						?.is_claimed_by_referrer ?? false,
+			};
 		});
 
 		return new Response(JSON.stringify(mod), {

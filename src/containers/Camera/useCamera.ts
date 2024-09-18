@@ -26,7 +26,7 @@ export function useCamera() {
 	}, [cameraRef]);
 
 	const flip = useCallback(() => {
-		setFacingMode((prev) => prev === 'user' ? 'environment' : 'user');
+		setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user'));
 	}, []);
 
 	const onAccept = useCallback(async () => {
@@ -34,7 +34,7 @@ export function useCamera() {
 			return;
 		}
 
-		dispatch(operationUploadPhoto(image!))
+		dispatch(operationUploadPhoto(image!));
 	}, [dispatch, image, user]);
 
 	const onReject = useCallback(() => {
@@ -53,6 +53,6 @@ export function useCamera() {
 		onReject,
 		onAccept,
 		goBack,
-		facingMode
+		facingMode,
 	};
 }

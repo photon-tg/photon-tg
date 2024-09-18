@@ -8,7 +8,9 @@ export function Tasks() {
 			<img
 				width={100}
 				className={'mb-[10px] justify-self-center'}
-				src={'https://hnvngbrjzbcenxwmzzrk.supabase.co/storage/v1/object/public/application/public/check.svg'}
+				src={
+					'https://hnvngbrjzbcenxwmzzrk.supabase.co/storage/v1/object/public/application/public/check.svg'
+				}
 			/>
 			<h1 className={'mb-[50px] justify-self-center text-xxl'}>Tasks</h1>
 			<div className={'flex flex-col gap-y-[40px]'}>

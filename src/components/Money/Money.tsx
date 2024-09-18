@@ -57,7 +57,8 @@ export function Money(props: MoneyProps) {
 				height={img.height}
 				src={'/assets/icons/photon.svg'}
 			/>
-			{!withoutPlus && '+'}{isCompact ? formatNumber(amount) : amount}
+			{!withoutPlus && '+'}
+			{isCompact ? formatNumber(amount) : amount}
 		</div>
 	);
 }

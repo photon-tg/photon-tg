@@ -53,9 +53,12 @@ export function getUserLevel(userCoins: number): Level {
 
 export function getUserLevelProgress(userCoins: number): number {
 	const level = getUserLevel(userCoins);
-	const prevLvlMoney = (level > 1 && levelToCoins.get(level - 1 as Level)) || 0;
+	const prevLvlMoney =
+		(level > 1 && levelToCoins.get((level - 1) as Level)) || 0;
 	return userCoins === 0
 		? 0
-		: Math.round((100 * (userCoins - prevLvlMoney) / (levelToCoins.get(level) as number)));
+		: Math.round(
+				(100 * (userCoins - prevLvlMoney)) /
+					(levelToCoins.get(level) as number),
+			);
 }
-

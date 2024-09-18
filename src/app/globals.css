@@ -16,7 +16,11 @@ body {
 	color: white;
 }
 
-p, span, h1,h2,h3 {
+p,
+span,
+h1,
+h2,
+h3 {
 	user-select: none !important;
 	pointer-events: none;
 }

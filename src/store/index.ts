@@ -10,15 +10,14 @@ export const createStore = () => {
 		reducer: rootReducer,
 		devTools: true,
 		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware()
-				.concat(sagaMiddleware)
+			getDefaultMiddleware().concat(sagaMiddleware),
 	});
 
 	sagaMiddleware.run(rootSaga);
 
 	return store;
-}
+};
 
-export type AppStore = ReturnType<typeof createStore>
-export type RootState = ReturnType<AppStore['getState']>
+export type AppStore = ReturnType<typeof createStore>;
+export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];

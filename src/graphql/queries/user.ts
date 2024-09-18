@@ -13,22 +13,33 @@ export const GET_USER = graphql(`
 `);
 
 export const GetUserData = graphql(`
-	query GetUserData(
-		$userId: UUID!,
-		$telegramId: String!,
-	) {
-		user_photosCollection(orderBy: [{ created_at: DescNullsLast }], first: 100, offset: 0, filter: { user_id: { eq: $userId } }) {
+	query GetUserData($userId: UUID!, $telegramId: String!) {
+		user_photosCollection(
+			orderBy: [{ created_at: DescNullsLast }]
+			first: 100
+			offset: 0
+			filter: { user_id: { eq: $userId } }
+		) {
 			edges {
 				node {
-					...UserPhoto,
+					...UserPhoto
 				}
 			}
 		}
 
-		user_referralsCollection(first: 100, offset: 0, filter: { or: [{ referrer_id: { eq: $telegramId } }, { referral_id: { eq: $telegramId } }] }) {
+		user_referralsCollection(
+			first: 100
+			offset: 0
+			filter: {
+				or: [
+					{ referrer_id: { eq: $telegramId } }
+					{ referral_id: { eq: $telegramId } }
+				]
+			}
+		) {
 			edges {
 				node {
-					...Referral,
+					...Referral
 				}
 			}
 		}
@@ -41,7 +52,11 @@ export const GetUserData = graphql(`
 			}
 		}
 
-		user_tasksCollection(first: 100, offset: 0, filter: { user_id: { eq: $userId } }) {
+		user_tasksCollection(
+			first: 100
+			offset: 0
+			filter: { user_id: { eq: $userId } }
+		) {
 			edges {
 				node {
 					...UserTask
@@ -49,4 +64,4 @@ export const GetUserData = graphql(`
 			}
 		}
 	}
-`)
+`);

@@ -2,12 +2,12 @@ import { graphql } from '@/gql';
 
 export const CLAIM_FIRST_TASK = graphql(`
 	mutation ClaimFirstTask(
-		$userId: UUID!,
+		$userId: UUID!
 		$taskId: String!
-		$lastDailyReward: Datetime,
-		$daysCompleted: Int!,
-		$completed: Boolean,
-		$coins: Int,
+		$lastDailyReward: Datetime
+		$daysCompleted: Int!
+		$completed: Boolean
+		$coins: Int
 	) {
 		updateusersCollection(
 			atMost: 1
@@ -22,10 +22,10 @@ export const CLAIM_FIRST_TASK = graphql(`
 		insertIntouser_tasksCollection(
 			objects: [
 				{
-					user_id: $userId,
-					task_id: $taskId,
-					days_completed: $daysCompleted,
-					completed: $completed,
+					user_id: $userId
+					task_id: $taskId
+					days_completed: $daysCompleted
+					completed: $completed
 				}
 			]
 		) {
@@ -38,12 +38,12 @@ export const CLAIM_FIRST_TASK = graphql(`
 
 export const CLAIM_TASK = graphql(`
 	mutation ClaimTask(
-		$userId: UUID!,
+		$userId: UUID!
 		$userTaskId: UUID!
-		$lastDailyReward: Datetime,
-		$daysCompleted: Int!,
-		$completed: Boolean,
-		$coins: Int,
+		$lastDailyReward: Datetime
+		$daysCompleted: Int!
+		$completed: Boolean
+		$coins: Int
 	) {
 		updateusersCollection(
 			atMost: 1
@@ -66,14 +66,6 @@ export const CLAIM_TASK = graphql(`
 		}
 	}
 `);
-
-
-
-
-
-
-
-
 
 export const CLAIM_DAILY_REWARD = graphql(`
 	mutation ClaimDailyReward(

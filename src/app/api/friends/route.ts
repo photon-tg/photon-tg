@@ -24,34 +24,45 @@ export async function POST(request: Request) {
 		const tgId = await request.json();
 
 		// if ((typeof userData === 'string' || !userData?.user_metadata) && !tgId?.telegramId) throw new Error();
-		console.log('hello')
+		console.log('hello');
 		await supabase.auth.signInWithPassword({
 			email: 'edge-functions@photon.com',
 			password: 'redound_chapbook_HOYDEN_rye_begotten_plump_passband',
 		});
-//userData?.user_metadata?.telegram_id ??
+		//userData?.user_metadata?.telegram_id ??
 		const telegramId = tgId?.telegramId;
 
-		const userReferralsResponse = await supabase.from('user_referrals')
+		const userReferralsResponse = await supabase
+			.from('user_referrals')
 			.select('referral_id,is_claimed_by_referrer')
 			.eq('referrer_id', telegramId);
 		if (userReferralsResponse.error) {
 			throw '';
 		}
 
-		const friends = (userReferralsResponse.data as { referral_id: string, is_claimed_by_referrer: boolean }[]);
+		const friends = userReferralsResponse.data as {
+			referral_id: string;
+			is_claimed_by_referrer: boolean;
+		}[];
 		const friendsIds = friends.map(({ referral_id }) => referral_id);
 
-		const usersResponse = await supabase.from('users').select('coins,first_name,last_name,is_premium,telegram_id').in('telegram_id', friendsIds);
-		const responseData = (usersResponse.data as { telegram_id: string }[]).map((user) => ({
-			...user,
-			is_claimed_by_referrer: friends.find((friend) => friend.referral_id === user.telegram_id)?.is_claimed_by_referrer ?? false,
-		}));
+		const usersResponse = await supabase
+			.from('users')
+			.select('coins,first_name,last_name,is_premium,telegram_id')
+			.in('telegram_id', friendsIds);
+		const responseData = (usersResponse.data as { telegram_id: string }[]).map(
+			(user) => ({
+				...user,
+				is_claimed_by_referrer:
+					friends.find((friend) => friend.referral_id === user.telegram_id)
+						?.is_claimed_by_referrer ?? false,
+			}),
+		);
 
 		return new Response(JSON.stringify(responseData), {
 			status: 200,
 		});
-	} catch(error) {
+	} catch (error) {
 		let message = 'Error occurred';
 		if (error instanceof Error) {
 			message = error.message;
@@ -59,6 +70,6 @@ export async function POST(request: Request) {
 
 		return new Response(message, {
 			status: 500,
-		})
+		});
 	}
 }

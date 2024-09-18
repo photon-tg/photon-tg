@@ -15,8 +15,16 @@ import { userSelector } from '@/model/user/selectors';
 export function Camera() {
 	const router = useRouter();
 	const user = useSelector(userSelector);
-	const { cameraRef, takePhoto, flip, facingMode, image, onReject, onAccept, goBack } =
-		useCamera();
+	const {
+		cameraRef,
+		takePhoto,
+		flip,
+		facingMode,
+		image,
+		onReject,
+		onAccept,
+		goBack,
+	} = useCamera();
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
@@ -33,7 +41,10 @@ export function Camera() {
 						<div className={'mb-[30px] flex flex-col gap-y-[2px] text-lg'}>
 							You can make photos only once a day
 						</div>
-						<Button onClick={() => router.push('/photo/gallery')} width={'100%'}>
+						<Button
+							onClick={() => router.push('/photo/gallery')}
+							width={'100%'}
+						>
 							Return
 						</Button>
 					</div>
@@ -60,7 +71,7 @@ export function Camera() {
 				width={'100%'}
 				height={'100%'}
 				videoConstraints={{
-					facingMode
+					facingMode,
 				}}
 				forceScreenshotSourceSize
 				screenshotFormat={'image/jpeg'}

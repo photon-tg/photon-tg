@@ -8,18 +8,20 @@ const AuthenticationData = z.object({
 
 type AuthenticationDataBody = z.infer<typeof AuthenticationData>;
 
-export type ValidatedTelegramUser = {
-	isValid: false;
-	error: {
-		type: UserErrorType;
-		message: string;
-	};
-} | {
-	user: WebAppUser;
-	referrerId: string | null;
-	isValid: true;
-	error: null;
-}
+export type ValidatedTelegramUser =
+	| {
+			isValid: false;
+			error: {
+				type: UserErrorType;
+				message: string;
+			};
+	  }
+	| {
+			user: WebAppUser;
+			referrerId: string | null;
+			isValid: true;
+			error: null;
+	  };
 
 // Add caching or JWT tokens on top
 // TODO: use ready-made lib https://github.com/Telegram-Mini-Apps/telegram-apps/tree/master/packages/init-data-node
@@ -35,7 +37,7 @@ export async function POST(request: Request) {
 				error: {
 					type: UserErrorType.INVALID_DATA_CHECK_STRING,
 					message: 'dataCheckString is invalid',
-				}
+				},
 			}),
 			{
 				status: 400,
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
 					error: {
 						type: UserErrorType.INVALID_DATA_CHECK_STRING,
 						message: 'dataCheckString is invalid',
-					}
+					},
 				}),
 				{ status: 403 },
 			);
@@ -83,9 +85,11 @@ export async function POST(request: Request) {
 				error: {
 					type: UserErrorType.SERVER_ERROR,
 					message: 'Internal server error',
-				}
-			}), {
-			status: 500,
-		});
+				},
+			}),
+			{
+				status: 500,
+			},
+		);
 	}
 }

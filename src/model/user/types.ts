@@ -1,4 +1,8 @@
-import { CoreUserFieldsFragment, UserPhotoFragment, UserTaskFragment } from '@/gql/graphql';
+import {
+	CoreUserFieldsFragment,
+	UserPhotoFragment,
+	UserTaskFragment,
+} from '@/gql/graphql';
 
 export interface UserCredentials {
 	email: string;
@@ -6,10 +10,10 @@ export interface UserCredentials {
 }
 
 export interface SignUpData {
-	first_name: string,
-	last_name?: string,
-	telegram_id: string,
-	is_premium?: boolean,
+	first_name: string;
+	last_name?: string;
+	telegram_id: string;
+	is_premium?: boolean;
 }
 
 export enum UserErrorType {
@@ -30,7 +34,7 @@ export interface UninitializedUserState {
 		photos: {
 			meta: {
 				isUploading: boolean;
-			}
+			};
 			data: null;
 		};
 		tasks: null;
@@ -48,7 +52,7 @@ export interface RegisteredUserState {
 		photos: {
 			meta: {
 				isUploading: boolean;
-			}
+			};
 			data: UserPhotoFragment[];
 		};
 		tasks: UserTaskFragment[];

@@ -5,12 +5,11 @@ const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
 
-
 export async function POST(request: Request) {
 	try {
 		const body = await request.json();
 		const telegramId = body.telegramId;
-	console.log(telegramId, 'tg')
+		console.log(telegramId, 'tg');
 		if (!telegramId) {
 			throw new Error('Not found');
 		}
@@ -20,8 +19,11 @@ export async function POST(request: Request) {
 			password: 'redound_chapbook_HOYDEN_rye_begotten_plump_passband',
 		});
 
-		const usersResponse = await supabase.from('users').select('is_premium').eq('telegram_id', telegramId);
-		
+		const usersResponse = await supabase
+			.from('users')
+			.select('is_premium')
+			.eq('telegram_id', telegramId);
+
 		if (usersResponse.error || !usersResponse.data[0]) {
 			throw new Error();
 		}

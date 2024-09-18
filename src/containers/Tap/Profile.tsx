@@ -2,7 +2,10 @@
 
 import Coin from '@/../public/assets/icons/photon.svg';
 import { useSelector } from 'react-redux';
-import { userDataSelector, userPassiveIncomeSelector } from '@/model/user/selectors';
+import {
+	userDataSelector,
+	userPassiveIncomeSelector,
+} from '@/model/user/selectors';
 import { getUserLevel, getUserLevelProgress } from '@/constants';
 
 export function Profile() {
@@ -20,10 +23,8 @@ export function Profile() {
 					alt={'avatar'}
 				/>
 				<div className={'grid content-start'}>
-					<span className={'mb-[7px] text-md'}>
-						{user.user.first_name}
-					</span>
-					<span className={'text-md font-semibold text-sky-blue mb-[3px]'}>
+					<span className={'mb-[7px] text-md'}>{user.user.first_name}</span>
+					<span className={'mb-[3px] text-md font-semibold text-sky-blue'}>
 						Level {getUserLevel(user.user.coins)}
 					</span>
 					<div className={'h-[9px] w-full rounded bg-[#2E3F69]'}>
