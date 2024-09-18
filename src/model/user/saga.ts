@@ -61,7 +61,7 @@ import {
 import { ApolloQueryResult, FetchResult } from '@apollo/client';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
-	userCoinsSelector,
+	userCoinsSelector, userDataSelector,
 	userIdSelector, userLastHourlyRewardSelector, userPhotosSelector,
 	userReferralsSelector, userReferrerSelector,
 	userSelector,
@@ -83,6 +83,7 @@ import {
 import { referUser, updateUser, UpdateUserOptions } from '@/api/api';
 import { nanoid } from 'nanoid';
 import { decode } from 'base64-arraybuffer';
+import * as Sentry from "@sentry/nextjs";
 
 function* operationSetUserWorker({ payload: userId }: PayloadAction<string>) {
 	try {
@@ -96,6 +97,13 @@ function* operationSetUserWorker({ payload: userId }: PayloadAction<string>) {
 
 		yield put(userSet(user));
 	} catch (error) {
+		Sentry.captureException(error, {
+			contexts: {
+				user: {
+					id: userId,
+				},
+			}
+		});
 		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 	}
 }
@@ -211,6 +219,9 @@ export function* operationInitUserWorker() {
 		window.Telegram.WebApp.ready();
 		!window.Telegram.WebApp.isExpanded && window.Telegram.WebApp.expand();
 	} catch (error) {
+		Sentry.captureException(error, {
+			contexts: {}
+		});
 		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 	}
 }
@@ -222,42 +233,49 @@ export function* operationInitDailyRewardWorker() {
 	const dailyRewardTask: TaskFragment = yield tasks.find((task) => task.id === 'daily_reward');
 	const userDailyRewardTask: UserTaskFragment = yield userTasks.find(userTask => userTask.task_id === dailyRewardTask?.id)!;
 
-	yield put(userLastDailyRewardSet(user.last_daily_reward ?? null));
+	try {
+		yield put(userLastDailyRewardSet(user.last_daily_reward ?? null));
 
-	if (!userDailyRewardTask) {
-		return;
+		if (!userDailyRewardTask) {
+			return;
+		}
+
+		const daysSinceLastDailyReward: number = yield user.last_daily_reward ? daysSinceDate(user.last_daily_reward) : 0;
+
+		if (daysSinceLastDailyReward <= 1) {
+			return;
+		}
+
+		// user started daily quest but skipped day(s)
+		const updateUserDailyRewardTaskResponse: FetchResult<UpdateDailyRewardCompletedDaysMutation> = yield call(updateDailyRewardCompletedDays, user.id, userDailyRewardTask.id!, 0);
+
+		if (updateUserDailyRewardTaskResponse.errors?.length) {
+			yield put(userErrorSet(UserErrorType.SERVER_ERROR));
+			return;
+		}
+
+		const updatedUserDailyRewardTask = updateUserDailyRewardTaskResponse.data?.updateuser_tasksCollection.records[0];
+
+		if (!updatedUserDailyRewardTask) {
+			yield put(userErrorSet(UserErrorType.SERVER_ERROR));
+			return;
+		}
+
+		yield put(userTaskUpdate(updatedUserDailyRewardTask));
+		yield put(userLastDailyRewardSet(null));
+	} catch (error) {
+		Sentry.captureException(error, {
+			contexts: {
+				user,
+			}
+		});
 	}
-
-	const daysSinceLastDailyReward: number = yield user.last_daily_reward ? daysSinceDate(user.last_daily_reward) : 0;
-
-	if (daysSinceLastDailyReward <= 1) {
-		return;
-	}
-
-	// user started daily quest but skipped day(s)
-	const updateUserDailyRewardTaskResponse: FetchResult<UpdateDailyRewardCompletedDaysMutation> = yield call(updateDailyRewardCompletedDays, user.id, userDailyRewardTask.id!, 0);
-
-	if (updateUserDailyRewardTaskResponse.errors?.length) {
-		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
-		return;
-	}
-
-	const updatedUserDailyRewardTask = updateUserDailyRewardTaskResponse.data?.updateuser_tasksCollection.records[0];
-
-	if (!updatedUserDailyRewardTask) {
-		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
-		return;
-	}
-
-	yield put(userTaskUpdate(updatedUserDailyRewardTask));
-	yield put(userLastDailyRewardSet(null));
 }
 
 export function* operationReferrerSetWorker() {
+	const user: CoreUserFieldsFragment = yield select(userSelector);
+	const referrerId: string | null = yield select(userReferrerSelector);
 	try {
-		const user: CoreUserFieldsFragment = yield select(userSelector);
-		const referrerId: string | null = yield select(userReferrerSelector);
-
 		if (!referrerId || user.telegram_id === referrerId) {
 			if (user.is_referred === null) {
 				yield call(updateUser, { userId: user.id, isReferred: false, user });
@@ -282,15 +300,22 @@ export function* operationReferrerSetWorker() {
 		yield call(referUser, { referralTgId: user.telegram_id, referrerTgId: referrerId, userId: user.id, coins: user.coins + bonusCoins  });
 		yield put(userCoinsAdd(bonusCoins));
 	} catch (error) {
-
+		Sentry.captureException(error, {
+			contexts: {
+				user,
+				meta: {
+					referrerId,
+					message: 'operationReferrerSetWorker'
+				}
+			}
+		});
 	}
 }
 
 export function* operationClaimReferralsWorker() {
+	const referrals: ReferralData[] = yield select(userReferralsSelector);
+	const telegramId: string = yield select(userTelegramIdSelector);
 	try {
-		const referrals: ReferralData[] = yield select(userReferralsSelector);
-		const telegramId: string = yield select(userTelegramIdSelector);
-
 		const bonusCoins: number = yield referrals?.reduce((totalCoins, referral) => {
 			if (referral.is_claimed_by_referrer) {
 				return totalCoins;
@@ -317,8 +342,20 @@ export function* operationClaimReferralsWorker() {
 
 		yield put(userReferralsSet(updatedReferrals));
 		yield put(userCoinsAdd(bonusCoins));
-	} catch (err) {
-
+	} catch (error) {
+		const userData: CoreUserFieldsFragment & WebAppUser = yield select(userDataSelector);
+		Sentry.captureException(error, {
+			contexts: {
+				user: {
+					...userData,
+					telegramId,
+				},
+				meta: {
+					referrals,
+					message: 'operationClaimReferralsWorker'
+				}
+			}
+		});
 	}
 }
 
@@ -326,11 +363,27 @@ export function* operationPayPassiveIncomeWorker() {
 	const photos: UserPhotoFragment[] = yield select(userPhotosSelector);
 	const lastHourlyReward: string = yield select(userLastHourlyRewardSelector);
 
-	const passiveIncome: number = yield call(getPassiveIncome, photos, lastHourlyReward);
-	console.log(passiveIncome, 'pass')
-	if (passiveIncome) {
-		yield put(userCoinsAdd(passiveIncome));
-		yield put(userLastHourlyRewardSet(new Date().toISOString()));
+	try {
+		const passiveIncome: number = yield call(getPassiveIncome, photos, lastHourlyReward);
+
+		if (passiveIncome) {
+			yield put(userCoinsAdd(passiveIncome));
+			yield put(userLastHourlyRewardSet(new Date().toISOString()));
+		}
+	} catch (error) {
+		const userData: CoreUserFieldsFragment & WebAppUser = yield select(userDataSelector);
+		Sentry.captureException(error, {
+			contexts: {
+				user: {
+					...userData,
+					photos,
+					lastHourlyReward
+				},
+				meta: {
+					message: 'operationPayPassiveIncomeWorker'
+				}
+			}
+		});
 	}
 }
 
@@ -377,6 +430,15 @@ function* operationUploadPhotoWorker({ payload: photo }: PayloadAction<string>) 
 		yield put(userPassiveIncomeRecalculate());
 		window.location.href = '/gallery';
 	} catch (error) {
+		Sentry.captureException(error, {
+			contexts: {
+				user: {
+				},
+				meta: {
+					message: 'operationPayPassiveIncomeWorker'
+				}
+			}
+		});
 	} finally {
 		yield put(userPhotosIsUploadingSet(false));
 	}
@@ -391,7 +453,17 @@ function* operationTapWorker() {
 		yield put(userEnergyReduce(1));
 		yield put(operationTapSync());
 	} catch (error) {
-		console.log(error, 'error')
+		const userData: CoreUserFieldsFragment & WebAppUser = yield select(userDataSelector);
+		Sentry.captureException(error, {
+			contexts: {
+				user: {
+					...userData,
+				},
+				meta: {
+					message: 'operationTapWorker'
+				}
+			}
+		});
 	}
 }
 
@@ -401,7 +473,16 @@ function* operationTapSyncWorker() {
 	const synchronizeResponse: FetchResult<SynchronizeTapsMutation> = yield call(synchronizeTaps, user.id, user.coins, user.energy, new Date().toUTCString());
 
 	if (synchronizeResponse.errors?.length) {
-		// TODD: log error
+		Sentry.captureException(synchronizeResponse.errors, {
+			contexts: {
+				user: {
+					...user,
+				},
+				meta: {
+					message: 'operationTapSyncWorker'
+				}
+			}
+		});
 	}
 }
 
@@ -454,7 +535,17 @@ export function* operationClaimTaskWorker({ payload: taskPayload }: PayloadActio
 		yield put(userSet(updatedUser));
 		yield put(userTaskUpdate(claimedTask));
 	} catch (error) {
-		console.log(error, 'error');
+		const userData: CoreUserFieldsFragment & WebAppUser = yield select(userDataSelector);
+		Sentry.captureException(error, {
+			contexts: {
+				user: {
+					...userData,
+				},
+				meta: {
+					message: 'operationClaimTaskWorker'
+				}
+			}
+		});
 	}
 }
 
