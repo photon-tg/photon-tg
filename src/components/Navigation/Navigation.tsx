@@ -1,8 +1,4 @@
 'use client';
-import CameraIcon from '@/../public/assets/icons/camera.svg';
-import PickaxeIcon from '@/../public/assets/icons/pickaxe.svg';
-import FriendsIcon from '@/../public/assets/icons/friends.svg';
-import TaskIcon from '@/../public/assets/icons/task.svg';
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -35,7 +31,7 @@ export function Navigation() {
 	return (
 		<div
 			className={
-				'z-10 mx-auto my-0 flex w-full justify-between rounded-tl rounded-tr bg-[#041837] p-[5px] px-[10px] pb-[10px] drop-shadow-[0_-15px_10px_rgba(0,0,0,0.1)]'
+				'h-[71px] z-10 mx-auto my-0 flex w-full justify-between rounded-tl rounded-tr bg-[#041837] p-[5px] px-[10px] pb-[10px] drop-shadow-[0_-15px_10px_rgba(0,0,0,0.1)]'
 			}
 		>
 			{tabs.map((tab) => (
@@ -64,7 +60,7 @@ export function Tab({ name, icon, url, isActive }: TabProps) {
 			}
 			href={url}
 		>
-			<img color={'red'} className={'w-6'} src={icon} alt={''} />
+			<img width={25} height={25} color={'red'} src={icon} alt={''} />
 			<span className={'text-xsm'}>{name}</span>
 		</Link>
 	);
