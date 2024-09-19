@@ -30,10 +30,6 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	const user = useSelector(userSelector);
 
 	useEffect(() => {
-		if (!isDetected || !isMobile) {
-			return;
-		}
-
 		if (!isApplicationInitialized) {
 			dispatch(operationInitApplication());
 		} else {
