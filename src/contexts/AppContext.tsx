@@ -71,7 +71,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 
 	const value = useMemo(() => ({}), []);
 
-	const shouldChildrenRender = isDetected && !isUserLoading && isMobile;
+	const shouldChildrenRender = !isUserLoading;
 	return (
 		<AppContext.Provider value={value}>
 			{shouldChildrenRender ? (
