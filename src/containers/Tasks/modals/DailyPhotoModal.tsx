@@ -11,6 +11,7 @@ import { Button } from '@/components/Button/Button';
 import { useRouter } from 'next/navigation';
 import { useModalContext } from '@/contexts/ModalContext';
 import Tick from '../../../../public/assets/icons/tick.svg';
+import { cn } from '@/utils/cn';
 
 interface DailyPhotoModalProps {
 	task: Task;
@@ -53,16 +54,20 @@ export function DailyPhotoModal(props: DailyPhotoModalProps) {
 			<Button onClick={onClick} variant={'filled'}>
 				<div
 					className={
-						'grid grid-flow-col grid-cols-[min-content_1fr] items-center'
+					cn(
+						'flex justify-center',
+						isDailyPhotoCompleted && 'grid grid-flow-col grid-cols-[min-content_1fr] items-center',
+						)
 					}
 				>
-					<div
+					{isDailyPhotoCompleted && (<div
 						className={
 							'flex h-[40px] w-[40px] items-center justify-center rounded-[50%] bg-gradient-to-r from-text-blue to-[#00E1FF]'
 						}
 					>
 						<Tick />
 					</div>
+					)}
 					<span className={'self-center'}>
 						{isDailyPhotoCompleted
 							? 'Your photo is accepted'
