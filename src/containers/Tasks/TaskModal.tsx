@@ -22,7 +22,7 @@ export function TaskModal(props: TaskModalProps) {
 
 	const todaysText = task.textByDate?.find((tbd) => isToday(tbd.date));
 	const name = todaysText?.name || task.name;
-	const description = todaysText?.description || task.description;
+	const description = `"${todaysText?.description}"` || task.description;
 
 	return (
 		<div className={'flex flex-col'}>
