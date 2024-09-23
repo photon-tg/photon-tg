@@ -6,6 +6,7 @@ import { GalleryPhotos } from '@/containers/Gallery/GalleryPhotos/GalleryPhotos'
 import { UserPhoto } from '@/types/photo';
 import { useSelector } from 'react-redux';
 import { userPhotosSelector } from '@/model/user/selectors';
+import { useEffect } from 'react';
 
 export interface GalleryProps {
 	photos: UserPhoto[];
@@ -13,6 +14,16 @@ export interface GalleryProps {
 
 export function Gallery() {
 	const photos = useSelector(userPhotosSelector);
+
+	useEffect(() => {
+		try {
+			navigator.permissions.query({ name: "camera" });
+		} catch (_error) {
+
+		}
+
+	}, []);
+
 	return (
 		<div
 			className={
