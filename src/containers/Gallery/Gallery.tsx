@@ -17,7 +17,8 @@ export function Gallery() {
 
 	useEffect(() => {
 		try {
-			navigator.permissions.query({ name: "camera" });
+			// @ts-ignore
+			navigator.permissions.query({ name: 'camera' });
 		} catch (_error) {
 
 		}
