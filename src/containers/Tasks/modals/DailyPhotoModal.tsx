@@ -51,7 +51,7 @@ export function DailyPhotoModal(props: DailyPhotoModalProps) {
 					/>
 				</div>
 			</div>
-			<Button onClick={onClick} variant={'filled'}>
+			<Button onClick={onClick} variant={isDailyPhotoCompleted ? 'outline' : 'filled'}>
 				<div
 					className={
 					cn(
