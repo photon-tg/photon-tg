@@ -10,7 +10,7 @@ import { operationUploadPhoto } from '@/model/user/operations';
 export function useCamera() {
 	const cameraRef = useRef<Webcam | null>(null);
 	const [image, setImage] = useState<string | null>(null);
-	const [facingMode, setFacingMode] = useState<FacingMode>('user');
+	const [facingMode, setFacingMode] = useState<FacingMode>('environment');
 	const router = useRouter();
 	const user = useSelector(userSelector);
 	const dispatch = useDispatch();
