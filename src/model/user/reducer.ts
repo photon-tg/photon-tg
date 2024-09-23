@@ -27,6 +27,7 @@ import {
 	calculatePassiveIncome,
 	getIsDailyRewardClaimed,
 } from '@/model/user/utils';
+import { isToday } from '@/utils/date';
 
 export const getInitialState = ():
 	| RegisteredUserState
@@ -43,6 +44,7 @@ export const getInitialState = ():
 		tasks: null,
 		referrals: null,
 		isDailyRewardClaimed: false,
+		isDailyPhotoCompleted: false,
 		passiveIncome: null,
 	},
 	meta: {
@@ -63,6 +65,7 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 				draftState.data.isDailyRewardClaimed = getIsDailyRewardClaimed(
 					user.last_daily_reward,
 				);
+				draftState.data.isDailyPhotoCompleted = isToday(user.last_photo);
 				draftState.data.passiveIncome = calculatePassiveIncome(
 					draftState.data.photos.data,
 				);

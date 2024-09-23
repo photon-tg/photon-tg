@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 	try {
 		const body = await request.json();
 		const telegramId = body.telegramId;
-		console.log(telegramId, 'tg');
+
 		if (!telegramId) {
 			throw new Error('Not found');
 		}

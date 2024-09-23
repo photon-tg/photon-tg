@@ -18,7 +18,6 @@ import { Level, levelToPhotoReward } from '@/constants';
 import { PersonalizedTask } from '@/types/Task';
 
 export const validateTelegramData = async (dataCheckString: string) => {
-	console.log(process.env.NODE_ENV, 'here');
 	return axios.post<ValidatedTelegramUser>('/check-telegram-data', {
 		dataCheckString:
 			process.env.NODE_ENV === 'development'

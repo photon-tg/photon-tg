@@ -31,7 +31,7 @@ export function Navigation() {
 	return (
 		<div
 			className={
-				'h-[71px] z-10 mx-auto my-0 flex w-full justify-between rounded-tl rounded-tr bg-[#041837] p-[5px] px-[10px] pb-[10px] drop-shadow-[0_-15px_10px_rgba(0,0,0,0.1)]'
+				'z-10 mx-auto my-0 flex h-[71px] w-full justify-between rounded-tl rounded-tr bg-[#041837] p-[5px] px-[10px] pb-[10px] drop-shadow-[0_-15px_10px_rgba(0,0,0,0.1)]'
 			}
 		>
 			{tabs.map((tab) => (

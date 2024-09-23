@@ -29,7 +29,8 @@ export const userPassiveIncomeSelector = (state: AppState) =>
 export const userIsLoadingSelector = (state: AppState) =>
 	state.user.meta.isLoading;
 export const userErrorSelector = (state: AppState) => state.user.meta.error;
-
+export const userDailyPhotoIsCompleted = (state: AppState) =>
+	state.user.data.isDailyPhotoCompleted;
 export const userDataSelector = createSelector(
 	[userSelector, userReferrerSelector, userTelegramSelector],
 	(user, referrerId, telegramUser) => {

@@ -34,7 +34,7 @@ export function getIsDailyRewardClaimed(
 	if (!lastDailyReward) {
 		return false;
 	}
-	console.log(daysSinceDate(lastDailyReward), 'dayay');
+
 	return daysSinceDate(lastDailyReward) < 1;
 }
 
@@ -101,7 +101,6 @@ export function getPassiveIncome(
 			? photo.created_at
 			: lastHourlyReward;
 		const hoursSinceLastReward = hoursSinceDate(lastClaimedReward);
-		console.log(hoursSinceLastReward);
 		const photoPassiveIncomePerHour =
 			levelToPhotoPassiveIncome.get(photo.level_at_time as Level) ?? 0;
 		let hours = hoursSinceLastReward > 3 ? 3 : hoursSinceLastReward;

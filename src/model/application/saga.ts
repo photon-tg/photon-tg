@@ -14,7 +14,6 @@ import { parseNodes } from '@/utils/graphql';
 export function* operationInitApplicationWorker() {
 	try {
 		const tasksResponse: ApolloQueryResult<TasksQuery> = yield call(getTasks);
-		console.log(tasksResponse, 'tasks');
 		if (tasksResponse.error) {
 			yield put(applicationErrorSet(ApplicationErrorType.NETWORK_ERROR));
 			return;

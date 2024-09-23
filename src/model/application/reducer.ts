@@ -25,8 +25,12 @@ const applicationReducer = createReducer<ApplicationState>(
 			.addCase(applicationTasksSet, (draftState, { payload: tasks }) => {
 				const newTasks: Task[] = tasks.map((task) => ({
 					...task,
-					rewardByDay: JSON.parse(task.reward_by_day || ''),
+					rewardByDay: task.reward_by_day && JSON.parse(task.reward_by_day),
+					rewardByLevel:
+						task.reward_by_level && JSON.parse(task.reward_by_level),
+					textByDate: task.text_by_date && JSON.parse(task.text_by_date),
 				}));
+
 				draftState.data.tasks = newTasks;
 			})
 			.addCase(applicationErrorSet, (draftState, { payload: error }) => {

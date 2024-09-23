@@ -1,16 +1,23 @@
 import { formatNumber } from '@/utils/formatter';
 
-export type MoneySize = 'xxs' | 'xs' | 'md' | 'xl';
+export type MoneySize = 'xxs' | 'xs' | 'md' | 'lg' | 'xl';
 
 export interface MoneyProps {
 	amount: number;
 	isCompact?: boolean;
 	size?: MoneySize;
 	withoutPlus?: boolean;
+	perHour?: boolean;
 }
 
 export function Money(props: MoneyProps) {
-	const { amount, isCompact = false, withoutPlus = false, size = 'md' } = props;
+	const {
+		amount,
+		isCompact = false,
+		withoutPlus = false,
+		perHour = false,
+		size = 'md',
+	} = props;
 
 	const sizeMap: Record<
 		MoneySize,
@@ -25,8 +32,8 @@ export function Money(props: MoneyProps) {
 		},
 		xs: {
 			img: {
-				width: 22,
-				height: 22,
+				width: 20,
+				height: 20,
 			},
 			text: 'text-sm gap-x-[3px]',
 		},
@@ -36,6 +43,13 @@ export function Money(props: MoneyProps) {
 				height: 22,
 			},
 			text: 'text-md gap-x-[5px]',
+		},
+		lg: {
+			img: {
+				width: 21,
+				height: 21,
+			},
+			text: 'text-xl gap-x-[7px] font-medium',
 		},
 		xl: {
 			img: {
@@ -59,6 +73,7 @@ export function Money(props: MoneyProps) {
 			/>
 			{!withoutPlus && '+'}
 			{isCompact ? formatNumber(amount) : amount}
+			{perHour && '/hour'}
 		</div>
 	);
 }

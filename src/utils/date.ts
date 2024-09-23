@@ -171,3 +171,40 @@ export function subtractTime(
 
 	return newDate.toUTCString();
 }
+
+export function isToday(dateStr: string | null | undefined): boolean {
+	if (!dateStr) {
+		return false;
+	}
+
+	const date = new Date(dateStr); // Parse the input date
+	const now = new Date(); // Get the current date
+
+	// Get today's start and end time in UTC
+	const todayStart = Date.UTC(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate(),
+		0,
+		0,
+		0,
+	);
+	const todayEnd = Date.UTC(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate(),
+		23,
+		59,
+		59,
+	);
+
+	// Get the input date's UTC time
+	const inputDate = Date.UTC(
+		date.getUTCFullYear(),
+		date.getUTCMonth(),
+		date.getUTCDate(),
+	);
+
+	// Check if the input date is within today
+	return inputDate >= todayStart && inputDate <= todayEnd;
+}
