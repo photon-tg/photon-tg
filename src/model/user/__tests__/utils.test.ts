@@ -78,21 +78,21 @@ describe('getPassiveIncome', () => {
 	});
 
 	it('should not allow to claim more than 3 hours of passive income', () => {
-		const twoHoursFromNow = subtractTime(new Date().toUTCString(), {
+		const fiveHoursFromNow = subtractTime(new Date().toUTCString(), {
 			hours: 5,
 		}); // 500
 		const photo1 = {
 			...mockBasePhoto,
-			created_at: twoHoursFromNow,
+			created_at: fiveHoursFromNow,
 			level_at_time: 2,
 		};
-		const emptyPhotos: UserPhotoFragment[] = [photo1];
+		const onePhoto: UserPhotoFragment[] = [photo1];
 		const lastHourlyRewardYesterday = subtractTime(new Date().toUTCString(), {
 			hours: 4,
 			minutes: 25,
 		});
 		const passiveIncome = getPassiveIncome(
-			emptyPhotos,
+			onePhoto,
 			lastHourlyRewardYesterday,
 		);
 		expect(passiveIncome).toBe(300);
