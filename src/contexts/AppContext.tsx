@@ -30,10 +30,6 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	const user = useSelector(userSelector);
 
 	useEffect(() => {
-		if (!isDetected || !isMobile) {
-			return;
-		}
-
 		if (!isApplicationInitialized) {
 			dispatch(operationInitApplication());
 		} else {
@@ -75,7 +71,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 
 	const value = useMemo(() => ({}), []);
 
-	const shouldChildrenRender = isDetected && !isUserLoading && isMobile;
+	const shouldChildrenRender = !isUserLoading;
 	return (
 		<AppContext.Provider value={value}>
 			{shouldChildrenRender ? (

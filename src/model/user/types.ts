@@ -40,6 +40,7 @@ export interface UninitializedUserState {
 		tasks: null;
 		referrals: null;
 		isDailyRewardClaimed: boolean;
+		isDailyPhotoCompleted: boolean;
 		passiveIncome: null;
 	};
 	meta: UserStateMeta;
@@ -58,6 +59,7 @@ export interface RegisteredUserState {
 		tasks: UserTaskFragment[];
 		referrals: ReferralData[];
 		isDailyRewardClaimed: boolean;
+		isDailyPhotoCompleted: boolean;
 		passiveIncome: number;
 	};
 	meta: UserStateMeta;

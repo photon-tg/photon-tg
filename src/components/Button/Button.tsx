@@ -6,7 +6,7 @@ export interface ButtonProps {
 	width?: string | number;
 	size?: 'lg';
 	disabled?: boolean;
-
+	noInnerStyle?: boolean;
 	onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -15,6 +15,7 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
 		children,
 		variant = 'outline',
 		width = 'fit-content',
+		noInnerStyle = false,
 		disabled,
 		size = 'md',
 		onClick,

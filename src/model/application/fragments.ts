@@ -12,6 +12,8 @@ export const Task = graphql(`
 			compressed_url
 		}
 		reward_by_day
+		reward_by_level
+		text_by_date
 		reward_coins
 		type
 	}

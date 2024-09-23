@@ -150,19 +150,15 @@ function* operationSetUserWorker({ payload: userId }: PayloadAction<string>) {
 
 export function* operationAuthenticateUserWorker() {
 	try {
-		console.log('here');
 		const dataCheckString = window.Telegram.WebApp.initData;
 		const { data: telegramData }: AxiosResponse<ValidatedTelegramUser> =
 			yield call(validateTelegramData, dataCheckString);
-		console.log('here91');
 		if (!telegramData.isValid) {
-			console.log('here93');
 			yield put(
 				userErrorSet(telegramData.error?.type ?? UserErrorType.SERVER_ERROR),
 			);
 			return;
 		}
-		console.log('here97');
 		yield put(userTelegramUserSet(telegramData.user));
 
 		if (telegramData.referrerId) {
@@ -205,10 +201,8 @@ export function* operationAuthenticateUserWorker() {
 			yield put(operationSetUser(signUpResponse.data.user.id));
 			return;
 		}
-		console.log('bad');
 		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 	} catch (error) {
-		console.log(error, 'MOEW');
 		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 	}
 }
@@ -294,6 +288,15 @@ export function* operationInitUserWorker() {
 		});
 		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 	}
+}
+
+export function* operationInitDailyPhotoWorker() {
+	const tasks: TaskFragment[] = yield select(applicationTasksSelector);
+	const user: CoreUserFieldsFragment = yield select(userSelector);
+	const userTasks: UserTaskFragment[] = yield select(userTasksSelector);
+
+	try {
+	} catch (error) {}
 }
 
 export function* operationInitDailyRewardWorker() {
@@ -544,8 +547,15 @@ function* operationUploadPhotoWorker({
 		);
 		const uploadedPhoto =
 			uploadedPhotoResponse.data?.insertIntouser_photosCollection?.records[0];
+		const updatedUser =
+			uploadedPhotoResponse.data?.updateusersCollection.records[0];
 
-		if (uploadedPhotoResponse.errors?.length || !uploadedPhoto) {
+		if (
+			uploadedPhotoResponse.errors?.length ||
+			!uploadedPhoto ||
+			!updatedUser ||
+			uploadedPhotoResponse.errors?.length
+		) {
 			return;
 		}
 
@@ -554,6 +564,7 @@ function* operationUploadPhotoWorker({
 				new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
 		);
 
+		yield put(userSet(updatedUser));
 		yield put(userCoinsAdd(coinsForPhoto));
 		yield put(userPhotosSet(newPhotos));
 		yield put(userPassiveIncomeRecalculate());

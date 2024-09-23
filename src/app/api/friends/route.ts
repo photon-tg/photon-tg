@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 		const tgId = await request.json();
 
 		// if ((typeof userData === 'string' || !userData?.user_metadata) && !tgId?.telegramId) throw new Error();
-		console.log('hello');
+
 		await supabase.auth.signInWithPassword({
 			email: 'edge-functions@photon.com',
 			password: 'redound_chapbook_HOYDEN_rye_begotten_plump_passband',
