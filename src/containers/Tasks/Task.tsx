@@ -43,7 +43,7 @@ export function Task(props: TaskProps) {
 	return (
 		<button
 			onClick={onClick}
-			className={` ${!isCompleted && 'shadow-[0_0_15px_3px_rgba(33,82,149,0.5)]'} grid w-full grid-cols-[max-content_1fr_max-content] gap-x-[10px] rounded bg-[#205295] px-[12px] py-[10px] text-start ${isClickable && 'active:bg-[#183368]'} `}
+			className={` ${!isCompleted && 'shadow-[0_0_15px_3px_rgba(33,82,149,0.5)]'} grid w-full grid-cols-[max-content_1fr_max-content] gap-x-[10px] rounded bg-[#205295] px-[12px] py-[15px] text-start ${isClickable && 'active:bg-[#183368]'} `}
 		>
 			<div>
 				<img width={45} src={task.images?.url || ''} />
