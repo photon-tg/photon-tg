@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, PropsWithChildren, useEffect, useMemo } from 'react';
+import { createContext, PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDevice } from '@/hooks/useDevice';
@@ -10,8 +10,7 @@ import { operationInitApplication } from '@/model/application/operations';
 import { operationInitUser } from '@/model/user/operations';
 import { HOME_PAGE } from '@/constants/urls';
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { getUserLevel, levelToMaxEnergy } from '@/constants';
-import { userEnergyAdd, userEnergySet } from '@/model/user/actions';
+import { userEnergyAdd } from '@/model/user/actions';
 
 export interface AppContext {}
 
@@ -51,27 +50,16 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		if (isUserLoading || !isApplicationInitialized) return;
 		let intervalId: NodeJS.Timeout;
 
-		if (user.energy >= levelToMaxEnergy.get(getUserLevel(user.coins))!) {
-			dispatch(userEnergySet(levelToMaxEnergy.get(getUserLevel(user.coins))!));
-			return;
-		}
-
-		function regenerateEnergy() {
+		function increaseEnergy() {
 			dispatch(userEnergyAdd(3));
 		}
 
-		intervalId = setInterval(regenerateEnergy, 1000);
+		intervalId = setInterval(increaseEnergy, 1000);
 
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [
-		dispatch,
-		isApplicationInitialized,
-		isUserLoading,
-		user?.coins,
-		user?.energy,
-	]);
+	}, [isApplicationInitialized, isUserLoading]);
 
 	const value = useMemo(() => ({}), []);
 
