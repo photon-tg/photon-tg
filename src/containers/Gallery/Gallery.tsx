@@ -15,16 +15,6 @@ export interface GalleryProps {
 export function Gallery() {
 	const photos = useSelector(userPhotosSelector);
 
-	useEffect(() => {
-		try {
-			// @ts-ignore
-			navigator.permissions.query({ name: 'camera' });
-		} catch (_error) {
-
-		}
-
-	}, []);
-
 	return (
 		<div
 			className={
