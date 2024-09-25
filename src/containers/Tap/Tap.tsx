@@ -5,6 +5,7 @@ import { userSelector } from '@/model/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserLevel, levelToMaxEnergy } from '@/constants';
 import { operationTap } from '@/model/user/operations';
+import { cn } from '@/utils/cn';
 
 export function Tap() {
 	const dispatch = useDispatch();
@@ -30,6 +31,7 @@ export function Tap() {
 					{user.coins}
 				</span>
 				<TapArea
+					isDisabled={user.energy === 0}
 					onTap={() => {
 						dispatch(operationTap());
 					}}
@@ -45,10 +47,11 @@ export function Tap() {
 
 export interface TapAreaProps {
 	onTap(): void;
+	isDisabled: boolean;
 }
 
 function TapArea(props: TapAreaProps) {
-	const { onTap } = props;
+	const { onTap, isDisabled } = props;
 
 	const [isPressed, setIsPressed] = useState(false);
 	const tapAreaRef = useRef<HTMLButtonElement>(null);
@@ -67,11 +70,13 @@ function TapArea(props: TapAreaProps) {
 	}, []);
 
 	const onTouchStart = () => {
+		if (isDisabled) return;
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
 		setIsPressed(true);
 	};
 
 	const onTouchEnd = () => {
+		if (isDisabled) return;
 		setIsPressed(false);
 		onTap();
 	};
@@ -83,9 +88,12 @@ function TapArea(props: TapAreaProps) {
 			onTouchEnd={onTouchEnd}
 		>
 			<div
-				className={
-					'pointer-events-none h-[300px] w-[300px] select-none rounded-[50%] bg-gradient-to-b from-[#5EB3DC] from-0% via-[#11419B] via-50% to-[#0F3F99] to-100% px-[12px] py-[12px] shadow-[0_0_93px_5px_rgba(8,74,199,0.45)]'
-				}
+				className={cn(
+					'pointer-events-none h-[300px] w-[300px] select-none rounded-[50%] px-[12px] py-[12px] shadow-[0_0_93px_5px_rgba(8,74,199,0.45)]',
+					!isDisabled &&
+						'bg-gradient-to-b from-[#5EB3DC] from-0% via-[#11419B] via-50% to-[#0F3F99] to-100%',
+					isDisabled && 'bg-[#081f44]',
+				)}
 			>
 				<div
 					className={`pointer-events-none flex h-full w-full items-center justify-center rounded-[50%] ${isPressed ? 'bg-[#072047]' : 'bg-[#07224c]'}`}
