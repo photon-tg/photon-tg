@@ -51,22 +51,25 @@ export function DailyPhotoModal(props: DailyPhotoModalProps) {
 					/>
 				</div>
 			</div>
-			<Button onClick={onClick} variant={isDailyPhotoCompleted ? 'outline' : 'filled'}>
+			<Button
+				onClick={onClick}
+				variant={isDailyPhotoCompleted ? 'outline' : 'filled'}
+			>
 				<div
-					className={
-					cn(
+					className={cn(
 						'flex justify-center',
-						isDailyPhotoCompleted && 'grid grid-flow-col grid-cols-[min-content_1fr] items-center',
-						)
-					}
+						isDailyPhotoCompleted &&
+							'grid grid-flow-col grid-cols-[min-content_1fr] items-center',
+					)}
 				>
-					{isDailyPhotoCompleted && (<div
-						className={
-							'flex h-[40px] w-[40px] items-center justify-center rounded-[50%] bg-gradient-to-r from-text-blue to-[#00E1FF]'
-						}
-					>
-						<Tick />
-					</div>
+					{isDailyPhotoCompleted && (
+						<div
+							className={
+								'flex h-[40px] w-[40px] items-center justify-center rounded-[50%] bg-gradient-to-r from-text-blue to-[#00E1FF]'
+							}
+						>
+							<Tick />
+						</div>
 					)}
 					<span className={'self-center'}>
 						{isDailyPhotoCompleted

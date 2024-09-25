@@ -127,7 +127,8 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 			})
 			.addCase(userEnergyReduce, (draftState, { payload: energy }) => {
 				if (draftState.data.user) {
-					draftState.data.user.energy = draftState.data.user.energy - energy;
+					const newEnergy = draftState.data.user.energy - energy;
+					draftState.data.user.energy = newEnergy < 0 ? 0 : newEnergy;
 				}
 			})
 			.addCase(userEnergySet, (draftState, { payload: energy }) => {
