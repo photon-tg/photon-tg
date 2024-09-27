@@ -51,7 +51,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		let intervalId: NodeJS.Timeout;
 
 		function increaseEnergy() {
-			dispatch(userEnergyAdd(1));
+			dispatch(userEnergyAdd(3));
 		}
 
 		intervalId = setInterval(increaseEnergy, 1000);
