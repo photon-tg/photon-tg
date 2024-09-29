@@ -321,7 +321,11 @@ export function* operationInitDailyRewardWorker() {
 			? daysSinceDate(user.last_daily_reward)
 			: 0;
 
-		if (daysSinceLastDailyReward <= 1) {
+		if (daysSinceLastDailyReward < 1) {
+			return;
+		}
+
+		if (daysSinceLastDailyReward === 1 && !userDailyRewardTask.completed) {
 			return;
 		}
 
@@ -331,6 +335,7 @@ export function* operationInitDailyRewardWorker() {
 				updateDailyRewardCompletedDays,
 				user.id,
 				userDailyRewardTask.id!,
+				false,
 				0,
 			);
 

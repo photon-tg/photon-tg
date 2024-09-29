@@ -21,10 +21,9 @@ export function* operationInitApplicationWorker() {
 
 		const tasks = parseNodes(tasksResponse.data.tasksCollection?.edges ?? []);
 		yield put(applicationTasksSet(tasks));
-
-		yield put(applicationIsInitializedSet(true));
 	} catch (error) {
 		yield put(applicationErrorSet(ApplicationErrorType.NETWORK_ERROR));
+	} finally {
 		yield put(applicationIsInitializedSet(true));
 	}
 }

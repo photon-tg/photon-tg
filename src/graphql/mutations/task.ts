@@ -138,11 +138,12 @@ export const UPDATE_DAILY_REWARD_COMPLETED_DAYS = graphql(`
 	mutation UpdateDailyRewardCompletedDays(
 		$userId: UUID!
 		$userTaskId: UUID!
+		$isCompleted: Boolean!
 		$completedDays: Int!
 	) {
 		updateuser_tasksCollection(
 			atMost: 1
-			set: { days_completed: $completedDays }
+			set: { days_completed: $completedDays, completed: $isCompleted }
 			filter: { user_id: { eq: $userId }, id: { eq: $userTaskId } }
 		) {
 			records {

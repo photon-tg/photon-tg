@@ -91,10 +91,7 @@ describe('getPassiveIncome', () => {
 			hours: 4,
 			minutes: 25,
 		});
-		const passiveIncome = getPassiveIncome(
-			onePhoto,
-			lastHourlyRewardYesterday,
-		);
+		const passiveIncome = getPassiveIncome(onePhoto, lastHourlyRewardYesterday);
 		expect(passiveIncome).toBe(300);
 	});
 });

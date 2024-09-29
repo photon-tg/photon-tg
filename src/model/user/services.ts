@@ -72,6 +72,7 @@ export const getReferrals = (telegramId: string) =>
 export const updateDailyRewardCompletedDays = async (
 	userId: string,
 	userTaskId: string,
+	isCompleted: boolean,
 	completedDays: number,
 ) => {
 	return apolloClient.mutate({
@@ -80,6 +81,7 @@ export const updateDailyRewardCompletedDays = async (
 		variables: {
 			userId,
 			userTaskId,
+			isCompleted,
 			completedDays,
 		},
 	});

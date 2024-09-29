@@ -64,7 +64,7 @@ export function claimTaskHelper(
 			}
 
 			const lastDailyReward = new Date().toUTCString();
-			const isCompleted = completedDays === 10;
+			const isCompleted = completedDays === 6;
 
 			return {
 				rewardCoins,

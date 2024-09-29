@@ -1,5 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { RegisteredUserState, UninitializedUserState } from '@/model/user/types';
+import {
+	RegisteredUserState,
+	UninitializedUserState,
+} from '@/model/user/types';
 import {
 	userCoinsAdd,
 	userEnergyAdd,
@@ -18,9 +21,12 @@ import {
 	userSet,
 	userTasksSet,
 	userTaskUpdate,
-	userTelegramUserSet
+	userTelegramUserSet,
 } from '@/model/user/actions';
-import { calculatePassiveIncome, getIsDailyRewardClaimed } from '@/model/user/utils';
+import {
+	calculatePassiveIncome,
+	getIsDailyRewardClaimed,
+} from '@/model/user/utils';
 import { isToday } from '@/utils/date';
 import { getUserLevel, levelToMaxEnergy } from '@/constants';
 
@@ -117,9 +123,12 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 			})
 			.addCase(userEnergyAdd, (draftState, { payload: energy }) => {
 				if (draftState.data.user) {
-					const maxEnergy = levelToMaxEnergy.get(getUserLevel(draftState.data.user.coins))!;
+					const maxEnergy = levelToMaxEnergy.get(
+						getUserLevel(draftState.data.user.coins),
+					)!;
 					const nextEnergy = draftState.data.user.energy + energy;
-					draftState.data.user.energy = nextEnergy > maxEnergy ? maxEnergy : nextEnergy;
+					draftState.data.user.energy =
+						nextEnergy > maxEnergy ? maxEnergy : nextEnergy;
 				}
 			})
 			.addCase(userEnergyReduce, (draftState, { payload: energy }) => {

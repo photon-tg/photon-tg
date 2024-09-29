@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
+import {
+	createContext,
+	PropsWithChildren,
+	useCallback,
+	useEffect,
+	useMemo,
+} from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDevice } from '@/hooks/useDevice';
