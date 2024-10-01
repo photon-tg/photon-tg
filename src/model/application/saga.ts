@@ -10,6 +10,7 @@ import {
 } from '@/model/application/actions';
 import { ApplicationErrorType } from '@/model/application/types';
 import { parseNodes } from '@/utils/graphql';
+import * as Sentry from '@sentry/nextjs';
 
 export function* operationInitApplicationWorker() {
 	try {
@@ -20,8 +21,26 @@ export function* operationInitApplicationWorker() {
 		}
 
 		const tasks = parseNodes(tasksResponse.data.tasksCollection?.edges ?? []);
+		if (tasks.length === 0) {
+			Sentry.captureException(tasks, {
+				level: 'error',
+				contexts: {
+					app: {
+						place: 'zero tasks',
+					}
+				},
+			});
+		}
 		yield put(applicationTasksSet(tasks));
 	} catch (error) {
+		Sentry.captureException(error, {
+			level: 'error',
+			contexts: {
+				app: {
+					place: 'operationInitApplication',
+				}
+			},
+		});
 		yield put(applicationErrorSet(ApplicationErrorType.NETWORK_ERROR));
 	} finally {
 		yield put(applicationIsInitializedSet(true));

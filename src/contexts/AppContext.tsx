@@ -32,7 +32,6 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		applicationIsInitializedSelector,
 	);
 	const isUserLoading = useSelector(userIsLoadingSelector);
-	const user = useSelector(userSelector);
 
 	useEffect(() => {
 		if (!isDetected || !isMobile) {
