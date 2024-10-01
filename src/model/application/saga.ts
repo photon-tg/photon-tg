@@ -21,8 +21,8 @@ export function* operationInitApplicationWorker() {
 		}
 
 		const tasks = parseNodes(tasksResponse.data.tasksCollection?.edges ?? []);
-		// if (tasks.length === 0) {
-			Sentry.captureException(tasks, {
+		if (tasks.length === 0) {
+			Sentry.captureException(tasksResponse, {
 				level: 'error',
 				contexts: {
 					app: {
@@ -30,7 +30,7 @@ export function* operationInitApplicationWorker() {
 					}
 				},
 			});
-		// }
+		}
 		yield put(applicationTasksSet(tasks));
 	} catch (error) {
 		Sentry.captureException(error, {
