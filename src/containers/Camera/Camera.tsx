@@ -28,7 +28,7 @@ export function Camera() {
 	} = useCamera();
 
 	useEffect(() => {
-		window.Telegram.WebApp.setHeaderColor('black');
+		window.Telegram.WebApp.setHeaderColor('#000000');
 
 		return () => {
 			window.Telegram.WebApp.setHeaderColor('#092646');
