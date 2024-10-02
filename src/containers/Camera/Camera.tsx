@@ -11,6 +11,7 @@ import Webcam from 'react-webcam';
 import { Layout } from '@/components/Layout/Layout';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/model/user/selectors';
+import { useEffect } from 'react';
 
 export function Camera() {
 	const router = useRouter();
@@ -25,6 +26,14 @@ export function Camera() {
 		onAccept,
 		goBack,
 	} = useCamera();
+
+	useEffect(() => {
+		window.Telegram.WebApp.setHeaderColor('#000000');
+
+		return () => {
+			window.Telegram.WebApp.setHeaderColor('#092646');
+		}
+	}, []);
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
@@ -60,7 +69,7 @@ export function Camera() {
 	}
 
 	return (
-		<div className={'h-full'}>
+		<div className={'h-full relative bg-[black]'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
@@ -72,14 +81,18 @@ export function Camera() {
 				height={'100%'}
 				videoConstraints={{
 					facingMode,
+					aspectRatio: 4/3,
 				}}
 				forceScreenshotSourceSize
 				screenshotFormat={'image/jpeg'}
-				style={{ objectFit: 'cover', height: '100%' }}
+				className={'absolute top-[50%]'}
 				screenshotQuality={1}
 				imageSmoothing
 				mirrored={facingMode === 'user'}
 				ref={cameraRef}
+				style={{
+					transform: 'translateY(-50%) translateY(-35px)',
+				}}
 			/>
 			<div
 				className={
@@ -89,8 +102,8 @@ export function Camera() {
 				<button />
 				<button
 					onClick={takePhoto}
-					className={'h-[60px] w-[60px] self-center rounded-[50%] border-[5px]'}
-				/>
+					className={'h-[65px] w-[65px] self-center rounded-[50%] border-[3px] flex items-center justify-center'}
+				><span className={'w-[50px] h-[50px] bg-[white] block rounded-[50%]'}></span></button>
 				<button onClick={flip}>
 					<CameraSwitch />
 				</button>
