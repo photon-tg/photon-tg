@@ -29,7 +29,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 			<img
 				className={'absolute top-[50%]'}
 				style={{
-					transform: 'translateY(-50%) translateY(-50px)',
+					transform: 'translateY(-50%) translateY(-20px)',
 				}}
 				src={image} alt={''} />
 			<div

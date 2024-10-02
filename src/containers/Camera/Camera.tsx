@@ -83,7 +83,7 @@ export function Camera() {
 				mirrored={facingMode === 'user'}
 				ref={cameraRef}
 				style={{
-					transform: 'translateY(-50%) translateY(-50px)',
+					transform: 'translateY(-50%) translateY(-20px)',
 				}}
 			/>
 			<div
