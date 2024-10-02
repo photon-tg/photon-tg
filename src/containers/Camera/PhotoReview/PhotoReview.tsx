@@ -16,7 +16,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 
 	return (
 		<div className={'grid h-full grid-rows-[1fr_min-content]'}>
-			<img className={'h-full w-full object-cover'} src={image} alt={''} />
+			<img className={''} src={image} alt={''} />
 			<div
 				className={
 					'absolute bottom-0 flex w-full justify-between px-[20px] pb-[25px]'

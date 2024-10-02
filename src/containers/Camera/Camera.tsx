@@ -72,10 +72,11 @@ export function Camera() {
 				height={'100%'}
 				videoConstraints={{
 					facingMode,
+					aspectRatio: 4/3,
 				}}
 				forceScreenshotSourceSize
 				screenshotFormat={'image/jpeg'}
-				style={{ objectFit: 'cover', height: '100%' }}
+				// style={{ objectFit: 'cover', height: '100%' }}
 				screenshotQuality={1}
 				imageSmoothing
 				mirrored={facingMode === 'user'}
