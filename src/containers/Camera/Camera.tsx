@@ -60,7 +60,7 @@ export function Camera() {
 	}
 
 	return (
-		<div className={'h-full'}>
+		<div className={'h-full relative'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
@@ -77,6 +77,7 @@ export function Camera() {
 				forceScreenshotSourceSize
 				screenshotFormat={'image/jpeg'}
 				// style={{ objectFit: 'cover', height: '100%' }}
+				className={'absolute top-[50%] translate-y-[-50%]'}
 				screenshotQuality={1}
 				imageSmoothing
 				mirrored={facingMode === 'user'}
@@ -90,8 +91,8 @@ export function Camera() {
 				<button />
 				<button
 					onClick={takePhoto}
-					className={'h-[60px] w-[60px] self-center rounded-[50%] border-[5px]'}
-				/>
+					className={'h-[65px] w-[65px] self-center rounded-[50%] border-[3px] flex items-center justify-center'}
+				><span className={'w-[50px] h-[50px] bg-[white] block rounded-[50%]'}></span></button>
 				<button onClick={flip}>
 					<CameraSwitch />
 				</button>
