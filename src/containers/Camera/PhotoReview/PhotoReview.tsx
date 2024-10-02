@@ -19,7 +19,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 
 
 	return (
-		<div className={'relative grid h-full grid-rows-[1fr_min-content] bg-[#black]'}>
+		<div className={'relative grid h-full grid-rows-[1fr_min-content] bg-[black]'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
