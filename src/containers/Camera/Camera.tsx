@@ -11,6 +11,7 @@ import Webcam from 'react-webcam';
 import { Layout } from '@/components/Layout/Layout';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/model/user/selectors';
+import { useEffect } from 'react';
 
 export function Camera() {
 	const router = useRouter();
@@ -25,6 +26,14 @@ export function Camera() {
 		onAccept,
 		goBack,
 	} = useCamera();
+
+	useEffect(() => {
+		window.Telegram.WebApp.setHeaderColor('black');
+
+		return () => {
+			window.Telegram.WebApp.setHeaderColor('#092646');
+		}
+	}, []);
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
