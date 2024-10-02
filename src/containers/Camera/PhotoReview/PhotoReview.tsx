@@ -19,14 +19,19 @@ export function PhotoReview(props: PhotoReviewProps) {
 
 
 	return (
-		<div className={'grid h-full grid-rows-[1fr_min-content]'}>
+		<div className={'relative grid h-full grid-rows-[1fr_min-content] bg-[#0c0c0c]'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
 			>
 				<ArrowIcon />
 			</button>
-			<img className={'self-center'} src={image} alt={''} />
+			<img
+				className={'absolute top-[50%]'}
+				style={{
+					transform: 'translateY(-50%) translateY(-50px)',
+				}}
+				src={image} alt={''} />
 			<div
 				className={
 					'absolute bottom-0 flex w-full justify-between px-[20px] pb-[25px]'
