@@ -60,7 +60,7 @@ export function Camera() {
 	}
 
 	return (
-		<div className={'h-full relative bg-[#0c0c0c]'}>
+		<div className={'h-full relative bg-[black]'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
