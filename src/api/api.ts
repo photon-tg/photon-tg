@@ -32,6 +32,7 @@ export type referUserOptions = {
 	referralTgId: string;
 	userId: string;
 	coins: number;
+	isUser: boolean;
 };
 
 export async function referUser({
@@ -39,6 +40,7 @@ export async function referUser({
 	referralTgId,
 	userId,
 	coins,
+	isUser,
 }: referUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: REFER_USER,
@@ -48,6 +50,7 @@ export async function referUser({
 			referralTgId,
 			userId,
 			coins,
+			isUser,
 		},
 	});
 

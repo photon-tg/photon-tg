@@ -61,7 +61,7 @@ export class TelegramAuth implements TelegramAuthInterface {
 
 		// and join it with \n
 		const dataCheckString = restKeys.map(([n, v]) => `${n}=${v}`).join('\n');
-		console.log(searchParams.get('user'));
+
 		return {
 			user: JSON.parse(searchParams.get('user') as string) as WebAppUser,
 			referrerId: this.parseStartParams(searchParams.get('start_param')),
@@ -70,7 +70,11 @@ export class TelegramAuth implements TelegramAuthInterface {
 
 	private parseStartParams(startParams: string | null): string | null {
 		try {
-			const [, match] = startParams?.match(/friendId(\d+)/) || [];
+			const [, oldParam] = startParams?.match(/friendId=(\d+)/) ?? [];
+			if (oldParam) return oldParam;
+
+			const startParamsDecoded = atob(startParams ?? '');
+			const [, match] = startParamsDecoded?.match(/referrer=(.+)/) || [];
 			return match;
 		} catch (err) {
 			return null;
