@@ -11,16 +11,17 @@ import { userReferralsSelector, userSelector } from '@/model/user/selectors';
 export function Friends() {
 	const referrals = useSelector(userReferralsSelector);
 	const user = useSelector(userSelector);
+	const encodedReferrerParam = btoa(`referrer=${user.telegram_id}`);
 	const onReferealLink = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
 		navigator.clipboard.writeText(
-			`https://${appURL}?startapp=friendId${user.telegram_id}`,
+			`https://${appURL}?startapp=${encodedReferrerParam}`,
 		);
 	};
 
 	const onShare = async () => {
 		const url = encodeURIComponent(
-			`https://${appURL}?startapp=friendId${user.telegram_id}`,
+			`https://${appURL}?startapp=${encodedReferrerParam}`,
 		);
 		const text = encodeURIComponent(
 			'Join me in Photon!\n💲+5k coins\nor\n💰+20k coins if you have telegram Premium',

@@ -375,6 +375,17 @@ export function* operationReferrerSetWorker() {
 			return;
 		}
 
+		if (referrerId === 'GREEN') {
+			yield call(referUser, {
+				referralTgId: user.telegram_id,
+				referrerTgId: referrerId,
+				userId: user.id,
+				coins: user.coins,
+				isUser: false,
+			});
+			return;
+		}
+
 		const referenceData: ApolloQueryResult<GetReferralQuery> = yield call(
 			getReferral,
 			user.telegram_id,
@@ -402,6 +413,7 @@ export function* operationReferrerSetWorker() {
 			referrerTgId: referrerId,
 			userId: user.id,
 			coins: user.coins + bonusCoins,
+			isUser: true,
 		});
 		yield put(userCoinsAdd(bonusCoins));
 	} catch (error) {

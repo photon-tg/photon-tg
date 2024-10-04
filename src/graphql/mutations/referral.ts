@@ -6,6 +6,7 @@ export const REFER_USER = graphql(`
 		$referralTgId: String!
 		$userId: UUID!
 		$coins: Int!
+		$isUser: Boolean!
 	) {
 		insertIntouser_referralsCollection(
 			objects: [
@@ -13,6 +14,7 @@ export const REFER_USER = graphql(`
 					referral_id: $referralTgId
 					referrer_id: $referrerTgId
 					is_claimed_by_referrer: false
+					is_user: $isUser
 				}
 			]
 		) {
