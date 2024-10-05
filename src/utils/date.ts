@@ -208,3 +208,10 @@ export function isToday(dateStr: string | null | undefined): boolean {
 	// Check if the input date is within today
 	return inputDate >= todayStart && inputDate <= todayEnd;
 }
+
+export function minutesSinceUTCDate(pastDate: string): number {
+	const nowUTC = new Date(new Date().toISOString()); // Get the current time in UTC
+	const diffInMilliseconds = nowUTC.getTime() - new Date(pastDate).getTime();
+	const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+	return diffInMinutes;
+}

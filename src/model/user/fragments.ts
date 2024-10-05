@@ -8,6 +8,7 @@ export const UserTask = graphql(`
 		days_completed
 		task_id
 		status
+		updated_at
 		tasks {
 			...FullTask
 		}

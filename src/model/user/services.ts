@@ -162,6 +162,8 @@ export type ClaimTaskParams = {
 	coins: number;
 	isCompleted: boolean;
 	lastDailyReward?: string | null;
+	status?: string;
+	updatedAt?: string;
 };
 
 export const claimFirstTask = (params: ClaimTaskParams) =>
@@ -175,6 +177,8 @@ export const claimFirstTask = (params: ClaimTaskParams) =>
 			daysCompleted: params.daysCompleted ?? null,
 			coins: params.coins,
 			completed: params.isCompleted,
+			status: params.status ?? null,
+			updatedAt: params.updatedAt ?? new Date().toUTCString(),
 		},
 	});
 
@@ -189,5 +193,7 @@ export const claimTask = (params: ClaimTaskParams) =>
 			daysCompleted: params.daysCompleted ?? null,
 			coins: params.coins,
 			completed: params.isCompleted,
+			status: params.status ?? null,
+			updatedAt: params.updatedAt ?? new Date().toUTCString(),
 		},
 	});

@@ -660,21 +660,49 @@ export function* operationClaimTaskWorker({
 		const { type, task, userTask } = taskPayload;
 
 		if (task.type === 'link') {
-			if (!!userTask?.id) {
+			if (!!userTask?.completed) {
 				const opener = window.Telegram.WebApp.openTelegramLink || window.open;
-				yield call(
-					opener,
-					task.link ?? '',
+				yield call(opener, task.link ?? '');
+				return;
+			}
+
+			if (userTask?.status === 'pending') {
+				const claimTaskParams: ClaimTaskParams = {
+					taskId: task.id,
+					isCompleted: true,
+					userTaskId: userTask?.id,
+					coins: (task.reward_coins || 0) + user.coins,
+					userId: user.id,
+					status: 'completed',
+				};
+
+				const claimTaskResponse: FetchResult<ClaimTaskMutation> = yield call(
+					claimTask,
+					claimTaskParams,
 				);
+				if (claimTaskResponse.errors?.length) {
+					return;
+				}
+
+				const claimedTask =
+					claimTaskResponse.data?.updateuser_tasksCollection.records[0];
+				const updatedUser =
+					claimTaskResponse.data?.updateusersCollection?.records[0];
+				if (!claimedTask || !updatedUser) {
+					return;
+				}
+				yield put(userSet(updatedUser));
+				yield put(userTaskUpdate(claimedTask));
 				return;
 			}
 
 			const claimTaskParams: ClaimTaskParams = {
 				taskId: task.id,
-				isCompleted: true,
+				isCompleted: false,
 				userTaskId: userTask?.id,
-				coins: (task.reward_coins || 0) + user.coins,
+				coins: user.coins,
 				userId: user.id,
+				status: 'pending',
 			};
 			const claimFirstTaskResponse: FetchResult<ClaimFirstTaskMutation> =
 				yield call(claimFirstTask, claimTaskParams);
@@ -692,13 +720,10 @@ export function* operationClaimTaskWorker({
 				return;
 			}
 			const opener = window.Telegram.WebApp.openTelegramLink || window.open;
-			yield call(
-				opener,
-				task.link ?? '',
-			);
-			//
-			// yield put(userSet(updatedUser));
-			// yield put(userTaskUpdate(claimedTask));
+			yield call(opener, task.link ?? '');
+
+			yield put(userSet(updatedUser));
+			yield put(userTaskUpdate(claimedTask));
 			return;
 		}
 
