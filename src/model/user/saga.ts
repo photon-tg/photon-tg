@@ -694,6 +694,7 @@ export function* operationClaimTaskWorker({
 			//
 			// yield put(userSet(updatedUser));
 			// yield put(userTaskUpdate(claimedTask));
+			return;
 		}
 
 		const userTaskExists = !!userTask?.id;
