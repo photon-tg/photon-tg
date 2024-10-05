@@ -5,7 +5,7 @@ export const CLAIM_FIRST_TASK = graphql(`
 		$userId: UUID!
 		$taskId: String!
 		$lastDailyReward: Datetime
-		$daysCompleted: Int!
+		$daysCompleted: Int
 		$completed: Boolean
 		$coins: Int
 	) {
@@ -41,7 +41,7 @@ export const CLAIM_TASK = graphql(`
 		$userId: UUID!
 		$userTaskId: UUID!
 		$lastDailyReward: Datetime
-		$daysCompleted: Int!
+		$daysCompleted: Int
 		$completed: Boolean
 		$coins: Int
 	) {

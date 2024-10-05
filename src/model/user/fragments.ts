@@ -7,6 +7,7 @@ export const UserTask = graphql(`
 		created_at
 		days_completed
 		task_id
+		status
 		tasks {
 			...FullTask
 		}
@@ -55,5 +56,6 @@ export const FullTask = graphql(`
 		text_by_date
 		reward_coins
 		type
+		link
 	}
 `);

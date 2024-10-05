@@ -5,7 +5,7 @@ export interface RewardByDay {
 	reward: number;
 }
 
-export type TaskType = 'daily_reward';
+export type TaskType = 'daily_reward' | 'link';
 
 export type FullTask = FullTaskFragment & {
 	rewardByDay?: RewardByDay[];

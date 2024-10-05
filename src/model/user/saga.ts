@@ -659,6 +659,40 @@ export function* operationClaimTaskWorker({
 
 		const { type, task, userTask } = taskPayload;
 
+		if (task.type === 'link') {
+			if (!!userTask?.id) {
+				return;
+			}
+
+			const claimTaskParams: ClaimTaskParams = {
+				taskId: task.id,
+				isCompleted: true,
+				userTaskId: userTask?.id,
+				coins: (task.reward_coins || 0) + user.coins,
+				userId: user.id,
+			};
+			const claimFirstTaskResponse: FetchResult<ClaimFirstTaskMutation> =
+				yield call(claimFirstTask, claimTaskParams);
+
+			if (claimFirstTaskResponse.errors?.length) {
+				return;
+			}
+
+			const claimedTask =
+				claimFirstTaskResponse.data?.insertIntouser_tasksCollection?.records[0];
+			const updatedUser =
+				claimFirstTaskResponse.data?.updateusersCollection?.records[0];
+
+			if (!claimedTask || !updatedUser) {
+				return;
+			}
+			const opener = window.Telegram.WebApp.openTelegramLink || window.open;
+			yield call(opener, 'https://t.me/greencoinmeme_bot/game?startapp=4fa5596b-2b95-4e91-b624-eba46eed5757');
+			//
+			// yield put(userSet(updatedUser));
+			// yield put(userTaskUpdate(claimedTask));
+		}
+
 		const userTaskExists = !!userTask?.id;
 		const updatedTaskData = claimTaskHelper(type, task, userTask);
 		const newCoins = updatedTaskData?.rewardCoins || 0;

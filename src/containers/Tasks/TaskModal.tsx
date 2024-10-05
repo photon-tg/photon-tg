@@ -4,6 +4,7 @@ import { applicationTasksSelector } from '@/model/application/selectors';
 import { DailyRewardModal } from '@/containers/Tasks/modals/DailyRewardModal';
 import { DailyPhotoModal } from '@/containers/Tasks/modals/DailyPhotoModal';
 import { isToday } from '@/utils/date';
+import { LinkModal } from '@/containers/Tasks/modals/LinkModal';
 
 export interface TaskModalProps {
 	taskId: string;
@@ -30,7 +31,7 @@ export function TaskModal(props: TaskModalProps) {
 		<div className={'flex flex-col'}>
 			<img
 				width={200}
-				className={'mx-auto mb-[10px]'}
+				className={'mx-auto mb-[10px] rounded-[5px]'}
 				src={task.images?.url || ''}
 			/>
 			<span className={'mx-auto mb-[10px] max-w-[80%] text-center text-xxl'}>
@@ -47,6 +48,9 @@ export function TaskModal(props: TaskModalProps) {
 
 			{task.rewardByLevel && (
 				<DailyPhotoModal task={task} userTask={userTask} />
+			)}
+			{task.link && (
+				<LinkModal task={task} userTask={userTask} />
 			)}
 		</div>
 	);
