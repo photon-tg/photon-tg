@@ -27,7 +27,7 @@ export function* operationInitApplicationWorker() {
 				contexts: {
 					app: {
 						place: 'zero tasks',
-					}
+					},
 				},
 			});
 		}
@@ -38,7 +38,7 @@ export function* operationInitApplicationWorker() {
 			contexts: {
 				app: {
 					place: 'operationInitApplication',
-				}
+				},
 			},
 		});
 		yield put(applicationErrorSet(ApplicationErrorType.NETWORK_ERROR));

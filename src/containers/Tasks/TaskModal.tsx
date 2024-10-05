@@ -49,9 +49,7 @@ export function TaskModal(props: TaskModalProps) {
 			{task.rewardByLevel && (
 				<DailyPhotoModal task={task} userTask={userTask} />
 			)}
-			{task.link && (
-				<LinkModal task={task} userTask={userTask} />
-			)}
+			{task.link && <LinkModal task={task} userTask={userTask} />}
 		</div>
 	);
 }

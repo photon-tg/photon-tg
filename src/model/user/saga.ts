@@ -687,7 +687,10 @@ export function* operationClaimTaskWorker({
 				return;
 			}
 			const opener = window.Telegram.WebApp.openTelegramLink || window.open;
-			yield call(opener, 'https://t.me/greencoinmeme_bot/game?startapp=4fa5596b-2b95-4e91-b624-eba46eed5757');
+			yield call(
+				opener,
+				'https://t.me/greencoinmeme_bot/game?startapp=4fa5596b-2b95-4e91-b624-eba46eed5757',
+			);
 			//
 			// yield put(userSet(updatedUser));
 			// yield put(userTaskUpdate(claimedTask));

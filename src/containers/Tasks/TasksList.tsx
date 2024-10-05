@@ -9,7 +9,9 @@ const normalTasksList: string[] = ['task', 'link'];
 export function TasksList() {
 	const tasks = useSelector(applicationTasksSelector);
 	const dailyTasks = tasks.filter((task) => task.type === 'daily_reward');
-	const normalTasks = tasks.filter((task) => normalTasksList.includes(task.type));
+	const normalTasks = tasks.filter((task) =>
+		normalTasksList.includes(task.type),
+	);
 
 	return (
 		<div className={'flex flex-col gap-y-[25px]'}>

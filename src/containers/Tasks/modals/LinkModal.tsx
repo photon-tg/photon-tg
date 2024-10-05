@@ -9,14 +9,14 @@ interface LinkModalProps {
 
 export function LinkModal(props: LinkModalProps) {
 	const { task, userTask } = props;
-const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const onClick = () => {
 		dispatch(operationClaimTask({ type: 'link', userTask, task }));
 	};
 
 	return (
 		<div className={'mb-[20px]'}>
-			<Button onClick={onClick} variant={'filled'} >
+			<Button onClick={onClick} variant={'filled'}>
 				Start
 			</Button>
 		</div>
