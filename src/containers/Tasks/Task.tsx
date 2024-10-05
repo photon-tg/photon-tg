@@ -13,6 +13,7 @@ import {
 } from '@/model/user/selectors';
 import { UserTaskFragment } from '@/gql/graphql';
 import { getUserLevel } from '@/constants';
+import { call } from '@redux-saga/core/effects';
 
 interface TaskProps {
 	task: TaskType;
@@ -38,6 +39,8 @@ export function Task(props: TaskProps) {
 
 	const onClick = () => {
 		if (task.type === 'link' && isCompleted) {
+			const opener = window.Telegram.WebApp.openTelegramLink || window.open;
+			opener(task.link ?? '');
 			return;
 		}
 
