@@ -4,10 +4,14 @@ import { Task } from './Task';
 import { useSelector } from 'react-redux';
 import { applicationTasksSelector } from '@/model/application/selectors';
 
+const normalTasksList: string[] = ['task', 'link'];
+
 export function TasksList() {
 	const tasks = useSelector(applicationTasksSelector);
 	const dailyTasks = tasks.filter((task) => task.type === 'daily_reward');
-	const normalTasks = tasks.filter((task) => task.type === 'task');
+	const normalTasks = tasks.filter((task) =>
+		normalTasksList.includes(task.type),
+	);
 
 	return (
 		<div className={'flex flex-col gap-y-[25px]'}>

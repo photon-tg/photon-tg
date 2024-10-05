@@ -32,7 +32,7 @@ export function Camera() {
 
 		return () => {
 			window.Telegram.WebApp.setHeaderColor('#092646');
-		}
+		};
 	}, []);
 
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
@@ -69,7 +69,7 @@ export function Camera() {
 	}
 
 	return (
-		<div className={'h-full relative bg-[black]'}>
+		<div className={'relative h-full bg-[black]'}>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
@@ -81,7 +81,7 @@ export function Camera() {
 				height={'100%'}
 				videoConstraints={{
 					facingMode,
-					aspectRatio: 4/3,
+					aspectRatio: 4 / 3,
 				}}
 				forceScreenshotSourceSize
 				screenshotFormat={'image/jpeg'}
@@ -102,8 +102,14 @@ export function Camera() {
 				<button />
 				<button
 					onClick={takePhoto}
-					className={'h-[65px] w-[65px] self-center rounded-[50%] border-[3px] flex items-center justify-center'}
-				><span className={'w-[50px] h-[50px] bg-[white] block rounded-[50%]'}></span></button>
+					className={
+						'flex h-[65px] w-[65px] items-center justify-center self-center rounded-[50%] border-[3px]'
+					}
+				>
+					<span
+						className={'block h-[50px] w-[50px] rounded-[50%] bg-[white]'}
+					></span>
+				</button>
 				<button onClick={flip}>
 					<CameraSwitch />
 				</button>

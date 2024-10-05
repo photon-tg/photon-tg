@@ -17,9 +17,10 @@ export function PhotoReview(props: PhotoReviewProps) {
 	const isPhotoUploading = useSelector(userPhotosUploadingSelector);
 	const { goBack } = useCamera();
 
-
 	return (
-		<div className={'relative grid h-full grid-rows-[1fr_min-content] bg-[black]'}>
+		<div
+			className={'relative grid h-full grid-rows-[1fr_min-content] bg-[black]'}
+		>
 			<button
 				onClick={goBack}
 				className={'absolute left-[20px] top-[20px] z-10'}
@@ -31,7 +32,9 @@ export function PhotoReview(props: PhotoReviewProps) {
 				style={{
 					transform: 'translateY(-50%) translateY(-35px)',
 				}}
-				src={image} alt={''} />
+				src={image}
+				alt={''}
+			/>
 			<div
 				className={
 					'absolute bottom-0 flex w-full justify-between px-[20px] pb-[25px]'

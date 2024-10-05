@@ -16,5 +16,6 @@ export const Task = graphql(`
 		text_by_date
 		reward_coins
 		type
+		link
 	}
 `);

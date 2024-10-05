@@ -659,6 +659,74 @@ export function* operationClaimTaskWorker({
 
 		const { type, task, userTask } = taskPayload;
 
+		if (task.type === 'link') {
+			if (!!userTask?.completed) {
+				const opener = window.Telegram.WebApp.openTelegramLink || window.open;
+				yield call(opener, task.link ?? '');
+				return;
+			}
+
+			if (userTask?.status === 'pending') {
+				const claimTaskParams: ClaimTaskParams = {
+					taskId: task.id,
+					isCompleted: true,
+					userTaskId: userTask?.id,
+					coins: (task.reward_coins || 0) + user.coins,
+					userId: user.id,
+					status: 'completed',
+				};
+
+				const claimTaskResponse: FetchResult<ClaimTaskMutation> = yield call(
+					claimTask,
+					claimTaskParams,
+				);
+				if (claimTaskResponse.errors?.length) {
+					return;
+				}
+
+				const claimedTask =
+					claimTaskResponse.data?.updateuser_tasksCollection.records[0];
+				const updatedUser =
+					claimTaskResponse.data?.updateusersCollection?.records[0];
+				if (!claimedTask || !updatedUser) {
+					return;
+				}
+				yield put(userSet(updatedUser));
+				yield put(userTaskUpdate(claimedTask));
+				return;
+			}
+
+			const claimTaskParams: ClaimTaskParams = {
+				taskId: task.id,
+				isCompleted: false,
+				userTaskId: userTask?.id,
+				coins: user.coins,
+				userId: user.id,
+				status: 'pending',
+			};
+			const claimFirstTaskResponse: FetchResult<ClaimFirstTaskMutation> =
+				yield call(claimFirstTask, claimTaskParams);
+
+			if (claimFirstTaskResponse.errors?.length) {
+				return;
+			}
+
+			const claimedTask =
+				claimFirstTaskResponse.data?.insertIntouser_tasksCollection?.records[0];
+			const updatedUser =
+				claimFirstTaskResponse.data?.updateusersCollection?.records[0];
+
+			if (!claimedTask || !updatedUser) {
+				return;
+			}
+			const opener = window.Telegram.WebApp.openTelegramLink || window.open;
+			yield call(opener, task.link ?? '');
+
+			yield put(userSet(updatedUser));
+			yield put(userTaskUpdate(claimedTask));
+			return;
+		}
+
 		const userTaskExists = !!userTask?.id;
 		const updatedTaskData = claimTaskHelper(type, task, userTask);
 		const newCoins = updatedTaskData?.rewardCoins || 0;

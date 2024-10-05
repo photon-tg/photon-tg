@@ -5,9 +5,11 @@ export const CLAIM_FIRST_TASK = graphql(`
 		$userId: UUID!
 		$taskId: String!
 		$lastDailyReward: Datetime
-		$daysCompleted: Int!
+		$daysCompleted: Int
 		$completed: Boolean
 		$coins: Int
+		$status: String
+		$updatedAt: Datetime
 	) {
 		updateusersCollection(
 			atMost: 1
@@ -26,6 +28,8 @@ export const CLAIM_FIRST_TASK = graphql(`
 					task_id: $taskId
 					days_completed: $daysCompleted
 					completed: $completed
+					status: $status
+					updated_at: $updatedAt
 				}
 			]
 		) {
@@ -41,9 +45,11 @@ export const CLAIM_TASK = graphql(`
 		$userId: UUID!
 		$userTaskId: UUID!
 		$lastDailyReward: Datetime
-		$daysCompleted: Int!
+		$daysCompleted: Int
 		$completed: Boolean
 		$coins: Int
+		$status: String
+		$updatedAt: Datetime
 	) {
 		updateusersCollection(
 			atMost: 1
@@ -57,7 +63,12 @@ export const CLAIM_TASK = graphql(`
 
 		updateuser_tasksCollection(
 			atMost: 1
-			set: { days_completed: $daysCompleted, completed: $completed }
+			set: {
+				days_completed: $daysCompleted
+				completed: $completed
+				status: $status
+				updated_at: $updatedAt
+			}
 			filter: { id: { eq: $userTaskId }, user_id: { eq: $userId } }
 		) {
 			records {

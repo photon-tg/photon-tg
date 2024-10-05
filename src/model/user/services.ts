@@ -14,8 +14,6 @@ import {
 	UPDATE_DAILY_REWARD_COMPLETED_DAYS,
 } from '@/graphql/mutations';
 import { ClaimReferrals } from '@/model/user/mutations';
-import { Level, levelToPhotoReward } from '@/constants';
-import { PersonalizedTask } from '@/types/Task';
 
 export const validateTelegramData = async (dataCheckString: string) => {
 	return axios.post<ValidatedTelegramUser>('/check-telegram-data', {
@@ -160,10 +158,12 @@ export type ClaimTaskParams = {
 	userId: string;
 	userTaskId?: string;
 	taskId: string;
-	daysCompleted: number;
+	daysCompleted?: number;
 	coins: number;
 	isCompleted: boolean;
 	lastDailyReward?: string | null;
+	status?: string;
+	updatedAt?: string;
 };
 
 export const claimFirstTask = (params: ClaimTaskParams) =>
@@ -174,9 +174,11 @@ export const claimFirstTask = (params: ClaimTaskParams) =>
 			userId: params.userId,
 			taskId: params.taskId,
 			lastDailyReward: params.lastDailyReward ?? null,
-			daysCompleted: params.daysCompleted,
+			daysCompleted: params.daysCompleted ?? null,
 			coins: params.coins,
 			completed: params.isCompleted,
+			status: params.status ?? null,
+			updatedAt: params.updatedAt ?? new Date().toUTCString(),
 		},
 	});
 
@@ -188,8 +190,10 @@ export const claimTask = (params: ClaimTaskParams) =>
 			userId: params.userId,
 			userTaskId: params.userTaskId!,
 			lastDailyReward: params.lastDailyReward ?? null,
-			daysCompleted: params.daysCompleted,
+			daysCompleted: params.daysCompleted ?? null,
 			coins: params.coins,
 			completed: params.isCompleted,
+			status: params.status ?? null,
+			updatedAt: params.updatedAt ?? new Date().toUTCString(),
 		},
 	});

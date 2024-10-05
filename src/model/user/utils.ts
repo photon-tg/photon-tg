@@ -46,7 +46,7 @@ export type ClaimRewardHelperRT = {
 };
 
 export function claimTaskHelper(
-	type: 'daily_reward',
+	type: 'daily_reward' | 'link',
 	task: TaskFragment,
 	userTask?: UserTaskFragment,
 ): ClaimRewardHelperRT | undefined {
