@@ -14,7 +14,7 @@ export function LinkModal(props: LinkModalProps) {
 	const dispatch = useDispatch();
 	const { closeModal } = useModalContext();
 	const isTimeOut = userTask?.updated_at
-		? minutesSinceUTCDate(userTask?.updated_at || '') > 1
+		? minutesSinceUTCDate(userTask?.updated_at || '') > 4
 		: true;
 	const onClick = () => {
 		dispatch(operationClaimTask({ type: 'link', userTask, task }));
