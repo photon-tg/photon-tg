@@ -93,10 +93,18 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 				draftState.data.referrals = referrals;
 			})
 			.addCase(userTaskUpdate, (draftState, { payload: task }) => {
-				draftState.data.tasks =
-					draftState.data.tasks?.map((draftTask) =>
+				const taskExists = draftState.data.tasks?.find((t) => t.id === task.id);
+
+				if (taskExists) {
+					draftState.data.tasks = draftState.data.tasks?.map((draftTask) =>
 						draftTask.id === task.id ? task : draftTask,
 					) ?? null;
+				}
+
+				if (!taskExists) {
+					const prevTasks = draftState.data.tasks ?? [];
+					draftState.data.tasks = [...prevTasks, task];
+				}
 			})
 			.addCase(
 				userLastDailyRewardSet,
