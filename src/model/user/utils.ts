@@ -103,9 +103,8 @@ export function getPassiveIncome(
 		const hoursSinceLastReward = hoursSinceDate(lastClaimedReward);
 		const photoPassiveIncomePerHour =
 			levelToPhotoPassiveIncome.get(photo.level_at_time as Level) ?? 0;
-		// return to v		let hours = hoursSinceLastReward > 3 ? 3 : hoursSinceLastReward;
-		let hours =
-			hoursSinceLastReward > 3 ? hoursSinceLastReward : hoursSinceLastReward;
+
+		let hours = hoursSinceLastReward > 3 ? 3 : hoursSinceLastReward;
 		const reward = hours * photoPassiveIncomePerHour;
 
 		return total + reward;
