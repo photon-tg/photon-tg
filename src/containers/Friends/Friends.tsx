@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/Button/Button';
 import { CTACard } from '@/components/CTACard/CTACard';
-import { appURL } from '@/constants/urls';
+import { botURL } from '@/constants/urls';
 import { getUserLevel } from '@/constants';
 import { Money } from '@/components/Money/Money';
 import { useSelector } from 'react-redux';
@@ -15,13 +15,13 @@ export function Friends() {
 	const onReferealLink = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
 		navigator.clipboard.writeText(
-			`https://${appURL}?startapp=${encodedReferrerParam}`,
+			`https://${botURL}?startapp=${encodedReferrerParam}`,
 		);
 	};
 
 	const onShare = async () => {
 		const url = encodeURIComponent(
-			`https://${appURL}?startapp=${encodedReferrerParam}`,
+			`https://${botURL}?startapp=${encodedReferrerParam}`,
 		);
 		const text = encodeURIComponent(
 			'Join me in Photon!\n💲+5k coins\nor\n💰+20k coins if you have telegram Premium',

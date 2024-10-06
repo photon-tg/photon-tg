@@ -1,3 +1,3 @@
 export const HOME_PAGE = '/photo/gallery';
 
-export const appURL = process.env.NEXT_PUBLIC_BOT_URL!;
+export const botURL = process.env.NEXT_PUBLIC_APP_URL!;
