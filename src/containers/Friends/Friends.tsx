@@ -15,13 +15,13 @@ export function Friends() {
 	const onReferealLink = () => {
 		window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy');
 		navigator.clipboard.writeText(
-			`https://${botURL}?startapp=${encodedReferrerParam}`,
+			`https://${botURL}?start=${encodedReferrerParam}`,
 		);
 	};
 
 	const onShare = async () => {
 		const url = encodeURIComponent(
-			`https://${botURL}?startapp=${encodedReferrerParam}`,
+			`https://${botURL}?start=${encodedReferrerParam}`,
 		);
 		const text = encodeURIComponent(
 			'Join me in Photon!\n💲+5k coins\nor\n💰+20k coins if you have telegram Premium',
