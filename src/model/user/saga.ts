@@ -376,6 +376,14 @@ export function* operationReferrerSetWorker() {
 		}
 
 		if (referrerId === 'GREEN') {
+			const referenceData: ApolloQueryResult<GetReferralQuery> = yield call(
+				getReferral,
+				user.telegram_id,
+			);
+			if (referenceData) {
+				return;
+			}
+
 			yield call(referUser, {
 				referralTgId: user.telegram_id,
 				referrerTgId: referrerId,
