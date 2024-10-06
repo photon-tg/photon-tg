@@ -368,6 +368,10 @@ export function* operationReferrerSetWorker() {
 	const user: CoreUserFieldsFragment = yield select(userSelector);
 	const referrerId: string | null = yield select(userReferrerSelector);
 	try {
+		if (typeof user.is_referred === 'boolean') {
+			return;
+		}
+
 		if (!referrerId || user.telegram_id === referrerId) {
 			if (user.is_referred === null) {
 				yield call(updateUser, { userId: user.id, isReferred: false, user });
