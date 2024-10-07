@@ -378,6 +378,7 @@ export function* operationReferrerSetWorker() {
 			}
 			return;
 		}
+
 		const idPattern = /^\d{1,32}$/;
 		const isReferrerAuser = idPattern.test(referrerId);
 
@@ -386,7 +387,8 @@ export function* operationReferrerSetWorker() {
 				getReferral,
 				user.telegram_id,
 			);
-			if (referenceData) {
+
+			if (referenceData.data.user_referralsCollection?.edges.length) {
 				return;
 			}
 
@@ -404,7 +406,7 @@ export function* operationReferrerSetWorker() {
 				getReferral,
 				user.telegram_id,
 			);
-			if (referenceData) {
+			if (referenceData.data.user_referralsCollection?.edges.length) {
 				return;
 			}
 
