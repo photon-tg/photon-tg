@@ -378,8 +378,10 @@ export function* operationReferrerSetWorker() {
 			}
 			return;
 		}
+		const idPattern = /^\d{1,32}$/;
+		const isReferrerAuser = idPattern.test(referrerId);
 
-		if (referrerId === 'GREEN') {
+		if (!isReferrerAuser) {
 			const referenceData: ApolloQueryResult<GetReferralQuery> = yield call(
 				getReferral,
 				user.telegram_id,
@@ -397,37 +399,38 @@ export function* operationReferrerSetWorker() {
 			});
 			return;
 		}
+		if (isReferrerAuser) {
+			const referenceData: ApolloQueryResult<GetReferralQuery> = yield call(
+				getReferral,
+				user.telegram_id,
+			);
+			if (referenceData) {
+				return;
+			}
 
-		const referenceData: ApolloQueryResult<GetReferralQuery> = yield call(
-			getReferral,
-			user.telegram_id,
-		);
-		if (referenceData) {
-			return;
+			const referrer: AxiosResponse<{ is_premium: boolean }> = yield call(
+				getReferrerData,
+				referrerId,
+			);
+
+			if (!referrer.data) {
+				return;
+			}
+
+			const isReferrerPremium = referrer.data.is_premium ?? false;
+			const bonusCoins: number = yield isReferrerPremium
+				? PREMIUM_USER_REF_BONUS
+				: USER_REF_BONUS;
+
+			yield call(referUser, {
+				referralTgId: user.telegram_id,
+				referrerTgId: referrerId,
+				userId: user.id,
+				coins: user.coins + bonusCoins,
+				isUser: true,
+			});
+			yield put(userCoinsAdd(bonusCoins));
 		}
-
-		const referrer: AxiosResponse<{ is_premium: boolean }> = yield call(
-			getReferrerData,
-			referrerId,
-		);
-
-		if (!referrer.data) {
-			return;
-		}
-
-		const isReferrerPremium = referrer.data.is_premium ?? false;
-		const bonusCoins: number = yield isReferrerPremium
-			? PREMIUM_USER_REF_BONUS
-			: USER_REF_BONUS;
-
-		yield call(referUser, {
-			referralTgId: user.telegram_id,
-			referrerTgId: referrerId,
-			userId: user.id,
-			coins: user.coins + bonusCoins,
-			isUser: true,
-		});
-		yield put(userCoinsAdd(bonusCoins));
 	} catch (error) {
 		Sentry.captureException(error, {
 			contexts: {
