@@ -82,13 +82,13 @@ import {
 	CoreUserFieldsFragment,
 	GetReferralQuery,
 	GetUserPhotosQuery,
-	GetUserTasksQuery,
+	GetUserTasksQuery, ReferUserMutation,
 	SynchronizeTapsMutation,
 	TaskFragment,
 	UpdateDailyRewardCompletedDaysMutation,
 	UserPhotoFragment,
 	UserQuery,
-	UserTaskFragment,
+	UserTaskFragment
 } from '@/gql/graphql';
 import { ApolloQueryResult, FetchResult } from '@apollo/client';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -368,13 +368,16 @@ export function* operationInitDailyRewardWorker() {
 export function* operationReferrerSetWorker() {
 	const user: CoreUserFieldsFragment = yield select(userSelector);
 	const referrerId: string | null = yield select(userReferrerSelector);
+	console.log(user, referrerId, 'asdf')
 	try {
 		if (typeof user.is_referred === 'boolean') {
 			return;
 		}
 
 		if (!referrerId || user.telegram_id === referrerId) {
+			console.log(!referrerId || user.telegram_id === referrerId, '378');
 			if (user.is_referred === null) {
+				console.log(user.is_referred === null, '380');
 				yield call(updateUser, { userId: user.id, isReferred: false, user });
 			}
 			return;
@@ -382,24 +385,30 @@ export function* operationReferrerSetWorker() {
 
 		const idPattern = /^\d{1,32}$/;
 		const isReferrerAuser = idPattern.test(referrerId);
-
+		console.log(isReferrerAuser, 'is it');
 		if (!isReferrerAuser) {
 			const referenceData: ApolloQueryResult<GetReferralQuery> = yield call(
 				getReferral,
 				user.telegram_id,
 			);
-
+		console.log(referenceData, 'ref');
 			if (referenceData.data.user_referralsCollection?.edges.length) {
 				return;
 			}
 
-			yield call(referUser, {
+			const response: FetchResult<ReferUserMutation> = yield call(referUser, {
 				referralTgId: user.telegram_id,
 				referrerTgId: referrerId,
 				userId: user.id,
 				coins: user.coins,
 				isUser: false,
 			});
+
+			const newUser = response.data?.updateusersCollection?.records[0];
+			if (newUser) {
+				yield put(userSet(newUser));
+			}
+
 			return;
 		}
 		if (isReferrerAuser) {

@@ -35,14 +35,13 @@ export type referUserOptions = {
 	isUser: boolean;
 };
 
-export async function referUser({
+export const referUser = async ({
 	referrerTgId,
 	referralTgId,
 	userId,
 	coins,
 	isUser,
-}: referUserOptions) {
-	const { errors, data } = await apolloClient.mutate({
+}: referUserOptions) => apolloClient.mutate({
 		mutation: REFER_USER,
 		fetchPolicy: 'no-cache',
 		variables: {
@@ -54,13 +53,6 @@ export async function referUser({
 			isReferred: true,
 		},
 	});
-
-	if (errors?.length) {
-		throw new Error();
-	}
-
-	return data;
-}
 
 export type UpdateUserOptions = {
 	userId?: string;
