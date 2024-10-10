@@ -118,9 +118,10 @@ import {
 	USER_REF_BONUS,
 } from '@/constants';
 import { referUser, updateUser, UpdateUserOptions } from '@/api/api';
-import { nanoid } from 'nanoid';
+
 import { decode } from 'base64-arraybuffer';
 import * as Sentry from '@sentry/nextjs';
+import { v4 as uuidv4 } from 'uuid';
 
 function* operationSetUserWorker({ payload: userId }: PayloadAction<string>) {
 	try {
@@ -556,7 +557,7 @@ function* operationUploadPhotoWorker({
 		const userId: string = yield select(userIdSelector);
 		const coins: number = yield select(userCoinsSelector);
 		const photos: UserPhotoFragment[] = yield select(userPhotosSelector);
-		const photoId: string = yield call(nanoid);
+		const photoId: string = yield call(uuidv4);
 		const photoArrayBuffer = decode(photo.split('base64,')[1]);
 
 		const uploadPhotoToBucketResponse: Awaited<

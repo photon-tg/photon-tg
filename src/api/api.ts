@@ -51,6 +51,7 @@ export async function referUser({
 			userId,
 			coins,
 			isUser,
+			isReferred: true,
 		},
 	});
 

@@ -7,6 +7,7 @@ export const REFER_USER = graphql(`
 		$userId: UUID!
 		$coins: Int!
 		$isUser: Boolean!
+		$isReferred: Boolean!
 	) {
 		insertIntouser_referralsCollection(
 			objects: [
@@ -25,7 +26,7 @@ export const REFER_USER = graphql(`
 
 		updateusersCollection(
 			atMost: 1
-			set: { coins: $coins, is_referred: true }
+			set: { coins: $coins, is_referred: $isReferred }
 			filter: { id: { eq: $userId } }
 		) {
 			records {

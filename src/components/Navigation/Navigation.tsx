@@ -3,7 +3,10 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { userDailyPhotoIsCompleted, userIsDailyRewardClaimedSelector } from '@/model/user/selectors';
+import {
+	userDailyPhotoIsCompleted,
+	userIsDailyRewardClaimedSelector,
+} from '@/model/user/selectors';
 
 const tabs = [
 	{
@@ -58,14 +61,21 @@ export function Tab({ name, icon, url, isActive }: TabProps) {
 		<Link
 			style={{ backgroundColor: isActive ? '#144272' : 'transparent' }}
 			className={
-				'relative w-50 flex flex-col items-center gap-y-[6px] rounded px-[20px] py-[7px]'
+				'w-50 relative flex flex-col items-center gap-y-[6px] rounded px-[20px] py-[7px]'
 			}
 			onClick={() =>
 				window.Telegram.WebApp.HapticFeedback.impactOccurred('medium')
 			}
 			href={url}
 		>
-			{name === 'Tasks' && (!isDailyRewardClaimed || !isDailyPhotoCompleted) && <span className={'absolute top-[5px] right-[7px] w-[5px] h-[5px] bg-[red] rounded-[50%]'}></span>}
+			{name === 'Tasks' &&
+				(!isDailyRewardClaimed || !isDailyPhotoCompleted) && (
+					<span
+						className={
+							'absolute right-[7px] top-[5px] h-[5px] w-[5px] rounded-[50%] bg-[red]'
+						}
+					></span>
+				)}
 			<img width={25} height={25} color={'red'} src={icon} alt={''} />
 			<span className={'text-xsm'}>{name}</span>
 		</Link>

@@ -96,9 +96,10 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 				const taskExists = draftState.data.tasks?.find((t) => t.id === task.id);
 
 				if (taskExists) {
-					draftState.data.tasks = draftState.data.tasks?.map((draftTask) =>
-						draftTask.id === task.id ? task : draftTask,
-					) ?? null;
+					draftState.data.tasks =
+						draftState.data.tasks?.map((draftTask) =>
+							draftTask.id === task.id ? task : draftTask,
+						) ?? null;
 				}
 
 				if (!taskExists) {
