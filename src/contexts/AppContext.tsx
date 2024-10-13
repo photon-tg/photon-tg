@@ -34,7 +34,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	const isUserLoading = useSelector(userIsLoadingSelector);
 
 	useEffect(() => {
-		if (!isDetected || !isMobile) {
+		if (!isDetected || (!process.env.NEXT_PUBLIC_ALLOW_DESKTOP! && !isMobile)) {
 			return;
 		}
 
