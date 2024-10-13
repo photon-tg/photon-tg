@@ -33,7 +33,7 @@ export function LinkModal(props: LinkModalProps) {
 			)}
 			{userTask?.status === 'pending' && !isTimeOut && (
 				<Button onClick={() => {}} variant={'filled'}>
-					Return to claim reward in {10 - minutesPassed}min
+					Claim reward in {10 - minutesPassed} minutes
 				</Button>
 			)}
 			{userTask?.status === 'pending' && isTimeOut && (
