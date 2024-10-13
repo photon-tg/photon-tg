@@ -50,5 +50,6 @@ export const FullTask = graphql(`
 		reward_coins
 		type
 		link
+		priority
 	}
 `);

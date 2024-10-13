@@ -17,5 +17,6 @@ export const Task = graphql(`
 		reward_coins
 		type
 		link
+		priority
 	}
 `);

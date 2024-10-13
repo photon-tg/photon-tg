@@ -8,9 +8,12 @@ const normalTasksList: string[] = ['task', 'link'];
 
 export function TasksList() {
 	const tasks = useSelector(applicationTasksSelector);
-	const dailyTasks = tasks.filter((task) => task.type === 'daily_reward');
-	const normalTasks = tasks.filter((task) =>
-		normalTasksList.includes(task.type),
+
+	const sortedTasks = [...tasks].sort((a, b) => b.priority - a.priority)
+
+	const dailyTasks = sortedTasks.filter((task) => task.type === 'daily_reward' || task.id === 'daily_photo');
+	const normalTasks = sortedTasks.filter((task) =>
+		normalTasksList.includes(task.type) && task.id !== 'daily_photo',
 	);
 
 	return (
