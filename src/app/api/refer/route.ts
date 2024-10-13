@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 		if (isReferrerUser) {
 			const referrerUserResponse = await supabase
 				.from('users')
-				.select('id,is_premium')
+				.select('id')
 				.eq('telegram_id', referrer);
 			const referrerUser = referrerUserResponse.data?.[0];
 
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 					referred_user_id: userId,
 					is_referred_premium: isPremium,
 				},
-				{ ignoreDuplicates: true, onConflict: 'referred_user_id' },
+				{ onConflict: 'referred_user_id' },
 			);
 
 			const addUserFriend = supabase.from('user_friends').upsert(
@@ -61,11 +61,11 @@ export async function POST(request: Request) {
 					user_id: referrerUser.id,
 					friend_id: userId,
 				},
-				{ ignoreDuplicates: true, onConflict: 'user_id,friend_id' },
+				{ onConflict: 'user_id,friend_id' },
 			);
 
-			await Promise.all([addUserReference, addUserFriend]);
-
+			const resp = await Promise.all([addUserReference, addUserFriend]);
+			console.log('here', resp)
 			const response: ReferUserResponse = {
 				data: {
 					isReferrerUser: true,
