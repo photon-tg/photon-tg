@@ -1,74 +1,70 @@
 import { createClient } from '@supabase/supabase-js';
-import jwt from 'jsonwebtoken';
 
 const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+	process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
+
+export interface Friend {
+	first_name: string;
+	last_name: string;
+	coins: number;
+	is_premium: boolean;
+}
+
+export type GetFriendsResponse =
+	| {
+			meta: {
+				error: string;
+			};
+			data: null;
+	  }
+	| {
+			meta: {
+				error: null;
+			};
+			data: Friend[];
+	  };
 
 export async function POST(request: Request) {
 	try {
-		// const authToken = request.headers.get('Authorization');
-		//
-		// if (!authToken) throw new Error('No auth token provided');
-		//
-		// const jwtToken = authToken.split('Bearer ')[1];
-		// let userData: any;
-		//
-		// try {
-		// 	userData = jwt.verify(jwtToken, process.env.JWT_TOKEN!);
-		// } catch(err) {
-		//
-		// }
+		const body = await request.json();
+		const { userId } = body || {};
 
-		const tgId = await request.json();
+		const userFriendsResponse = await supabase
+			.from('user_friends')
+			.select(`friend_id(first_name,last_name,is_premium,coins)`)
+			.eq('user_id', userId);
 
-		// if ((typeof userData === 'string' || !userData?.user_metadata) && !tgId?.telegramId) throw new Error();
-
-		await supabase.auth.signInWithPassword({
-			email: 'edge-functions@photon.com',
-			password: 'redound_chapbook_HOYDEN_rye_begotten_plump_passband',
-		});
-		//userData?.user_metadata?.telegram_id ??
-		const telegramId = tgId?.telegramId;
-
-		const userReferralsResponse = await supabase
-			.from('user_referrals')
-			.select('referral_id,is_claimed_by_referrer')
-			.eq('referrer_id', telegramId);
-		if (userReferralsResponse.error) {
-			throw '';
+		if (userFriendsResponse.error) {
+			throw new Error('Error');
 		}
 
-		const friends = userReferralsResponse.data as {
-			referral_id: string;
-			is_claimed_by_referrer: boolean;
-		}[];
-		const friendsIds = friends.map(({ referral_id }) => referral_id);
-
-		const usersResponse = await supabase
-			.from('users')
-			.select('coins,first_name,last_name,is_premium,telegram_id')
-			.in('telegram_id', friendsIds);
-		const responseData = (usersResponse.data as { telegram_id: string }[]).map(
-			(user) => ({
-				...user,
-				is_claimed_by_referrer:
-					friends.find((friend) => friend.referral_id === user.telegram_id)
-						?.is_claimed_by_referrer ?? false,
-			}),
+		const transformedFriends = userFriendsResponse.data.map(
+			({ friend_id }) => friend_id,
 		);
 
-		return new Response(JSON.stringify(responseData), {
-			status: 200,
-		});
+		const response: GetFriendsResponse = {
+			meta: {
+				error: null,
+			},
+			data: transformedFriends as unknown as Friend[],
+		};
+		return new Response(JSON.stringify(response));
 	} catch (error) {
 		let message = 'Error occurred';
 		if (error instanceof Error) {
 			message = error.message;
 		}
 
-		return new Response(message, {
+		const response: GetFriendsResponse = {
+			meta: {
+				error: message,
+			},
+			data: null,
+		};
+
+		return new Response(JSON.stringify(response), {
 			status: 500,
 		});
 	}

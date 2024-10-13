@@ -11,12 +11,12 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDevice } from '@/hooks/useDevice';
 import { applicationIsInitializedSelector } from '@/model/application/selectors';
-import { userIsLoadingSelector, userSelector } from '@/model/user/selectors';
+import { userIsLoadingSelector } from '@/model/user/selectors';
 import { operationInitApplication } from '@/model/application/operations';
-import { operationInitUser } from '@/model/user/operations';
 import { HOME_PAGE } from '@/constants/urls';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { userEnergyAdd } from '@/model/user/actions';
+import { operationUserInit } from '@/model/user/operations/operationUserInit';
 
 export interface AppContext {}
 
@@ -41,7 +41,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		if (!isApplicationInitialized) {
 			dispatch(operationInitApplication());
 		} else {
-			dispatch(operationInitUser());
+			dispatch(operationUserInit());
 		}
 	}, [dispatch, isApplicationInitialized, isDetected, isMobile]);
 

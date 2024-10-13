@@ -1,11 +1,11 @@
 import { TaskFragment, UserTaskFragment } from '@/gql/graphql';
 import { useDispatch, useSelector } from 'react-redux';
-import { operationClaimTask } from '@/model/user/operations';
 import { RewardByDay } from '@/types/Task';
 import { Button } from '@/components/Button/Button';
 import { cn } from '@/utils/cn';
 import { Money } from '@/components/Money/Money';
 import { userIsDailyRewardClaimedSelector } from '@/model/user/selectors';
+import { operationTaskClaim } from '@/model/user/operations/operationTaskClaim';
 
 interface DailyRewardModalProps {
 	task: TaskFragment;
@@ -19,7 +19,7 @@ export function DailyRewardModal(props: DailyRewardModalProps) {
 	const isDailyRewardClaimed = useSelector(userIsDailyRewardClaimedSelector);
 
 	const onClaim = () => {
-		dispatch(operationClaimTask({ type: 'daily_reward', userTask, task }));
+		dispatch(operationTaskClaim({ type: 'daily_reward', userTask, task }));
 	};
 
 	return (

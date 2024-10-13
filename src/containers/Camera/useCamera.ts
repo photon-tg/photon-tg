@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Webcam from 'react-webcam';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '@/model/user/selectors';
-import { operationUploadPhoto } from '@/model/user/operations';
+import { operationPhotoUpload } from '@/model/user/operations/operationPhotoUpload';
 
 export function useCamera() {
 	const cameraRef = useRef<Webcam | null>(null);
@@ -34,7 +34,7 @@ export function useCamera() {
 			return;
 		}
 
-		dispatch(operationUploadPhoto(image!));
+		dispatch(operationPhotoUpload(image!));
 	}, [dispatch, image, user]);
 
 	const onReject = useCallback(() => {

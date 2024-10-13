@@ -1,9 +1,9 @@
 import { TaskFragment, UserTaskFragment } from '@/gql/graphql';
 import { Button } from '@/components/Button/Button';
 import { useDispatch } from 'react-redux';
-import { operationClaimTask } from '@/model/user/operations';
 import { minutesSinceUTCDate } from '@/utils/date';
 import { useModalContext } from '@/contexts/ModalContext';
+import { operationTaskClaim } from '@/model/user/operations/operationTaskClaim';
 interface LinkModalProps {
 	task: TaskFragment;
 	userTask?: UserTaskFragment;
@@ -17,7 +17,7 @@ export function LinkModal(props: LinkModalProps) {
 		? minutesSinceUTCDate(userTask?.updated_at || '') > 4
 		: true;
 	const onClick = () => {
-		dispatch(operationClaimTask({ type: 'link', userTask, task }));
+		dispatch(operationTaskClaim({ type: 'link', userTask, task }));
 		if (userTask?.status === 'pending' && isTimeOut) {
 			closeModal();
 		}

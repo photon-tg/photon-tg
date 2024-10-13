@@ -9,14 +9,15 @@ import {
 	userEnergyReduce,
 	userEnergySet,
 	userErrorSet,
+	userFriendsSet,
 	userIsLoadingSet,
+	userIsReferredSet,
 	userLastDailyRewardSet,
 	userLastHourlyRewardSet,
 	userPassiveIncomeRecalculate,
 	userPassiveIncomeSet,
 	userPhotosIsUploadingSet,
 	userPhotosSet,
-	userReferralsSet,
 	userReferredIdSet,
 	userSet,
 	userTasksSet,
@@ -43,7 +44,7 @@ export const getInitialState = ():
 			data: null,
 		},
 		tasks: null,
-		referrals: null,
+		friends: null,
 		isDailyRewardClaimed: false,
 		isDailyPhotoCompleted: false,
 		passiveIncome: null,
@@ -85,12 +86,12 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 			})
 			.addCase(userPhotosSet, (draftState, { payload: photos }) => {
 				draftState.data.photos.data = photos;
+				draftState.data.passiveIncome = calculatePassiveIncome(
+					draftState.data.photos.data,
+				);
 			})
 			.addCase(userTasksSet, (draftState, { payload: tasks }) => {
 				draftState.data.tasks = tasks;
-			})
-			.addCase(userReferralsSet, (draftState, { payload: referrals }) => {
-				draftState.data.referrals = referrals;
 			})
 			.addCase(userTaskUpdate, (draftState, { payload: task }) => {
 				const taskExists = draftState.data.tasks?.find((t) => t.id === task.id);
@@ -166,6 +167,11 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 					);
 				}
 			})
+			.addCase(userIsReferredSet, (draftState, { payload: isReferred }) => {
+				if (draftState.data.user) {
+					draftState.data.user.is_referred = isReferred;
+				}
+			})
 			.addCase(
 				userPhotosIsUploadingSet,
 				(draftState, { payload: isUploading }) => {
@@ -173,7 +179,10 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 						draftState.data.photos.meta.isUploading = isUploading;
 					}
 				},
-			),
+			)
+			.addCase(userFriendsSet, (draftState, { payload: friends }) => {
+				draftState.data.friends = friends;
+			}),
 );
 
 export default userReducer;

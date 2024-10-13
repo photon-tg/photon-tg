@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { userSelector } from '@/model/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserLevel, levelToMaxEnergy } from '@/constants';
-import { operationTap } from '@/model/user/operations';
 import { cn } from '@/utils/cn';
+import { operationTap } from '@/model/user/operations/operationTap';
 
 export function Tap() {
 	const dispatch = useDispatch();

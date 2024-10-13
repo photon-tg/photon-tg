@@ -119,10 +119,14 @@ export function hoursSinceDate(
 	return roundedHours;
 }
 
+export interface CalculateEnergyGainedResponse {
+	newEnergy: number;
+	energyGained: number;
+}
 export function calculateEnergyGained(
 	lastSyncDateUTC: string,
 	currentEnergy: number,
-): { newEnergy: number; energyGained: number } {
+): CalculateEnergyGainedResponse {
 	// Get current UTC time
 	const currentDateUTC = new Date();
 

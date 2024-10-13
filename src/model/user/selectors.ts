@@ -22,8 +22,6 @@ export const userLastHourlyRewardSelector = (state: AppState) =>
 	state.user.data.user.last_hourly_reward;
 export const userIsDailyRewardClaimedSelector = (state: AppState) =>
 	state.user.data.isDailyRewardClaimed;
-export const userReferralsSelector = (state: AppState) =>
-	state.user.data.referrals;
 export const userPassiveIncomeSelector = (state: AppState) =>
 	state.user.data.passiveIncome;
 export const userIsLoadingSelector = (state: AppState) =>
@@ -31,6 +29,7 @@ export const userIsLoadingSelector = (state: AppState) =>
 export const userErrorSelector = (state: AppState) => state.user.meta.error;
 export const userDailyPhotoIsCompleted = (state: AppState) =>
 	state.user.data.isDailyPhotoCompleted;
+export const userFriendsSelector = (state: AppState) => state.user.data.friends;
 export const userDataSelector = createSelector(
 	[userSelector, userReferrerSelector, userTelegramSelector],
 	(user, referrerId, telegramUser) => {

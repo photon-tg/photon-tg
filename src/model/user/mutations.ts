@@ -1,11 +1,11 @@
 import { graphql } from '@/gql';
 
 export const ClaimReferrals = graphql(`
-	mutation ClaimReferral($telegramId: String!) {
-		updateuser_referralsCollection(
+	mutation ClaimReferral($referrerUserId: UUID!) {
+		updateuser_referencesCollection(
 			atMost: 100
-			set: { is_claimed_by_referrer: true }
-			filter: { referrer_id: { eq: $telegramId } }
+			set: { bonus_claimed: true }
+			filter: { referrer_user_id: { eq: $referrerUserId } }
 		) {
 			records {
 				...Referral

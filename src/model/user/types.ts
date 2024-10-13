@@ -3,6 +3,7 @@ import {
 	UserPhotoFragment,
 	UserTaskFragment,
 } from '@/gql/graphql';
+import { Friend } from '@/app/api/friends/route';
 
 export interface UserCredentials {
 	email: string;
@@ -38,7 +39,7 @@ export interface UninitializedUserState {
 			data: null;
 		};
 		tasks: null;
-		referrals: null;
+		friends: null;
 		isDailyRewardClaimed: boolean;
 		isDailyPhotoCompleted: boolean;
 		passiveIncome: null;
@@ -57,7 +58,7 @@ export interface RegisteredUserState {
 			data: UserPhotoFragment[];
 		};
 		tasks: UserTaskFragment[];
-		referrals: ReferralData[];
+		friends: Friend[];
 		isDailyRewardClaimed: boolean;
 		isDailyPhotoCompleted: boolean;
 		passiveIncome: number;

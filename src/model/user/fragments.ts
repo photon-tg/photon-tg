@@ -16,18 +16,10 @@ export const UserTask = graphql(`
 `);
 
 export const Referral = graphql(`
-	fragment Referral on user_referrals {
+	fragment Referral on user_references {
 		id
-		referral_id
-		referrer_id
-		is_claimed_by_referrer
-		users {
-			id
-			is_premium
-			coins
-			first_name
-			last_name
-		}
+		bonus_claimed
+		is_referred_premium
 	}
 `);
 

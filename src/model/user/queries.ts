@@ -17,13 +17,11 @@ export const GetUserPhotos = graphql(`
 `);
 
 export const GetReferrals = graphql(`
-	query GetReferrals($userId: String!) {
-		user_referralsCollection(filter: { referrer_id: { eq: $userId } }) {
+	query GetReferrals($userId: UUID!) {
+		user_referencesCollection(filter: { referrer_user_id: { eq: $userId } }) {
 			edges {
 				node {
-					id
-					referrer_id
-					referral_id
+					...Referral
 				}
 			}
 		}
@@ -40,18 +38,6 @@ export const GetUserTasks = graphql(`
 			edges {
 				node {
 					...UserTask
-				}
-			}
-		}
-	}
-`);
-
-export const GetReferral = graphql(`
-	query GetReferral($telegramId: String!) {
-		user_referralsCollection(filter: { referral_id: { eq: $telegramId } }) {
-			edges {
-				node {
-					...Referral
 				}
 			}
 		}

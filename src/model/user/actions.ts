@@ -1,10 +1,11 @@
 import { createAction } from '@reduxjs/toolkit';
-import { ReferralData, UserErrorType } from '@/model/user/types';
+import { UserErrorType } from '@/model/user/types';
 import {
 	CoreUserFieldsFragment,
 	UserPhotoFragment,
 	UserTaskFragment,
 } from '@/gql/graphql';
+import { Friend } from '@/app/api/friends/route';
 
 export const userSet = createAction<CoreUserFieldsFragment>('user/set');
 export const userTelegramUserSet = createAction<WebAppUser>(
@@ -31,11 +32,11 @@ export const userEnergyReduce = createAction<number>('user/energy/reduce');
 export const userEnergySet = createAction<number>('user/energy/set');
 export const userTaskUpdate =
 	createAction<UserTaskFragment>('user/task/update');
-export const userReferralsSet =
-	createAction<ReferralData[]>('user/referrals/set');
 export const userPassiveIncomeSet = createAction<number>(
 	'user/passiveIncome/set',
 );
 export const userPassiveIncomeRecalculate = createAction(
 	'user/passiveIncome/recalculate',
 );
+export const userIsReferredSet = createAction<boolean>('user/isReferred/set');
+export const userFriendsSet = createAction<Friend[]>('user/friends/set');

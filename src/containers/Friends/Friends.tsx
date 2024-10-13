@@ -6,10 +6,10 @@ import { botURL } from '@/constants/urls';
 import { getUserLevel } from '@/constants';
 import { Money } from '@/components/Money/Money';
 import { useSelector } from 'react-redux';
-import { userReferralsSelector, userSelector } from '@/model/user/selectors';
+import { userFriendsSelector, userSelector } from '@/model/user/selectors';
 
 export function Friends() {
-	const referrals = useSelector(userReferralsSelector);
+	const friends = useSelector(userFriendsSelector);
 	const user = useSelector(userSelector);
 	const encodedReferrerParam = btoa(`referrer=${user.telegram_id}`);
 	const onReferealLink = () => {
@@ -64,7 +64,7 @@ export function Friends() {
 					<span className={'mb-[10px] inline-block text-start text-md'}>
 						Friends list
 					</span>
-					{!referrals?.length && (
+					{!friends?.length && (
 						<div
 							className={
 								'text-center text-[16px] text-md font-semibold text-inactive-grey'
@@ -73,27 +73,27 @@ export function Friends() {
 							Empty
 						</div>
 					)}
-					{!!referrals?.length && (
+					{!!friends?.length && (
 						<div className={'flex flex-col gap-y-[10px]'}>
-							{referrals.map((ref) => {
+							{friends.map((friend, i) => {
 								return (
 									<div
-										key={ref.telegram_id}
+										key={`${friend.first_name}-${i}`}
 										className={
 											'flex flex-col gap-y-[8px] rounded bg-[#215295] px-[15px] py-[9px]'
 										}
 									>
 										<span className={'text-md'}>
-											{ref?.first_name} {ref?.last_name}
+											{friend?.first_name} {friend?.last_name}
 										</span>
 										<div className={'flex items-center gap-x-[5px]'}>
 											<span className={'text-md text-[#42C2FF]'}>
-												Lvl {getUserLevel(ref?.coins)}
+												Lvl {getUserLevel(friend?.coins)}
 											</span>
 											<div
 												className={'h-[4px] w-[4px] rounded-[50%] bg-[#5a8cd1]'}
 											></div>
-											<Money withoutPlus amount={ref?.coins} size={'xxs'} />
+											<Money withoutPlus amount={friend?.coins} size={'xxs'} />
 										</div>
 									</div>
 								);

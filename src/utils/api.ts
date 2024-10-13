@@ -3,8 +3,7 @@ export async function retry<T>(
 	maxRetries = 3,
 ): Promise<T | void> {
 	try {
-		const result = await req();
-		return result;
+		return await req();
 	} catch (err) {
 		if (maxRetries === 0) {
 			throw err;

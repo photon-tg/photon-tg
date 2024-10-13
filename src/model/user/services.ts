@@ -1,19 +1,43 @@
 import { ValidatedTelegramUser } from '@/app/api/check-telegram-data/route';
 import axios, { axiosInstance } from '@/api/axios';
 import { photosBucketURL, supabase } from '@/api/supabase';
-import { SignUpData, UserCredentials } from '@/model/user/types';
+import {
+	ReferralData,
+	SignUpData,
+	UserCredentials,
+	UserErrorType,
+} from '@/model/user/types';
 import apolloClient from '@/api/graphql';
 import { GET_USER } from '@/graphql/queries';
-import { GetReferral, GetUserPhotos, GetUserTasks } from '@/model/user/queries';
-import { ReferralsDataResponse } from '@/app/api/referrals-data/route';
+import {
+	GetReferrals,
+	GetUserPhotos,
+	GetUserTasks,
+} from '@/model/user/queries';
 import {
 	ADD_USER_PHOTO,
 	CLAIM_FIRST_TASK,
 	CLAIM_TASK,
 	SYNCHRONIZE_TAPS,
 	UPDATE_DAILY_REWARD_COMPLETED_DAYS,
+	UPDATE_USER,
 } from '@/graphql/mutations';
 import { ClaimReferrals } from '@/model/user/mutations';
+import { ApolloQueryResult } from '@apollo/client';
+import {
+	CoreUserFieldsFragment,
+	GetUserPhotosQuery,
+	GetUserTasksQuery,
+	UserPhotoFragment,
+	UserQuery,
+	UserTaskFragment,
+} from '@/gql/graphql';
+import { call, put } from '@redux-saga/core/effects';
+import { userErrorSet, userFriendsSet } from '@/model/user/actions';
+import { parseNodes } from '@/utils/graphql';
+import { AxiosResponse } from 'axios';
+import * as Sentry from '@sentry/nextjs';
+import { Friend, GetFriendsResponse } from '@/app/api/friends/route';
 
 export const validateTelegramData = async (dataCheckString: string) => {
 	return axios.post<ValidatedTelegramUser>('/check-telegram-data', {
@@ -62,11 +86,6 @@ export const getUserTasks = (id: string) =>
 		},
 	});
 
-export const getReferrals = (telegramId: string) =>
-	axios.post<ReferralsDataResponse>('/referrals-data', {
-		telegramId,
-	});
-
 export const updateDailyRewardCompletedDays = async (
 	userId: string,
 	userTaskId: string,
@@ -84,29 +103,6 @@ export const updateDailyRewardCompletedDays = async (
 		},
 	});
 };
-
-export const getReferral = (telegramId: string) =>
-	apolloClient.query({
-		query: GetReferral,
-		fetchPolicy: 'no-cache',
-		variables: {
-			telegramId,
-		},
-	});
-
-export const getReferrerData = async (referrerId: string) =>
-	axiosInstance.post('/referral', {
-		telegramId: referrerId,
-	});
-
-export const claimReferrals = async (telegramId: string) =>
-	apolloClient.query({
-		query: ClaimReferrals,
-		fetchPolicy: 'no-cache',
-		variables: {
-			telegramId,
-		},
-	});
 
 export const uploadPhotoToBucket = (
 	userId: string,
@@ -197,3 +193,164 @@ export const claimTask = (params: ClaimTaskParams) =>
 			updatedAt: params.updatedAt ?? new Date().toUTCString(),
 		},
 	});
+
+export interface ReferUserPayload {
+	userId: string;
+	referrer: string;
+	isPremium: boolean;
+}
+
+export const referUser = async (payload: ReferUserPayload) =>
+	axiosInstance.post('/refer', payload);
+
+export const fetchPhotos = async (
+	userId: string,
+): Promise<UserPhotoFragment[]> => {
+	try {
+		const photosResponse: ApolloQueryResult<GetUserPhotosQuery> =
+			await getPhotos(userId);
+		if (photosResponse.error) {
+			return [];
+		}
+
+		const photos = parseNodes(
+			photosResponse.data.user_photosCollection?.edges ?? [],
+		);
+
+		return photos;
+	} catch (error) {
+		return [];
+	}
+};
+
+export const fetchTasks = async (
+	userId: string,
+): Promise<UserTaskFragment[]> => {
+	try {
+		const tasksResponse: ApolloQueryResult<GetUserTasksQuery> =
+			await getUserTasks(userId);
+		if (tasksResponse.error) {
+			return [];
+		}
+
+		const tasks = parseNodes(
+			tasksResponse.data.user_tasksCollection?.edges ?? [],
+		);
+
+		return tasks;
+	} catch (error) {
+		return [];
+	}
+};
+
+export const fetchFriends = async (userId: string): Promise<Friend[]> => {
+	try {
+		const friendsResponse: AxiosResponse<GetFriendsResponse> =
+			await getFriends(userId);
+
+		if (friendsResponse.data.meta.error || !friendsResponse.data.data) {
+			return [];
+		}
+
+		return friendsResponse.data.data;
+	} catch (error) {
+		return [];
+	}
+};
+
+export type FetchUserResponse = {
+	data?: CoreUserFieldsFragment;
+	meta?: { error: UserErrorType };
+};
+
+export const fetchUser = async (userId: string): Promise<FetchUserResponse> => {
+	try {
+		const userResponse: ApolloQueryResult<UserQuery> = await getUser(userId);
+		const user = userResponse.data.usersCollection?.edges[0].node;
+		if (userResponse.error || !user) {
+			return {
+				meta: {
+					error: UserErrorType.SERVER_ERROR,
+				},
+			};
+		}
+
+		return {
+			data: user,
+		};
+	} catch (error) {
+		Sentry.captureException(error, {
+			contexts: {
+				user: {
+					id: userId,
+				},
+			},
+		});
+
+		return {
+			meta: {
+				error: UserErrorType.SERVER_ERROR,
+			},
+		};
+	}
+};
+
+export const getFriends = (userId: string) =>
+	axiosInstance.post('/friends', { userId });
+
+export const getUserReferrals = (userId: string) =>
+	apolloClient.query({
+		query: GetReferrals,
+		fetchPolicy: 'no-cache',
+		variables: {
+			userId,
+		},
+	});
+
+export const claimUserReferralsBonus = (userId: string) =>
+	apolloClient.mutate({
+		mutation: ClaimReferrals,
+		fetchPolicy: 'no-cache',
+		variables: {
+			referrerUserId: userId,
+		},
+	});
+
+export type UpdateUserOptions = {
+	userId?: string;
+	coins?: number;
+	lastHourlyReward?: string;
+	lastDailyReward?: string | null;
+	user: CoreUserFieldsFragment;
+	isReferred?: boolean;
+	energy?: number;
+};
+
+export async function updateUser({
+	userId,
+	coins,
+	lastHourlyReward,
+	energy,
+	lastDailyReward,
+	user,
+	isReferred,
+}: UpdateUserOptions) {
+	const { errors, data } = await apolloClient.mutate({
+		mutation: UPDATE_USER,
+		fetchPolicy: 'no-cache',
+		variables: {
+			userId: userId ?? user.id,
+			coins: coins ?? user.coins,
+			lastHourlyReward: lastHourlyReward ?? user.last_hourly_reward,
+			isReferred: isReferred ?? user.is_referred,
+			lastDailyReward: lastDailyReward ?? user.last_daily_reward,
+			energy: energy ?? user.energy,
+		},
+	});
+
+	if (errors?.length) {
+		throw new Error();
+	}
+
+	return data;
+}
