@@ -13,8 +13,9 @@ export function LinkModal(props: LinkModalProps) {
 	const { task, userTask } = props;
 	const dispatch = useDispatch();
 	const { closeModal } = useModalContext();
+	const minutesPassed = minutesSinceUTCDate(userTask?.updated_at || '');
 	const isTimeOut = userTask?.updated_at
-		? minutesSinceUTCDate(userTask?.updated_at || '') > 4
+		? minutesPassed > 9
 		: true;
 	const onClick = () => {
 		dispatch(operationTaskClaim({ type: 'link', userTask, task }));
@@ -32,7 +33,7 @@ export function LinkModal(props: LinkModalProps) {
 			)}
 			{userTask?.status === 'pending' && !isTimeOut && (
 				<Button onClick={() => {}} variant={'filled'}>
-					Checking...
+					Return to claim reward in {10 - minutesPassed}min
 				</Button>
 			)}
 			{userTask?.status === 'pending' && isTimeOut && (
