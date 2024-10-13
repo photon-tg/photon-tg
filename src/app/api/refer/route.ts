@@ -64,8 +64,8 @@ export async function POST(request: Request) {
 				{ onConflict: 'user_id,friend_id' },
 			);
 
-			const resp = await Promise.all([addUserReference, addUserFriend]);
-			console.log('here', resp)
+			await Promise.all([addUserReference, addUserFriend]);
+
 			const response: ReferUserResponse = {
 				data: {
 					isReferrerUser: true,
