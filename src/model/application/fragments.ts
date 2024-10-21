@@ -18,5 +18,6 @@ export const Task = graphql(`
 		type
 		link
 		priority
+		cta_text
 	}
 `);

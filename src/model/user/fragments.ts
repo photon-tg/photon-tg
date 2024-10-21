@@ -51,5 +51,6 @@ export const FullTask = graphql(`
 		type
 		link
 		priority
+		cta_text
 	}
 `);

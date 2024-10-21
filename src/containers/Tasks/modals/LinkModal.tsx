@@ -28,7 +28,7 @@ export function LinkModal(props: LinkModalProps) {
 		<div className={'mb-[20px]'}>
 			{!userTask?.status && (
 				<Button onClick={onClick} variant={'filled'}>
-					Start
+					{task.cta_text || 'Start'}
 				</Button>
 			)}
 			{userTask?.status === 'pending' && !isTimeOut && (
