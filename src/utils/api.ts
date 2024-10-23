@@ -1,6 +1,6 @@
 export async function retry<T>(
 	req: Function,
-	maxRetries = 3,
+	maxRetries = 5,
 ): Promise<T | void> {
 	try {
 		return await req();

@@ -6,7 +6,7 @@ export const getTasks = () => {
 	const query = async () => {
 		const res = await apolloClient.query({
 			query: GetTasks,
-			fetchPolicy: 'no-cache',
+			fetchPolicy: 'cache-first',
 		});
 
 		if (res.data.tasksCollection?.edges?.length === 0) {
