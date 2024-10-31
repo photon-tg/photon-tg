@@ -98,7 +98,7 @@ function StatisticsContent() {
 	return (
 		<div
 			className={
-				'grid grid-cols-2 rounded-bl-[10px] rounded-br-[10px] bg-[#274784CC]'
+				'max-h-[280px] grid grid-cols-2 rounded-bl-[10px] rounded-br-[10px] bg-[#274784CC]'
 			}
 		>
 			<img

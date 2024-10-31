@@ -14,7 +14,7 @@ export function BattleMessage({
 	return (
 		<div
 			className={
-				'relative rounded-[10px] bg-[rgba(39,71,132,80%)] px-[15px] py-[10px]'
+				'relative rounded-[10px] bg-[rgba(39,71,132,90%)] px-[15px] py-[20px]'
 			}
 			style={{ backdropFilter: 'blur(5px)' }}
 		>
