@@ -9,7 +9,7 @@ export function BattleEmptyPhotos() {
 			<p className={'mb-[10px] text-md font-semibold'}>
 				You are a great judge!
 			</p>
-			<p className={'mb-[20px] text-md'}>Take a rest</p>
+			<p className={'mb-[20px] text-md'}>There are yet no photos to choose from</p>
 		</div>
 	);
 }

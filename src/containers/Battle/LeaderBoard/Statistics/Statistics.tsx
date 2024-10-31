@@ -102,7 +102,7 @@ function StatisticsContent() {
 			}
 		>
 			<img
-				className={'h-full rounded-bl-[10px] object-cover'}
+				className={'h-[280px] rounded-bl-[10px] object-cover'}
 				src={selectedBattlePhoto?.photo_url}
 			/>
 			<MyStats />
