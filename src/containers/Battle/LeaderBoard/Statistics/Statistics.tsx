@@ -1,5 +1,5 @@
 import ArrowIcon from '../../../../../public/assets/icons/Photo/arrow-left.svg';
-import { MyStats } from '@/pages/Battle/LeaderBoard/Statistics/MyStats';
+import { MyStats } from '@/containers/Battle/LeaderBoard/Statistics/MyStats';
 import { Button } from '@/components/Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import {

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { UserPhoto } from '@/types/photo';
+
 import { BattlePhotoFragment } from '@/gql/graphql';
 
 export const PHOTOS_PER_PAGE = 8;

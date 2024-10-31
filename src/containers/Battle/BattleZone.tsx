@@ -4,7 +4,7 @@ import {
 	battlePhotosSelector,
 } from '@/model/battle/selectors';
 import { operationBattlePhotoSelect } from '@/model/battle/operations/operationBattlePhotoSelect';
-import { BattleReward } from '@/pages/Battle/BattleReward';
+import { BattleReward } from '@/containers/Battle/BattleReward';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { battleCurrentBattlePhotosRemove } from '@/model/battle/actions';

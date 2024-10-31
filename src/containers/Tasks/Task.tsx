@@ -1,6 +1,7 @@
 import { Money } from '@/components/Money/Money';
 import Tick from '@/../public/assets/icons/tick.svg';
 import { useModalContext } from '@/contexts/ModalContext';
+import { TaskModal } from './TaskModal';
 import { RewardByDay, TaskType as TaskTypeType } from '@/types/Task';
 import { Task as TaskType } from '@/model/application/types';
 import { useSelector } from 'react-redux';
@@ -12,7 +13,6 @@ import {
 } from '@/model/user/selectors';
 import { UserTaskFragment } from '@/gql/graphql';
 import { getUserLevel } from '@/constants';
-import { TaskModal } from '@/pages/Tasks/TaskModal';
 
 interface TaskProps {
 	task: TaskType;

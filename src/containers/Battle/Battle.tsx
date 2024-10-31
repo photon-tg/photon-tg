@@ -2,17 +2,17 @@
 
 import { Coins } from '@/components/Coins';
 import { Energy } from '@/components/Energy';
-import { BattleBanner } from '@/pages/Battle/BattleBanner';
-import { BattleZone } from '@/pages/Battle/BattleZone';
-import { BattleActions } from '@/pages/Battle/BattleActions';
+import { BattleBanner } from '@/containers/Battle/BattleBanner';
+import { BattleZone } from '@/containers/Battle/BattleZone';
+import { BattleActions } from '@/containers/Battle/BattleActions';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	battleMessageSelector,
 	battlePhotosSelector,
 } from '@/model/battle/selectors';
-import { BattleEmptyPhotos } from '@/pages/Battle/BattleEmptyPhotos';
+import { BattleEmptyPhotos } from '@/containers/Battle/BattleEmptyPhotos';
 import { useState } from 'react';
-import { BattleMessage } from '@/pages/Battle/BattleMessage';
+import { BattleMessage } from '@/containers/Battle/BattleMessage';
 import { battleMessageIsShownSet } from '@/model/battle/actions';
 
 export function Battle() {

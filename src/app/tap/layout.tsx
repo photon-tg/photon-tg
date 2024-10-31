@@ -1,5 +1,5 @@
 import { Layout } from '@/components/Layout/Layout';
-import { Profile } from '@/pages/Tap/Profile';
+import { Profile } from '@/containers/Tap/Profile';
 
 export default function TapLayout({
 	children,

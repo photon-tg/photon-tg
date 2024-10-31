@@ -2,8 +2,8 @@
 
 import { useSelector } from 'react-redux';
 import { userPhotosSelector } from '@/model/user/selectors';
-import { EmptyMessage } from '@/pages/Gallery/EmptyMessage/EmptyMessage';
-import { GalleryPhotos } from '@/pages/Gallery/GalleryPhotos/GalleryPhotos';
+import { EmptyMessage } from '@/containers/Gallery/EmptyMessage/EmptyMessage';
+import { GalleryPhotos } from '@/containers/Gallery/GalleryPhotos/GalleryPhotos';
 import { BattlePhotoFragment } from '@/gql/graphql';
 
 export interface GalleryProps {

@@ -4,8 +4,8 @@ import { Button } from '@/components/Button/Button';
 import { useSelector } from 'react-redux';
 import { userPhotosUploadingSelector } from '@/model/user/selectors';
 import ArrowIcon from '@/../public/assets/icons/Photo/arrow-left.svg';
-import { useCamera } from '@/pages/Camera/useCamera';
-import { BattleBanner } from '@/pages/Battle/BattleBanner';
+import { useCamera } from '@/containers/Camera/useCamera';
+import { BattleBanner } from '@/containers/Battle/BattleBanner';
 
 export interface PhotoReviewProps {
 	image: string;

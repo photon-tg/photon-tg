@@ -1,5 +1,5 @@
 import { Layout } from '@/components/Layout/Layout';
-import { PhotoTabs } from '@/pages/Gallery/PhotoTabs/PhotoTabs';
+import { PhotoTabs } from '@/containers/Gallery/PhotoTabs/PhotoTabs';
 
 export default function GalleryLayout({
 	children,

@@ -1,7 +1,7 @@
 'use client';
 
-import { Statistics } from '@/pages/Battle/LeaderBoard/Statistics/Statistics';
-import { Top } from '@/pages/Battle/LeaderBoard/Top';
+import { Statistics } from '@/containers/Battle/LeaderBoard/Statistics/Statistics';
+import { Top } from '@/containers/Battle/LeaderBoard/Top';
 
 export function LeaderBoard() {
 	return (

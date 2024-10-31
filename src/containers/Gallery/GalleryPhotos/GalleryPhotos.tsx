@@ -6,7 +6,7 @@ import { formatDate } from '@/utils/date';
 import {
 	PHOTOS_PER_PAGE,
 	useGalleryPhotos,
-} from '@/pages/Gallery/GalleryPhotos/useGalleryPhotos';
+} from '@/containers/Gallery/GalleryPhotos/useGalleryPhotos';
 import { BattlePhotoFragment } from '@/gql/graphql';
 
 export interface GalleryPhotosProps {
@@ -106,7 +106,7 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
 					))}
 				</div>
 			</div>
-			{/* pages counter */}
+			{/* containers counter */}
 			<span className={'block text-center text-sm'}>
 				Page {page + 1} / {totalPages}
 			</span>

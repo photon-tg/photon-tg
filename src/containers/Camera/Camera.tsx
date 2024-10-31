@@ -11,8 +11,8 @@ import { Layout } from '@/components/Layout/Layout';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/model/user/selectors';
 import { useEffect } from 'react';
-import { PhotoReview } from '@/pages/Camera/PhotoReview/PhotoReview';
-import { BattleBanner } from '@/pages/Battle/BattleBanner';
+import { PhotoReview } from '@/containers/Camera/PhotoReview/PhotoReview';
+import { BattleBanner } from '@/containers/Battle/BattleBanner';
 
 export function Camera() {
 	const router = useRouter();

@@ -1,5 +1,3 @@
-import { Button } from '@/components/Button/Button';
-
 export function BattleEmptyPhotos() {
 	return (
 		<div

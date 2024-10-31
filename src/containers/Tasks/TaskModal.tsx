@@ -3,9 +3,9 @@ import { userTasksSelector } from '@/model/user/selectors';
 import { applicationTasksSelector } from '@/model/application/selectors';
 
 import { isToday } from '@/utils/date';
-import { DailyRewardModal } from '@/pages/Tasks/modals/DailyRewardModal';
-import { DailyPhotoModal } from '@/pages/Tasks/modals/DailyPhotoModal';
-import { LinkModal } from '@/pages/Tasks/modals/LinkModal';
+import { DailyRewardModal } from '@/containers/Tasks/modals/DailyRewardModal';
+import { DailyPhotoModal } from '@/containers/Tasks/modals/DailyPhotoModal';
+import { LinkModal } from '@/containers/Tasks/modals/LinkModal';
 
 export interface TaskModalProps {
 	taskId: string;
