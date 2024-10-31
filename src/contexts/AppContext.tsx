@@ -84,7 +84,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		isUserInitialized &&
 		isBattleInitialized &&
 		isApplicationInitialized &&
-		isMobile;
+		(isMobile || process.env.NEXT_PUBLIC_ALLOW_DESKTOP);
 	return (
 		<AppContext.Provider value={value}>
 			{shouldChildrenRender ? (
