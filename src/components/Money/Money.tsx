@@ -1,4 +1,5 @@
 import { formatNumber } from '@/utils/formatter';
+import { cn } from '@/utils/cn';
 
 export type MoneySize = 'xxs' | 'xs' | 'md' | 'lg' | 'xl';
 
@@ -8,6 +9,9 @@ export interface MoneyProps {
 	size?: MoneySize;
 	withoutPlus?: boolean;
 	perHour?: boolean;
+	withoutCoin?: boolean;
+	activeColor?: boolean;
+	bold?: boolean;
 }
 
 export function Money(props: MoneyProps) {
@@ -16,6 +20,9 @@ export function Money(props: MoneyProps) {
 		isCompact = false,
 		withoutPlus = false,
 		perHour = false,
+		withoutCoin = false,
+		activeColor = false,
+		bold = false,
 		size = 'md',
 	} = props;
 
@@ -64,13 +71,19 @@ export function Money(props: MoneyProps) {
 
 	return (
 		<div
-			className={`flex items-center gap-x-[10px] justify-self-center ${text}`}
+			className={cn(
+				`flex items-center gap-x-[10px] justify-self-center ${text}`,
+				activeColor && 'text-[#42C2FF]',
+				bold && 'font-semibold',
+			)}
 		>
-			<img
-				width={img.width}
-				height={img.height}
-				src={'/assets/icons/photon.svg'}
-			/>
+			{!withoutCoin && (
+				<img
+					width={img.width}
+					height={img.height}
+					src={'/assets/icons/photon.svg'}
+				/>
+			)}
 			{!withoutPlus && '+'}
 			{isCompact ? formatNumber(amount) : amount}
 			{perHour && '/hour'}

@@ -1,17 +1,12 @@
 import { ValidatedTelegramUser } from '@/app/api/check-telegram-data/route';
 import axios, { axiosInstance } from '@/api/axios';
 import { photosBucketURL, supabase } from '@/api/supabase';
-import {
-	ReferralData,
-	SignUpData,
-	UserCredentials,
-	UserErrorType,
-} from '@/model/user/types';
+import { SignUpData, UserCredentials, UserErrorType } from '@/model/user/types';
 import apolloClient from '@/api/graphql';
 import { GET_USER } from '@/graphql/queries';
 import {
+	GetAllUserPhotos,
 	GetReferrals,
-	GetUserPhotos,
 	GetUserTasks,
 } from '@/model/user/queries';
 import {
@@ -25,19 +20,19 @@ import {
 import { ClaimReferrals } from '@/model/user/mutations';
 import { ApolloQueryResult } from '@apollo/client';
 import {
+	BattlePhotoFragment,
 	CoreUserFieldsFragment,
+	GetAllUserPhotosQuery,
 	GetUserPhotosQuery,
 	GetUserTasksQuery,
-	UserPhotoFragment,
 	UserQuery,
 	UserTaskFragment,
 } from '@/gql/graphql';
-import { call, put } from '@redux-saga/core/effects';
-import { userErrorSet, userFriendsSet } from '@/model/user/actions';
 import { parseNodes } from '@/utils/graphql';
 import { AxiosResponse } from 'axios';
 import * as Sentry from '@sentry/nextjs';
 import { Friend, GetFriendsResponse } from '@/app/api/friends/route';
+import { GetUserBattlePhotos } from '@/model/battle/queries';
 
 export const validateTelegramData = async (dataCheckString: string) => {
 	return axios.post<ValidatedTelegramUser>('/check-telegram-data', {
@@ -70,7 +65,7 @@ export const getUser = (id: string) =>
 
 export const getPhotos = (id: string) =>
 	apolloClient.query({
-		query: GetUserPhotos,
+		query: GetAllUserPhotos,
 		fetchPolicy: 'no-cache',
 		variables: {
 			userId: id,
@@ -103,15 +98,6 @@ export const updateDailyRewardCompletedDays = async (
 		},
 	});
 };
-
-export const uploadPhotoToBucket = (
-	userId: string,
-	photoId: string,
-	photo: ArrayBuffer,
-) =>
-	supabase.storage.from('photos').upload(`${userId}/${photoId}`, photo, {
-		contentType: 'image/jpeg',
-	});
 
 export const uploadPhoto = (
 	userId: string,
@@ -205,16 +191,16 @@ export const referUser = async (payload: ReferUserPayload) =>
 
 export const fetchPhotos = async (
 	userId: string,
-): Promise<UserPhotoFragment[]> => {
+): Promise<BattlePhotoFragment[]> => {
 	try {
-		const photosResponse: ApolloQueryResult<GetUserPhotosQuery> =
+		const photosResponse: ApolloQueryResult<GetAllUserPhotosQuery> =
 			await getPhotos(userId);
 		if (photosResponse.error) {
 			return [];
 		}
 
 		const photos = parseNodes(
-			photosResponse.data.user_photosCollection?.edges ?? [],
+			photosResponse.data.battle_photosCollection?.edges ?? [],
 		);
 
 		return photos;
@@ -321,6 +307,7 @@ export type UpdateUserOptions = {
 	coins?: number;
 	lastHourlyReward?: string;
 	lastDailyReward?: string | null;
+	lastLikesClaim?: string | null;
 	user: CoreUserFieldsFragment;
 	isReferred?: boolean;
 	energy?: number;
@@ -334,6 +321,7 @@ export async function updateUser({
 	lastDailyReward,
 	user,
 	isReferred,
+	lastLikesClaim,
 }: UpdateUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_USER,
@@ -345,6 +333,7 @@ export async function updateUser({
 			isReferred: isReferred ?? user.is_referred,
 			lastDailyReward: lastDailyReward ?? user.last_daily_reward,
 			energy: energy ?? user.energy,
+			lastLikesClaim: lastLikesClaim ?? user.last_likes_claim,
 		},
 	});
 

@@ -18,14 +18,16 @@ export const userPhotosUploadingSelector = (state: AppState) =>
 	state.user.data.photos.meta.isUploading;
 export const userPhotosSelector = (state: AppState) =>
 	state.user.data.photos.data;
+export const userOldPhotosSelector = (state: AppState) =>
+	state.user.data.photos.oldData;
 export const userLastHourlyRewardSelector = (state: AppState) =>
 	state.user.data.user.last_hourly_reward;
 export const userIsDailyRewardClaimedSelector = (state: AppState) =>
 	state.user.data.isDailyRewardClaimed;
 export const userPassiveIncomeSelector = (state: AppState) =>
 	state.user.data.passiveIncome;
-export const userIsLoadingSelector = (state: AppState) =>
-	state.user.meta.isLoading;
+export const userIsInitializedSelector = (state: AppState) =>
+	state.user.meta.isInitialized;
 export const userErrorSelector = (state: AppState) => state.user.meta.error;
 export const userDailyPhotoIsCompleted = (state: AppState) =>
 	state.user.data.isDailyPhotoCompleted;

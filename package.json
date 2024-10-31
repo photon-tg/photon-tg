@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.4",
+    "@contentful/rich-text-react-renderer": "^16.0.0",
     "@next/third-parties": "^14.2.6",
     "@reduxjs/toolkit": "^2.2.7",
     "@sanity/client": "^6.22.2",
@@ -31,6 +32,7 @@
     "@types/uuid": "^10.0.0",
     "axios": "^1.7.3",
     "base64-arraybuffer": "^1.0.2",
+    "contentful": "^11.2.0",
     "crypto": "^1.0.1",
     "framer-motion": "^11.11.9",
     "graphql": "^16.9.0",

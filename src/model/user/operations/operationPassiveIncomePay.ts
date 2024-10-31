@@ -1,4 +1,4 @@
-import { CoreUserFieldsFragment, UserPhotoFragment } from '@/gql/graphql';
+import { BattlePhotoFragment, CoreUserFieldsFragment } from '@/gql/graphql';
 import { call, put, select } from '@redux-saga/core/effects';
 import {
 	userDataSelector,
@@ -15,7 +15,7 @@ export const operationPassiveIncomePay = createAction(
 );
 
 export function* operationPassiveIncomePayWorker() {
-	const photos: UserPhotoFragment[] = yield select(userPhotosSelector);
+	const photos: BattlePhotoFragment[] = yield select(userPhotosSelector);
 	const lastHourlyReward: string = yield select(userLastHourlyRewardSelector);
 
 	try {

@@ -11,13 +11,15 @@ import {
 	userIdSelector,
 	userPhotosSelector,
 } from '@/model/user/selectors';
-import { AddUserPhotoMutation, UserPhotoFragment } from '@/gql/graphql';
+import { AddBattlePhotoMutation, BattlePhotoFragment } from '@/gql/graphql';
 import { v4 as uuidv4 } from 'uuid';
 import { decode } from 'base64-arraybuffer';
-import { uploadPhoto, uploadPhotoToBucket } from '@/model/user/services';
 import { getUserLevel, levelToPhotoReward } from '@/constants';
 import { FetchResult } from '@apollo/client';
 import * as Sentry from '@sentry/nextjs';
+import { battleIdSelector } from '@/model/battle/selectors';
+import { uploadPhoto, uploadPhotoToBucket } from '@/model/battle/services';
+import { bucketURL } from '@/api/supabase';
 
 export const operationPhotoUpload = createAction<string>(
 	'operation:user/photos/upload',
@@ -29,16 +31,27 @@ export function* operationPhotoUploadWorker({
 	try {
 		yield put(userPhotosIsUploadingSet(true));
 		const userId: string = yield select(userIdSelector);
+		const battleId: string = yield select(battleIdSelector);
 		const coins: number = yield select(userCoinsSelector);
-		const photos: UserPhotoFragment[] = yield select(userPhotosSelector);
+		const photos: BattlePhotoFragment[] = yield select(userPhotosSelector);
 		const photoId: string = yield call(uuidv4);
 		const photoArrayBuffer = decode(photo.split('base64,')[1]);
 
 		const uploadPhotoToBucketResponse: Awaited<
 			ReturnType<typeof uploadPhotoToBucket>
-		> = yield call(uploadPhotoToBucket, userId, photoId, photoArrayBuffer);
-
-		if (uploadPhotoToBucketResponse.error) {
+		> = yield call(
+			uploadPhotoToBucket,
+			userId,
+			battleId,
+			photoId,
+			photoArrayBuffer,
+		);
+		console.log(uploadPhotoToBucketResponse, 'ff');
+		if (
+			('error' in uploadPhotoToBucketResponse &&
+				!!uploadPhotoToBucketResponse.error) ||
+			!uploadPhotoToBucketResponse.data?.fullPath
+		) {
 			return;
 		}
 
@@ -46,16 +59,18 @@ export function* operationPhotoUploadWorker({
 		const coinsForPhoto = levelToPhotoReward.get(level)!;
 		const newCoins = coinsForPhoto + coins;
 
-		const uploadedPhotoResponse: FetchResult<AddUserPhotoMutation> = yield call(
-			uploadPhoto,
-			userId,
-			photoId,
-			level,
-			newCoins,
-			new Date().toUTCString(),
-		);
+		const uploadedPhotoResponse: FetchResult<AddBattlePhotoMutation> =
+			yield call(uploadPhoto, {
+				userId,
+				battleId,
+				level,
+				url: `${bucketURL}/${uploadPhotoToBucketResponse.data?.fullPath}`,
+				coins: newCoins,
+			});
+
 		const uploadedPhoto =
-			uploadedPhotoResponse.data?.insertIntouser_photosCollection?.records[0];
+			uploadedPhotoResponse.data?.insertIntobattle_photosCollection
+				?.records?.[0];
 		const updatedUser =
 			uploadedPhotoResponse.data?.updateusersCollection.records[0];
 

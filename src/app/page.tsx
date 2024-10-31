@@ -1,6 +1,6 @@
 'use client';
 
-import { Index } from '@/containers/Index/Index';
+import { Index } from '@/pages/Index/Index';
 
 export default function IndexPage() {
 	return <Index />;

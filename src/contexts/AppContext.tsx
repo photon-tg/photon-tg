@@ -1,22 +1,18 @@
 'use client';
 
-import {
-	createContext,
-	PropsWithChildren,
-	useCallback,
-	useEffect,
-	useMemo,
-} from 'react';
+import { createContext, PropsWithChildren, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDevice } from '@/hooks/useDevice';
 import { applicationIsInitializedSelector } from '@/model/application/selectors';
-import { userIsLoadingSelector } from '@/model/user/selectors';
+import { userIsInitializedSelector } from '@/model/user/selectors';
 import { operationInitApplication } from '@/model/application/operations';
 import { HOME_PAGE } from '@/constants/urls';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { userEnergyAdd } from '@/model/user/actions';
 import { operationUserInit } from '@/model/user/operations/operationUserInit';
+import { battleIsInitializedSelector } from '@/model/battle/selectors';
+import { operationBattleInitialize } from '@/model/battle/operations/operationBattleInitialize';
 
 export interface AppContext {}
 
@@ -31,7 +27,8 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	const isApplicationInitialized = useSelector(
 		applicationIsInitializedSelector,
 	);
-	const isUserLoading = useSelector(userIsLoadingSelector);
+	const isUserInitialized = useSelector(userIsInitializedSelector);
+	const isBattleInitialized = useSelector(battleIsInitializedSelector);
 
 	useEffect(() => {
 		if (!isDetected || (!process.env.NEXT_PUBLIC_ALLOW_DESKTOP! && !isMobile)) {
@@ -40,19 +37,33 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 
 		if (!isApplicationInitialized) {
 			dispatch(operationInitApplication());
-		} else {
-			dispatch(operationUserInit());
+			return;
 		}
-	}, [dispatch, isApplicationInitialized, isDetected, isMobile]);
+		if (!isUserInitialized) {
+			dispatch(operationUserInit());
+			return;
+		}
+		if (!isBattleInitialized) {
+			dispatch(operationBattleInitialize());
+			return;
+		}
+	}, [
+		dispatch,
+		isApplicationInitialized,
+		isBattleInitialized,
+		isDetected,
+		isMobile,
+		isUserInitialized,
+	]);
 
 	useEffect(() => {
-		if (!isUserLoading) {
+		if (isUserInitialized) {
 			router.replace(HOME_PAGE);
 		}
-	}, [isUserLoading, router]);
+	}, [isUserInitialized, router]);
 
 	useEffect(() => {
-		if (isUserLoading || !isApplicationInitialized) return;
+		if (!isUserInitialized || !isApplicationInitialized) return;
 		let intervalId: NodeJS.Timeout;
 
 		function increaseEnergy() {
@@ -64,18 +75,23 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [isApplicationInitialized, isUserLoading]);
+	}, [isApplicationInitialized, isUserInitialized]);
 
 	const value = useMemo(() => ({}), []);
 
-	const shouldChildrenRender = isDetected && !isUserLoading && isMobile;
+	const shouldChildrenRender =
+		isDetected &&
+		isUserInitialized &&
+		isBattleInitialized &&
+		isApplicationInitialized &&
+		isMobile;
 	return (
 		<AppContext.Provider value={value}>
 			{shouldChildrenRender ? (
 				children
 			) : (
 				<LoadingScreen
-					isLoading={!isDetected || isUserLoading}
+					isLoading={!isDetected || !isUserInitialized}
 					isMobile={isMobile}
 				/>
 			)}

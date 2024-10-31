@@ -4,27 +4,34 @@ import { MouseEventHandler, PropsWithChildren } from 'react';
 export interface ButtonProps {
 	variant?: 'outline' | 'filled';
 	width?: string | number;
-	size?: 'lg';
+	fz?: string;
+	size?: 'lg' | 'sm';
+	height?: string | number;
 	disabled?: boolean;
 	noInnerStyle?: boolean;
 	onClick?: MouseEventHandler<HTMLButtonElement>;
+	className?: string;
 }
 
 export function Button(props: PropsWithChildren<ButtonProps>) {
 	const {
 		children,
 		variant = 'outline',
-		width = 'fit-content',
+		width = '100%',
 		noInnerStyle = false,
 		disabled,
 		size = 'md',
 		onClick,
+		height,
+		className,
+		fz,
 	} = props;
 
 	return (
 		<div
+			style={{ width }}
 			className={cn(
-				'w-[${width}] rounded p-[2px]',
+				'h-fit w-full rounded p-[2px]',
 				variant === 'outline' &&
 					!disabled &&
 					'bg-gradient-to-tr from-light-blue from-0% to-sky-blue to-100%',
@@ -32,9 +39,11 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
 					!disabled &&
 					'bg-gradient-to-tr from-sky-blue to-saturated-blue',
 				disabled && 'bg-[#1b2b50]',
+				className ?? '',
 			)}
 		>
 			<button
+				style={{ height }}
 				disabled={disabled}
 				onClick={onClick}
 				className={cn(
@@ -46,6 +55,7 @@ export function Button(props: PropsWithChildren<ButtonProps>) {
 						!disabled &&
 						'bg-gradient-to-tr from-sky-blue to-saturated-blue',
 					disabled && 'bg-[#1b2b50]',
+					size === 'sm' && 'px-[10px] py-[7px]',
 				)}
 			>
 				{children}

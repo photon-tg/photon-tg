@@ -7,3 +7,6 @@ export const supabase = createClient(
 
 export const photosBucketURL =
 	'https://hnvngbrjzbcenxwmzzrk.supabase.co/storage/v1/object/public/photos';
+
+export const bucketURL =
+	'https://hnvngbrjzbcenxwmzzrk.supabase.co/storage/v1/object/public';

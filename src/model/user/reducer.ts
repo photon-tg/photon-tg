@@ -10,7 +10,7 @@ import {
 	userEnergySet,
 	userErrorSet,
 	userFriendsSet,
-	userIsLoadingSet,
+	userIsInitializedSet,
 	userIsReferredSet,
 	userLastDailyRewardSet,
 	userLastHourlyRewardSet,
@@ -50,7 +50,7 @@ export const getInitialState = ():
 		passiveIncome: null,
 	},
 	meta: {
-		isLoading: true,
+		isInitialized: false,
 		error: null,
 		referrerId: null,
 	},
@@ -75,9 +75,12 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 			.addCase(userErrorSet, (draftState, { payload: error }) => {
 				draftState.meta.error = error;
 			})
-			.addCase(userIsLoadingSet, (draftState, { payload: isLoading }) => {
-				draftState.meta.isLoading = isLoading;
-			})
+			.addCase(
+				userIsInitializedSet,
+				(draftState, { payload: isInitialized }) => {
+					draftState.meta.isInitialized = isInitialized;
+				},
+			)
 			.addCase(userTelegramUserSet, (draftState, { payload: telegramUser }) => {
 				draftState.data.telegramUser = telegramUser;
 			})
@@ -85,6 +88,7 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 				draftState.meta.referrerId = referrerId;
 			})
 			.addCase(userPhotosSet, (draftState, { payload: photos }) => {
+				console.log(photos, 'sf');
 				draftState.data.photos.data = photos;
 				draftState.data.passiveIncome = calculatePassiveIncome(
 					draftState.data.photos.data,

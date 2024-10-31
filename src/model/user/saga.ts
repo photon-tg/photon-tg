@@ -44,6 +44,10 @@ import {
 	operationReferralInit,
 	operationReferralInitWorker,
 } from '@/model/user/operations/operationReferralInit';
+import {
+	operationPhotoLikesCoinsReceive,
+	operationPhotoLikesCoinsReceiveWorker,
+} from '@/model/user/operations/operationPhotoLikesCoinsReceiveWorker';
 
 function* userWatcher() {
 	yield takeLeading(operationUserInit.type, operationUserInitWorker);
@@ -67,6 +71,10 @@ function* userWatcher() {
 	yield takeLeading(
 		operationPassiveEnergyRestore.type,
 		operationPassiveEnergyRestoreWorker,
+	);
+	yield takeEvery(
+		operationPhotoLikesCoinsReceive.type,
+		operationPhotoLikesCoinsReceiveWorker,
 	);
 	yield takeLeading(operationPhotoUpload.type, operationPhotoUploadWorker);
 	yield takeLeading(operationTaskClaim.type, operationTaskClaimWorker);

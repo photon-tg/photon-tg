@@ -5,7 +5,7 @@ const Spinner = () => {
 		border: '4px solid #e5e7eb', // Tailwind's gray-200
 		borderTop: '4px solid #3b82f6', // Tailwind's blue-500
 		borderRadius: '50%',
-		width: '64px',  // Tailwind's w-16
+		width: '64px', // Tailwind's w-16
 		height: '64px', // Tailwind's h-16
 		animation: 'spin 1s linear infinite',
 	};

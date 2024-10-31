@@ -1,15 +1,15 @@
 import { graphql } from '@/gql';
 
-export const GetUserPhotos = graphql(`
-	query GetUserPhotos($userId: UUID!) {
-		user_photosCollection(
+export const GetAllUserPhotos = graphql(`
+	query GetAllUserPhotos($userId: UUID!) {
+		battle_photosCollection(
 			first: 100
 			orderBy: { created_at: DescNullsLast }
 			filter: { user_id: { eq: $userId } }
 		) {
 			edges {
 				node {
-					...UserPhoto
+					...BattlePhoto
 				}
 			}
 		}

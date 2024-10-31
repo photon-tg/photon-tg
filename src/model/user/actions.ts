@@ -1,8 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
 import { UserErrorType } from '@/model/user/types';
 import {
+	BattlePhotoFragment,
 	CoreUserFieldsFragment,
-	UserPhotoFragment,
 	UserTaskFragment,
 } from '@/gql/graphql';
 import { Friend } from '@/app/api/friends/route';
@@ -13,9 +13,11 @@ export const userTelegramUserSet = createAction<WebAppUser>(
 );
 export const userReferredIdSet = createAction<string>('user/referrerId/set');
 export const userErrorSet = createAction<UserErrorType>('user/error/set');
-export const userIsLoadingSet = createAction<boolean>('user/isLoading/set');
+export const userIsInitializedSet = createAction<boolean>(
+	'user/isInitialized/set',
+);
 export const userPhotosSet =
-	createAction<UserPhotoFragment[]>('user/photos/set');
+	createAction<BattlePhotoFragment[]>('user/photos/set');
 export const userPhotosIsUploadingSet = createAction<boolean>(
 	'user/photos/isUploading/set',
 );

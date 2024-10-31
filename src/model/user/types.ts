@@ -1,4 +1,5 @@
 import {
+	BattlePhotoFragment,
 	CoreUserFieldsFragment,
 	UserPhotoFragment,
 	UserTaskFragment,
@@ -23,7 +24,7 @@ export enum UserErrorType {
 }
 
 export interface UserStateMeta {
-	isLoading: boolean;
+	isInitialized: boolean;
 	referrerId: string | null;
 	error: null | UserErrorType;
 }
@@ -55,7 +56,8 @@ export interface RegisteredUserState {
 			meta: {
 				isUploading: boolean;
 			};
-			data: UserPhotoFragment[];
+			oldData: UserPhotoFragment[];
+			data: BattlePhotoFragment[];
 		};
 		tasks: UserTaskFragment[];
 		friends: Friend[];

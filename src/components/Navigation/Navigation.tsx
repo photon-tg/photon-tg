@@ -10,6 +10,11 @@ import {
 
 const tabs = [
 	{
+		icon: '/assets/icons/battle.svg',
+		name: 'Battle',
+		url: '/battle',
+	},
+	{
 		icon: '/assets/icons/camera.svg',
 		name: 'Photo',
 		url: '/photo/gallery',
@@ -61,7 +66,7 @@ export function Tab({ name, icon, url, isActive }: TabProps) {
 		<Link
 			style={{ backgroundColor: isActive ? '#144272' : 'transparent' }}
 			className={
-				'w-50 relative flex flex-col items-center gap-y-[6px] rounded px-[20px] py-[7px]'
+				'w-50 relative flex h-[60px] flex-col items-center justify-between gap-y-[6px] rounded px-[20px] pb-[5px] pt-[8px]'
 			}
 			onClick={() =>
 				window.Telegram.WebApp.HapticFeedback.impactOccurred('medium')
@@ -76,7 +81,7 @@ export function Tab({ name, icon, url, isActive }: TabProps) {
 						}
 					></span>
 				)}
-			<img width={25} height={25} color={'red'} src={icon} alt={''} />
+			<img color={'red'} src={icon} alt={''} />
 			<span className={'text-xsm'}>{name}</span>
 		</Link>
 	);

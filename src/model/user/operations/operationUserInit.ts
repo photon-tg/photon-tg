@@ -2,7 +2,7 @@ import { call, put, select, take } from '@redux-saga/core/effects';
 import {
 	userErrorSet,
 	userFriendsSet,
-	userIsLoadingSet,
+	userIsInitializedSet,
 	userPassiveIncomeRecalculate,
 	userPhotosSet,
 	userSet,
@@ -10,8 +10,8 @@ import {
 } from '@/model/user/actions';
 import { userIdSelector, userSelector } from '@/model/user/selectors';
 import {
+	BattlePhotoFragment,
 	CoreUserFieldsFragment,
-	UserPhotoFragment,
 	UserTaskFragment,
 } from '@/gql/graphql';
 import {
@@ -33,6 +33,7 @@ import { operationPassiveIncomePay } from '@/model/user/operations/operationPass
 import { operationPassiveEnergyRestoreWorker } from '@/model/user/operations/operationPassiveEnergyRestore';
 import { operationReferralInitWorker } from '@/model/user/operations/operationReferralInit';
 import { Friend } from '@/app/api/friends/route';
+import { operationPhotoLikesCoinsReceive } from '@/model/user/operations/operationPhotoLikesCoinsReceiveWorker';
 
 export const operationUserInit = createAction('operation:user/init');
 
@@ -46,7 +47,7 @@ export function* operationUserInitWorker() {
 
 		const userId: string = yield select(userIdSelector);
 
-		const photos: UserPhotoFragment[] = yield call(fetchPhotos, userId);
+		const photos: BattlePhotoFragment[] = yield call(fetchPhotos, userId);
 		yield put(userPhotosSet(photos));
 
 		const userTasks: UserTaskFragment[] = yield call(fetchTasks, userId);
@@ -59,6 +60,7 @@ export function* operationUserInitWorker() {
 		yield call(operationReferralInitWorker);
 		yield call(operationReferralsClaimWorker);
 		yield call(operationPassiveIncomePay);
+		yield put(operationPhotoLikesCoinsReceive());
 		yield call(operationPassiveEnergyRestoreWorker);
 
 		const user: CoreUserFieldsFragment = yield select(userSelector);
@@ -74,7 +76,7 @@ export function* operationUserInitWorker() {
 		} as UpdateUserOptions);
 
 		yield put(userPassiveIncomeRecalculate());
-		yield put(userIsLoadingSet(false));
+		yield put(userIsInitializedSet(true));
 
 		window.Telegram.WebApp.ready();
 		!window.Telegram.WebApp.isExpanded && window.Telegram.WebApp.expand();

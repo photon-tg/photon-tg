@@ -1,4 +1,4 @@
-export type Level = 1 | 2 | 3 | 4 | 5;
+export type Level = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export const levelToCoins = new Map<Level, number>([
 	[1, 25000],
@@ -36,6 +36,45 @@ export const levelToPhotoPassiveIncome = new Map<Level, number>([
 	[3, 200],
 	[4, 400],
 	[5, 800],
+]);
+
+export const levelToSelectReward = new Map<Level, number>([
+	[1, 5],
+	[2, 20],
+	[3, 45],
+	[4, 80],
+	[5, 125],
+	[6, 180],
+	[7, 245],
+	[8, 320],
+	[9, 405],
+	[10, 1000],
+]);
+
+export const levelToSelectEnergyReduction = new Map<Level, number>([
+	[1, 50],
+	[2, 75],
+	[3, 100],
+	[4, 125],
+	[5, 150],
+	[6, 175],
+	[7, 200],
+	[8, 225],
+	[9, 250],
+	[10, 275],
+]);
+
+export const levelToReceiveLikeReward = new Map<Level, number>([
+	[1, 10],
+	[2, 40],
+	[3, 90],
+	[4, 160],
+	[5, 250],
+	[6, 360],
+	[7, 490],
+	[8, 640],
+	[9, 810],
+	[10, 1000],
 ]);
 
 export const USER_REF_BONUS = 5000;

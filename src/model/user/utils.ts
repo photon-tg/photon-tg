@@ -1,13 +1,12 @@
 import { SignUpData, UserCredentials } from '@/model/user/types';
 import { daysSinceDate, hoursSinceDate } from '@/utils/date';
 import {
+	BattlePhotoFragment,
 	TaskFragment,
-	UserPhotoFragment,
 	UserTaskFragment,
 } from '@/gql/graphql';
 import { Level, levelToPhotoPassiveIncome } from '@/constants';
 import { RewardByDay } from '@/types/Task';
-import { UserPhoto } from '@/types/photo';
 
 export function getUserCredentials(telegramId: string): UserCredentials {
 	return {
@@ -79,18 +78,18 @@ export function claimTaskHelper(
 	}
 }
 
-export function calculatePassiveIncome(photos?: UserPhoto[] | null) {
+export function calculatePassiveIncome(photos?: BattlePhotoFragment[] | null) {
 	return (
 		photos?.reduce((total, photo) => {
 			const photoPassiveIncome =
-				levelToPhotoPassiveIncome.get(photo.level_at_time as Level)! || 0;
+				levelToPhotoPassiveIncome.get(photo.user_level as Level)! || 0;
 			return total + photoPassiveIncome;
 		}, 0) ?? 0
 	);
 }
 
 export function getPassiveIncome(
-	photos: UserPhotoFragment[],
+	photos: BattlePhotoFragment[],
 	lastHourlyReward: string,
 ) {
 	const photosPassiveIncome: number = photos.reduce((total, photo) => {
@@ -102,7 +101,7 @@ export function getPassiveIncome(
 			: lastHourlyReward;
 		const hoursSinceLastReward = hoursSinceDate(lastClaimedReward);
 		const photoPassiveIncomePerHour =
-			levelToPhotoPassiveIncome.get(photo.level_at_time as Level) ?? 0;
+			levelToPhotoPassiveIncome.get(photo.user_level as Level) ?? 0;
 
 		let hours = hoursSinceLastReward > 3 ? 3 : hoursSinceLastReward;
 		const reward = hours * photoPassiveIncomePerHour;
