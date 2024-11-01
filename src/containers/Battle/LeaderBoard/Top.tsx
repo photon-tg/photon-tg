@@ -10,7 +10,7 @@ export function Top() {
 	}
 
 	return (
-		<div className={'flex flex-col items-center'}>
+		<div className={'flex max-h-[100px] flex-col items-center'}>
 			<span className={'mb-[10px] block text-lg font-semibold'}>
 				Top of the day
 			</span>

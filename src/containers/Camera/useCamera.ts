@@ -6,6 +6,7 @@ import Webcam from 'react-webcam';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '@/model/user/selectors';
 import { operationPhotoUpload } from '@/model/user/operations/operationPhotoUpload';
+import { HOME_PAGE } from '@/constants/urls';
 
 export function useCamera() {
 	const cameraRef = useRef<Webcam | null>(null);
@@ -35,6 +36,9 @@ export function useCamera() {
 		}
 
 		dispatch(operationPhotoUpload(image!));
+		setTimeout(() => {
+			router.replace(HOME_PAGE);
+		}, 2000);
 	}, [dispatch, image, user]);
 
 	const onReject = useCallback(() => {

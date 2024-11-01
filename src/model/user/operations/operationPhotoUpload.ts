@@ -20,6 +20,7 @@ import * as Sentry from '@sentry/nextjs';
 import { battleIdSelector } from '@/model/battle/selectors';
 import { uploadPhoto, uploadPhotoToBucket } from '@/model/battle/services';
 import { bucketURL } from '@/api/supabase';
+import { battleHasJoinedSet } from '@/model/battle/actions';
 
 export const operationPhotoUpload = createAction<string>(
 	'operation:user/photos/upload',
@@ -46,7 +47,7 @@ export function* operationPhotoUploadWorker({
 			photoId,
 			photoArrayBuffer,
 		);
-		console.log(uploadPhotoToBucketResponse, 'ff');
+
 		if (
 			('error' in uploadPhotoToBucketResponse &&
 				!!uploadPhotoToBucketResponse.error) ||
@@ -91,7 +92,7 @@ export function* operationPhotoUploadWorker({
 		yield put(userSet(updatedUser));
 		yield put(userCoinsAdd(coinsForPhoto));
 		yield put(userPhotosSet(newPhotos));
-		window.location.href = '/gallery';
+		yield put(battleHasJoinedSet(true));
 	} catch (error) {
 		Sentry.captureException(error, {
 			contexts: {

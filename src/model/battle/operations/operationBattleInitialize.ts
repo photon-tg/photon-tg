@@ -4,6 +4,7 @@ import {
 	getBattlePhotos,
 	getBattles,
 	GetEntityResult,
+	getUserBattlePhoto,
 } from '@/model/battle/services';
 import { BattleFragment, BattlePhotoFragment } from '@/gql/graphql';
 import {
@@ -11,6 +12,7 @@ import {
 	battleBattlesSet,
 	battleCurrentBattlePhotosSet,
 	battleCurrentIdSet,
+	battleHasJoinedSet,
 	battleIsInitializedSet,
 } from '@/model/battle/actions';
 import shuffle from 'lodash/shuffle';
@@ -54,5 +56,16 @@ export function* operationBattleInitializeWorker() {
 	yield put(operationBattleSelect(currentBattle.id));
 
 	yield put(operationBattleCalculateTimeToJoin());
+
+	const userPhotoResponse: GetEntityResult<BattlePhotoFragment> = yield call(
+		getUserBattlePhoto,
+		currentBattle.id,
+		userId,
+	);
+
+	if (!userPhotoResponse.error && !!userPhotoResponse.data.id) {
+		put(battleHasJoinedSet(true));
+	}
+
 	yield put(battleIsInitializedSet(true));
 }

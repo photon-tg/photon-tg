@@ -22,6 +22,7 @@ export interface BattleState {
 		currentBattlePhotos: BattlePhotoFragment[];
 		selectedBattle: SelectedBattle | null;
 		canJoin: boolean;
+		hasJoined: boolean;
 		timeLeftToJoin: number | null;
 		message: {
 			isShown: boolean;

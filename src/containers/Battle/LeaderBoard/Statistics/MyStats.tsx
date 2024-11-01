@@ -8,10 +8,18 @@ import {
 	Level,
 	levelToPhotoPassiveIncome,
 	levelToPhotoReward,
+	levelToReceiveLikeReward,
 } from '@/constants';
 
 export function MyStats() {
 	const selectedBattlePhoto = useSelector(battleSelectedBattleUserPhoto);
+
+	if (!selectedBattlePhoto) {
+		return null;
+	}
+
+	const { likes_count, user_level } = selectedBattlePhoto;
+
 	return (
 		<div
 			className={
@@ -32,9 +40,14 @@ export function MyStats() {
 				<div className={'flex flex-col justify-start gap-y-[5px]'}>
 					<span className={'flex flex-row items-center gap-x-[4px] text-sm'}>
 						<img width={19} src={'/assets/icons/like.svg'} />
-						{formatNumber(selectedBattlePhoto?.likes_count || 0)}
+						{formatNumber(likes_count)}
 					</span>
-					<Money amount={10000} size={'xs'} />
+					<Money
+						amount={
+							likes_count * levelToReceiveLikeReward.get(user_level as Level)!
+						}
+						size={'xs'}
+					/>
 				</div>
 			</div>
 			<div>

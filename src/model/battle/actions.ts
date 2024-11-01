@@ -46,3 +46,4 @@ export const battleMessageContentSet = createAction<{
 	title: string;
 	description: string;
 }>('battle/message/content/set');
+export const battleHasJoinedSet = createAction<boolean>('battle/hasJoined/set');

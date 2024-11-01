@@ -21,11 +21,12 @@ export const getInitialState = (): BattleState => ({
 		currentBattlePhotos: [],
 		selectedBattle: null,
 		canJoin: false,
+		hasJoined: false,
 		timeLeftToJoin: null,
 		message: {
 			isShown: true,
 			content: {
-				title: 'Choose Photo',
+				title: 'Rules: choose photo',
 				description: `
 					<ul style="padding-left: 12px; list-style-type: circle">
 						<li>Authors get coins for likes</li>

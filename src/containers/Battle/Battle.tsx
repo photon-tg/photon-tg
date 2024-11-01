@@ -36,7 +36,7 @@ export function Battle() {
 				{message.isShown && (
 					<div
 						className={
-							'absolute left-[50%] top-[50%] w-[90%] translate-x-[-50%] translate-y-[-50%]'
+							'absolute left-[50%] top-[50%] z-[500] w-[90%] translate-x-[-50%] translate-y-[-50%]'
 						}
 					>
 						<BattleMessage

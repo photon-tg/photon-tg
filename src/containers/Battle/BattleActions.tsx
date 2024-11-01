@@ -11,6 +11,7 @@ import { userCoinsSelector } from '@/model/user/selectors';
 import { useMemo } from 'react';
 import {
 	battleCanJoinSelector,
+	battleHasJoinedSelector,
 	battleTimeLeftToJoinSelector,
 } from '@/model/battle/selectors';
 
@@ -19,6 +20,7 @@ export function BattleActions() {
 	const userLevel = getUserLevel(userCoins);
 	const router = useRouter();
 	const canJoin = useSelector(battleCanJoinSelector);
+	const hasJoined = useSelector(battleHasJoinedSelector);
 	const timeLeftToJoin = useSelector(battleTimeLeftToJoinSelector);
 	const onJoinBattleClick = () => {
 		router.push('/photo/camera');
@@ -42,7 +44,13 @@ export function BattleActions() {
 				size={'sm'}
 				variant={'filled'}
 			>
-				{canJoin ? (
+				{hasJoined ? (
+					<div className={'flex items-center justify-center gap-x-[5px]'}>
+						<span className={'mb-[2px] text-[15px] text-sm'}>
+							You have joined
+						</span>
+					</div>
+				) : canJoin ? (
 					<div className={'flex flex-col'}>
 						<span className={'mb-[2px] text-[15px] text-sm'}>
 							Join current battle
