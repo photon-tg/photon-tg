@@ -58,7 +58,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 					size={'sm'}
 					height={60}
 				>
-					<span className={'text-[13px]'}>Send to battle</span>
+					<span className={''}>Send to battle</span>
 				</Button>
 			</div>
 		</div>
