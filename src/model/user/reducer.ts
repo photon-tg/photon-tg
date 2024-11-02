@@ -13,7 +13,7 @@ import {
 	userIsInitializedSet,
 	userIsReferredSet,
 	userLastDailyRewardSet,
-	userLastHourlyRewardSet,
+	userLastHourlyRewardSet, userLastLikesClaimSet,
 	userPassiveIncomeRecalculate,
 	userPassiveIncomeSet,
 	userPhotosIsUploadingSet,
@@ -22,7 +22,7 @@ import {
 	userSet,
 	userTasksSet,
 	userTaskUpdate,
-	userTelegramUserSet,
+	userTelegramUserSet
 } from '@/model/user/actions';
 import {
 	calculatePassiveIncome,
@@ -186,6 +186,11 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 			)
 			.addCase(userFriendsSet, (draftState, { payload: friends }) => {
 				draftState.data.friends = friends;
+			})
+			.addCase(userLastLikesClaimSet, (draftState, { payload: lastLikesClaim }) => {
+				if (draftState.data.user) {
+					draftState.data.user.last_likes_claim = lastLikesClaim;
+				}
 			}),
 );
 

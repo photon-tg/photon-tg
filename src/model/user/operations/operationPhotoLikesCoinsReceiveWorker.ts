@@ -3,7 +3,7 @@ import {
 	GetEntityResult,
 	getNotClaimedPhotoLikes,
 } from '@/model/battle/services';
-import { call, select } from '@redux-saga/core/effects';
+import { call, put, select } from '@redux-saga/core/effects';
 import { BattlePhotoFragment, CoreUserFieldsFragment } from '@/gql/graphql';
 import {
 	userCoinsSelector,
@@ -12,6 +12,7 @@ import {
 } from '@/model/user/selectors';
 import { getUserLevel, Level, levelToReceiveLikeReward } from '@/constants';
 import { updateUser } from '@/model/user/services';
+import { userCoinsAdd, userLastLikesClaimSet } from '@/model/user/actions';
 
 export const operationPhotoLikesCoinsReceive = createAction(
 	'operation:user/photos/likes/receive',
@@ -37,11 +38,6 @@ export function* operationPhotoLikesCoinsReceiveWorker() {
 
 	if (award <= 0) return;
 
-	const coins: number = yield select(userCoinsSelector);
-
-	yield call(updateUser, {
-		user,
-		lastLikesClaim: new Date().toUTCString(),
-		coins: coins + award,
-	});
+	yield put(userCoinsAdd(award));
+	yield put(userLastLikesClaimSet(new Date().toUTCString()));
 }
