@@ -20,7 +20,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 
 	return (
 		<div
-			className={'relative grid h-full grid-rows-[1fr_min-content] bg-[black]'}
+			className={'gap-y-[10px] relative grid h-full grid-rows-[min-content_1fr_min-content] bg-[#062243] px-[10px] pt-[20px]'}
 		>
 			<button
 				onClick={goBack}
@@ -28,21 +28,17 @@ export function PhotoReview(props: PhotoReviewProps) {
 			>
 				<ArrowIcon />
 			</button>
-			<div className={'absolute top-[40px] z-[700] px-[10px]'}>
+			<div className={''}>
 				<BattleBanner noTime />
 			</div>
 			<img
-				className={'absolute left-[50%] top-[50%] rounded-[10px]'}
-				style={{
-					transform:
-						'translateX(-50%) translateY(-50%) translateY(-35px) scale(0.75)',
-				}}
+				className={'rounded-[10px]'}
 				src={image}
 				alt={''}
 			/>
 			<div
 				className={
-					'absolute bottom-0 flex w-full justify-between gap-x-[10px] px-[20px] pb-[25px]'
+					'flex w-full justify-between gap-x-[10px] pb-[25px]'
 				}
 			>
 				<Button
