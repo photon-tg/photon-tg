@@ -77,7 +77,7 @@ export function Camera() {
 			>
 				<ArrowIcon />
 			</button>
-			<div className={'absolute top-[40px] w-full px-[10px]'}>
+			<div className={'absolute top-[40px] w-full px-[10px] z-[2000]'}>
 				<BattleBanner noTime />
 			</div>
 			<Webcam
