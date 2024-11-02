@@ -20,7 +20,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 
 	return (
 		<div
-			className={'gap-y-[10px] relative grid h-full grid-rows-[min-content_1fr_min-content] bg-[#062243] px-[10px] pt-[20px] items-center justify-center'}
+			className={'gap-y-[10px] relative grid h-full grid-rows-[min-content_1fr_min-content] bg-[#062243] px-[10px] pt-[20px] items-center justify-center justify-items-center'}
 		>
 			<button
 				onClick={goBack}
@@ -33,6 +33,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 			</div>
 			<img
 				className={'rounded-[10px]'}
+				style={{height: 'calc(100vh - 230px)', aspectRatio: '16/9'}}
 				src={image}
 				alt={''}
 			/>

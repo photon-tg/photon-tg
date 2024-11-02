@@ -118,7 +118,7 @@ export function Camera() {
 					<CameraSwitch />
 				</button>
 			</div>
-			<div className={'absolute bottom-0 w-full h-[100px]'} style={{background: 'linear-gradient(180deg, rgba(39, 71, 132, 0) 0%, #1B325F 42.5%, #0F1B38 87.5%)'}}></div>
+			<div className={'absolute bottom-0 w-full h-[150px]'} style={{background: 'linear-gradient(180deg, rgba(39, 71, 132, 0) 0%, #1B325FA8 42.5%, #0F1B38A8 87.5%)'}}></div>
 		</div>
 	);
 }
