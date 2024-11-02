@@ -85,6 +85,7 @@ export function Camera() {
 				height={'100%'}
 				videoConstraints={{
 					facingMode,
+					aspectRatio: 16 / 9,
 				}}
 				forceScreenshotSourceSize
 				screenshotFormat={'image/jpeg'}
