@@ -32,7 +32,7 @@ export function* operationBattleSelectWorker({
 	if (userPhotoResponse.data) {
 		const photoLikesResponse: GetEntityResult<number> = yield call(
 			getPhotoLikes,
-			battleId,
+			userPhotoResponse.data.id,
 		);
 
 		userPhoto = {

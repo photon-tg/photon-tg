@@ -131,7 +131,7 @@ export const getPhotoLikes = async (
 		.select('*', { head: true, count: 'estimated' })
 		.eq('photo_id', photoId);
 
-	if (response.error || !response.data) {
+	if (response.error) {
 		return {
 			error: true,
 		};

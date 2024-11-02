@@ -28,11 +28,15 @@ export function PhotoReview(props: PhotoReviewProps) {
 			>
 				<ArrowIcon />
 			</button>
-			<div className={'absolute top-[40px] px-[10px] z-[700]'}>
-				<BattleBanner />
+			<div className={'absolute top-[40px] z-[700] px-[10px]'}>
+				<BattleBanner noTime />
 			</div>
 			<img
-				className={'absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]'}
+				className={'absolute left-[50%] top-[50%] rounded-[10px]'}
+				style={{
+					transform:
+						'translateX(-50%) translateY(-50%) translateY(-35px) scale(0.75)',
+				}}
 				src={image}
 				alt={''}
 			/>
@@ -48,7 +52,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 					size={'sm'}
 					height={60}
 				>
-					Reject
+					Redo
 				</Button>
 				<Button
 					disabled={isPhotoUploading}
@@ -57,7 +61,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 					size={'sm'}
 					height={60}
 				>
-					<span className={'text-[13px]'}>Accept & Send to battle</span>
+					<span className={'text-[13px]'}>Send to battle</span>
 				</Button>
 			</div>
 		</div>

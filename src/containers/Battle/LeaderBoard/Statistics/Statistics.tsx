@@ -10,11 +10,16 @@ import {
 } from '@/model/battle/selectors';
 import { operationBattleSelect } from '@/model/battle/operations/operationBattleSelect';
 import { useRouter } from 'next/navigation';
+import { translationsSelectedBattleSelect } from '@/model/translations/selectors';
+import { BattleContent } from '@/model/translations/types';
 
 export function Statistics() {
 	const dispatch = useDispatch();
 	const battles = useSelector(battleBattlesSelector);
 	const selectedBattle = useSelector(battleSelectedBattleSelector);
+	const translation = useSelector(
+		translationsSelectedBattleSelect,
+	) as BattleContent;
 
 	const changeBattle = (type: 'next' | 'prev') => {
 		const currentIndex = battles.findIndex(
@@ -40,7 +45,7 @@ export function Statistics() {
 					<ArrowIcon />
 				</button>
 				<div>
-					<span>{selectedBattle?.id}</span>
+					<span>{translation?.title}</span>
 				</div>
 				<button
 					onClick={() => changeBattle('next')}
