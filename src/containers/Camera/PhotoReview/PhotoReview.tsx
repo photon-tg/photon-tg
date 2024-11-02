@@ -28,7 +28,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 			>
 				<ArrowIcon />
 			</button>
-			<div className={'absolute top-[40px] px-[10px]'}>
+			<div className={'absolute top-[40px] px-[10px] z-[700]'}>
 				<BattleBanner />
 			</div>
 			<img
