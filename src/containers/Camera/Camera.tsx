@@ -77,7 +77,7 @@ export function Camera() {
 			>
 				<ArrowIcon />
 			</button>
-			<div className={'absolute top-[40px] z-[2000] w-full px-[10px]'}>
+			<div className={'absolute top-[20px] z-[2000] w-full px-[10px]'}>
 				<BattleBanner noTime />
 			</div>
 			<Webcam
@@ -118,7 +118,7 @@ export function Camera() {
 					<CameraSwitch />
 				</button>
 			</div>
-			<div className={'absolute bottom-0 w-full h-[150px]'} style={{background: 'linear-gradient(180deg, rgba(39, 71, 132, 0) 0%, #1B325FA8 42.5%, #0F1B38A8 87.5%)'}}></div>
+			<div className={'absolute bottom-0 w-full h-[120px]'} style={{background: 'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 95%) 55%, rgba(39, 73, 139, 4%) 98%)'}}></div>
 		</div>
 	);
 }
