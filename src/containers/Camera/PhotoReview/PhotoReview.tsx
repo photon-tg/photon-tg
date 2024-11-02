@@ -32,10 +32,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 				<BattleBanner />
 			</div>
 			<img
-				className={'absolute top-[50%]'}
-				style={{
-					transform: 'translateY(-50%) translateY(-35px)',
-				}}
+				className={'absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]'}
 				src={image}
 				alt={''}
 			/>
