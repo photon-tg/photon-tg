@@ -73,7 +73,7 @@ export function Camera() {
 		<div className={'relative h-full bg-[#062243]'}>
 			<button
 				onClick={goBack}
-				className={'absolute left-[10px] top-[10px] z-10'}
+				className={'absolute left-[10px] top-[10px] z-[5000]'}
 			>
 				<ArrowIcon />
 			</button>
