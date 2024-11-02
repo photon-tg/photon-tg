@@ -16,6 +16,7 @@ export interface SignUpData {
 	last_name?: string;
 	telegram_id: string;
 	is_premium?: boolean;
+	username?: string;
 }
 
 export enum UserErrorType {

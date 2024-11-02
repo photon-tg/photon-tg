@@ -6,6 +6,11 @@ export const levelToCoins = new Map<Level, number>([
 	[3, 500000],
 	[4, 2500000],
 	[5, 10000000],
+	[6, 50000000],
+	[7, 100000000],
+	[8, 1000000000],
+	[9, 40000000000],
+	[10, Infinity],
 ]);
 export const levelToCoinsPerTap = new Map<Level, number>([
 	[1, 1],
@@ -13,6 +18,11 @@ export const levelToCoinsPerTap = new Map<Level, number>([
 	[3, 3],
 	[4, 4],
 	[5, 5],
+	[6, 6],
+	[7, 7],
+	[8, 8],
+	[9, 9],
+	[10, 10],
 ]);
 export const levelToMaxEnergy = new Map<Level, number>([
 	[1, 1000],
@@ -20,6 +30,11 @@ export const levelToMaxEnergy = new Map<Level, number>([
 	[3, 2000],
 	[4, 2500],
 	[5, 3000],
+	[6, 3500],
+	[7, 4000],
+	[8, 4500],
+	[9, 5000],
+	[10, 5500],
 ]);
 
 export const levelToPhotoReward = new Map<Level, number>([
@@ -28,6 +43,11 @@ export const levelToPhotoReward = new Map<Level, number>([
 	[3, 20000],
 	[4, 40000],
 	[5, 80000],
+	[6, 160000],
+	[7, 320000],
+	[8, 640000],
+	[9, 1280000],
+	[10, 2560000],
 ]);
 
 export const levelToPhotoPassiveIncome = new Map<Level, number>([
@@ -36,6 +56,11 @@ export const levelToPhotoPassiveIncome = new Map<Level, number>([
 	[3, 200],
 	[4, 400],
 	[5, 800],
+	[6, 1600],
+	[7, 3200],
+	[8, 6400],
+	[9, 12800],
+	[10, 25600],
 ]);
 
 export const levelToSelectReward = new Map<Level, number>([

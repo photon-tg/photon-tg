@@ -63,7 +63,7 @@ export function* operationBattleInitializeWorker() {
 		userId,
 	);
 
-	if (!userPhotoResponse.error && !!userPhotoResponse.data.id) {
+	if (!userPhotoResponse.error && !!userPhotoResponse?.data?.id) {
 		put(battleHasJoinedSet(true));
 	}
 

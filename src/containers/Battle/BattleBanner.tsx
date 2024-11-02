@@ -54,9 +54,9 @@ export function BattleBanner(props: BattleBannerProps) {
 			<span className={'mb-[10px] text-lg font-semibold'}>
 				{translation?.title}
 			</span>
-			<p className={'font-regular mb-[5px] text-sm'}>
+			<div className={'font-regular mb-[5px] text-sm'}>
 				{documentToReactComponents(translation?.description as any)}
-			</p>
+			</div>
 			{!noTime && (
 				<div className={'text-sm font-semibold text-[#488ae5]'}>
 					Time left for voting {formattedHours}hrs {formattedMinutes}min

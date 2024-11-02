@@ -24,6 +24,7 @@ export function getSignUpData(
 		last_name: telegramUser.last_name,
 		is_premium: telegramUser.is_premium ?? false,
 		telegram_id: telegramId,
+		username: telegramUser.username,
 	};
 }
 
