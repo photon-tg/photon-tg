@@ -100,7 +100,7 @@ export function Camera() {
 			/>
 			<div
 				className={
-					'absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[40px]'
+					'z-[300] absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[40px]'
 				}
 			>
 				<button />
@@ -118,6 +118,7 @@ export function Camera() {
 					<CameraSwitch />
 				</button>
 			</div>
+			<div className={'absolute bottom-0 w-full h-[100px]'} style={{background: 'linear-gradient(180deg, rgba(39, 71, 132, 0) 0%, #1B325F 42.5%, #0F1B38 87.5%)'}}></div>
 		</div>
 	);
 }
