@@ -20,7 +20,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 
 	return (
 		<div
-			className={'gap-y-[10px] relative grid h-full grid-rows-[min-content_1fr_min-content] bg-[#062243] px-[10px] pt-[20px]'}
+			className={'gap-y-[10px] relative grid h-full grid-rows-[min-content_1fr_min-content] bg-[#062243] px-[10px] pt-[20px] items-center'}
 		>
 			<button
 				onClick={goBack}
