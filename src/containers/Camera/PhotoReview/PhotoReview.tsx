@@ -56,7 +56,11 @@ export function PhotoReview(props: PhotoReviewProps) {
 					size={'sm'}
 					height={60}
 				>
-					<span className={''}>Send to battle</span>
+					<span className={''}>
+						{process.env.NEXT_PUBLIC_BATTLES_HIDDEN === 'true'
+							? 'Save'
+							: 'Send to battle'}
+					</span>
 				</Button>
 			</div>
 		</div>

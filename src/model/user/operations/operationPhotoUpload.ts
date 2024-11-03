@@ -44,7 +44,7 @@ export function* operationPhotoUploadWorker({
 		> = yield call(
 			uploadPhotoToBucket,
 			userId,
-			battleId,
+			process.env.NEXT_PUBLIC_BATTLES_HIDDEN === 'true' ? 'nobattle' : battleId,
 			photoId,
 			photoArrayBuffer,
 		);
@@ -64,7 +64,10 @@ export function* operationPhotoUploadWorker({
 		const uploadedPhotoResponse: FetchResult<AddBattlePhotoMutation> =
 			yield call(uploadPhoto, {
 				userId,
-				battleId,
+				battleId:
+					process.env.NEXT_PUBLIC_BATTLES_HIDDEN === 'true'
+						? undefined
+						: battleId,
 				level,
 				url: `${bucketURL}/${uploadPhotoToBucketResponse.data?.fullPath}`,
 				coins: newCoins,
@@ -91,7 +94,6 @@ export function* operationPhotoUploadWorker({
 		);
 
 		yield put(userSet(updatedUser));
-		yield put(userCoinsAdd(coinsForPhoto));
 		yield put(userPhotosSet(newPhotos));
 		yield put(battleHasJoinedSet(true));
 		yield put(operationBattleSelect(battleId));

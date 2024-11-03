@@ -8,11 +8,17 @@ import {
 	userIsDailyRewardClaimedSelector,
 } from '@/model/user/selectors';
 
-const tabs = [
+const tabs: {
+	icon: string;
+	name: string;
+	url: string;
+	isHidden?: boolean;
+}[] = [
 	{
 		icon: '/assets/icons/battle.svg',
 		name: 'Battle',
 		url: '/battle',
+		isHidden: process.env.NEXT_PUBLIC_BATTLES_HIDDEN === 'true',
 	},
 	{
 		icon: '/assets/icons/camera.svg',
@@ -44,9 +50,11 @@ export function Navigation() {
 				'z-10 mx-auto my-0 flex h-[71px] w-full justify-between rounded-tl rounded-tr bg-[#041837] p-[5px] px-[10px] pb-[10px] drop-shadow-[0_-15px_10px_rgba(0,0,0,0.1)]'
 			}
 		>
-			{tabs.map((tab) => (
-				<Tab {...tab} key={tab.name} isActive={tab.url === pathname} />
-			))}
+			{tabs
+				.filter(({ isHidden }) => !isHidden)
+				.map((tab) => (
+					<Tab {...tab} key={tab.name} isActive={tab.url === pathname} />
+				))}
 		</div>
 	);
 }

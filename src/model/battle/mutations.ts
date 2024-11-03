@@ -25,7 +25,7 @@ export const LikePhoto = graphql(`
 export const AddBattlePhoto = graphql(`
 	mutation AddBattlePhoto(
 		$userId: UUID!
-		$battleId: BigInt!
+		$battleId: BigInt
 		$url: String!
 		$userLevel: Int!
 		$coins: Int!

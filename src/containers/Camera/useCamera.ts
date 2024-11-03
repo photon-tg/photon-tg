@@ -39,7 +39,7 @@ export function useCamera() {
 		setTimeout(() => {
 			router.replace(HOME_PAGE);
 		}, 2000);
-	}, [dispatch, image, user]);
+	}, [dispatch, image, router, user]);
 
 	const onReject = useCallback(() => {
 		setImage(null);

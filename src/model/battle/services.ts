@@ -210,7 +210,7 @@ export const uploadPhotoToBucket = (
 
 export interface UploadPhotoParams {
 	userId: string;
-	battleId: string;
+	battleId?: string;
 	level: Level;
 	coins: number;
 	url: string;
