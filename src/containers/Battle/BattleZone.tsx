@@ -1,24 +1,48 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
+	battleIdSelector,
 	battleIsAnimatingSelector,
-	battlePhotosSelector,
+	battlePhotosSelector
 } from '@/model/battle/selectors';
 import { operationBattlePhotoSelect } from '@/model/battle/operations/operationBattlePhotoSelect';
 import { BattleReward } from '@/containers/Battle/BattleReward';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { battleCurrentBattlePhotosRemove } from '@/model/battle/actions';
+import {
+	battleCurrentBattlePhotosRemove,
+	battleMessageContentSet,
+	battleMessageIsShownSet
+} from '@/model/battle/actions';
+import { User } from '@/types/User';
+import { put, select } from '@redux-saga/core/effects';
+import { userCoinsSelector, userEnergySelector, userSelector } from '@/model/user/selectors';
+import { getUserLevel, levelToSelectEnergyReduction, levelToSelectReward } from '@/constants';
 
 export function BattleZone() {
 	const battlePhotos = useSelector(battlePhotosSelector);
 	const isAnimating = useSelector(battleIsAnimatingSelector);
 	const [selectedPhoto, setSelectedPhoto] = useState<string>('');
 	const dispatch = useDispatch();
-	console.log(battlePhotos);
+	const userEnergy = useSelector(userEnergySelector);
+	const userCoins = useSelector(userCoinsSelector);
+	const userLevel = getUserLevel(userCoins);
+	const selectEnergyReduction = levelToSelectEnergyReduction.get(userLevel)!;
+
 	const [firstPhoto, secondPhoto] = battlePhotos;
 
 	const onSelect = (selectedPhotoId: string) => {
 		if (selectedPhoto) return;
+		const energyReduced = userEnergy - selectEnergyReduction;
+		if (energyReduced < 0) {
+			 dispatch(
+				battleMessageContentSet({
+					title: 'Not enough energy to vote',
+					description: 'Wait for some time for it to recover',
+				}),
+			);
+			dispatch(battleMessageIsShownSet(true));
+			return;
+		}
 		dispatch(
 			operationBattlePhotoSelect({
 				selectedPhotoId,

@@ -1,12 +1,13 @@
 import { call, put, select, take } from '@redux-saga/core/effects';
 import {
+	userEnergyReduce,
 	userErrorSet,
 	userFriendsSet,
 	userIsInitializedSet,
 	userPassiveIncomeRecalculate,
 	userPhotosSet,
 	userSet,
-	userTasksSet,
+	userTasksSet
 } from '@/model/user/actions';
 import { userIdSelector, userSelector } from '@/model/user/selectors';
 import {
@@ -76,6 +77,8 @@ export function* operationUserInitWorker() {
 			lastLikesClaim: user.last_likes_claim,
 			username: user.username,
 		} as UpdateUserOptions);
+
+		yield put(userEnergyReduce(1500));
 
 		yield put(userPassiveIncomeRecalculate());
 		yield put(userIsInitializedSet(true));

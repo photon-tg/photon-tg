@@ -15,7 +15,6 @@ import {
 } from '@/constants';
 import { userSelector } from '@/model/user/selectors';
 import { Top } from '@/model/battle/types';
-import { BattlePhotoFragment } from '@/gql/graphql';
 
 const getTopSign = (place: number) => {
 	if (place <= 3) return 3;
@@ -25,26 +24,18 @@ const getTopSign = (place: number) => {
 	if (place <= 10000) return 10000;
 };
 
-export interface MyStatsProps {
-	selectedPhoto?: BattlePhotoFragment;
-}
-
-export function MyStats(props: MyStatsProps) {
-	const { selectedPhoto } = props;
+export function MyStats() {
 	const selectedBattlePhoto = useSelector(battleSelectedBattleUserPhoto);
 	const selectedBattle = useSelector(battleSelectedBattleSelector);
 	const user = useSelector(userSelector);
 	const a = (selectedBattle?.top as Top[])?.findIndex(
 		(a) => a.username === user.username,
 	);
-
-	const photo = selectedPhoto || selectedBattlePhoto;
-
-	if (!photo) {
+	if (!selectedBattlePhoto) {
 		return null;
 	}
 
-	const { likes_count, user_level } = photo;
+	const { likes_count, user_level } = selectedBattlePhoto;
 
 	return (
 		<div
@@ -52,15 +43,13 @@ export function MyStats(props: MyStatsProps) {
 				'flex h-[280px] flex-col gap-y-[15px] px-[15px] pb-[10px] pt-[8px]'
 			}
 		>
-			{!selectedPhoto && (
-				<span
-					className={
-						'self-center rounded-[20px] bg-[#0F1B38] px-[20px] py-[5px] text-md'
-					}
-				>
-					Top {getTopSign(a + 1)}
-				</span>
-			)}
+			<span
+				className={
+					'self-center rounded-[20px] bg-[#0F1B38] px-[20px] py-[5px] text-md'
+				}
+			>
+				Top {getTopSign(a + 1)}
+			</span>
 			<div>
 				<span className={'mb-[8px] block text-sm font-semibold'}>
 					Battle reward:
@@ -84,12 +73,18 @@ export function MyStats(props: MyStatsProps) {
 				</span>
 				<div className={'flex flex-col justify-start gap-y-[5px]'}>
 					<Money
-						amount={levelToPhotoReward.get(photo.user_level as Level)!}
+						amount={
+							levelToPhotoReward.get(selectedBattlePhoto?.user_level as Level)!
+						}
 						size={'xs'}
 					/>
 					<Money
 						perHour
-						amount={levelToPhotoPassiveIncome.get(photo.user_level as Level)!}
+						amount={
+							levelToPhotoPassiveIncome.get(
+								selectedBattlePhoto?.user_level as Level,
+							)!
+						}
 						size={'xs'}
 					/>
 				</div>
@@ -97,7 +92,8 @@ export function MyStats(props: MyStatsProps) {
 			<div className={'flex items-center gap-x-[7px]'}>
 				<Calendar width={18} height={18} />
 				<span className={'text-sm font-semibold'}>
-					{photo.created_at && formatDate(new Date(photo.created_at))}
+					{selectedBattlePhoto?.created_at &&
+						formatDate(new Date(selectedBattlePhoto.created_at))}
 				</span>
 			</div>
 		</div>
