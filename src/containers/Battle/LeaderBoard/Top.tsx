@@ -40,20 +40,25 @@ export function TopCard({
 			}
 		>
 			<div className={'flex items-center justify-start'}>
-				<div className={'mr-[5px] block w-[20px] text-sm'}>{place}</div>
-				<div
-					className={
-						'mr-[5px] w-[90px] overflow-hidden overflow-ellipsis whitespace-nowrap text-sm'
-					}
-				>
-					{first_name}
-				</div>
-				<div className={'flex flex-row items-center gap-x-[5px] text-sm'}>
-					<img width={17} src={'/assets/icons/like.svg'} />
-					<span className={'text-sm'}>{like_count}</span>
+				<div className={'flex items-center justify-start'}>
+					<div className={'mr-[5px] block w-[20px] text-sm'}>{place}</div>
+					<div
+						className={
+							'mr-[5px] w-[90px] overflow-hidden overflow-ellipsis whitespace-nowrap text-sm'
+						}
+					>
+						{first_name}
+					</div>
+					<div className={'flex flex-row items-center gap-x-[5px] text-sm'}>
+						<img width={17} src={'/assets/icons/like.svg'} />
+						<span className={'text-sm'}>{like_count}</span>
+					</div>
 				</div>
 			</div>
-			<div className={'text-sm font-semibold text-[#42C2FF]'}>{place}</div>
+			{place <= 3 && (<div className={'flex items-center justify-start gap-[5px] w-[30px]'}>
+				<img width={17} src={'/assets/icons/crown.svg'} />
+				<div className={'text-sm font-semibold text-[#42C2FF]'}>{place}</div>
+			</div>)}
 		</div>
 	);
 }
