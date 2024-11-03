@@ -21,6 +21,7 @@ import { battleIdSelector } from '@/model/battle/selectors';
 import { uploadPhoto, uploadPhotoToBucket } from '@/model/battle/services';
 import { bucketURL } from '@/api/supabase';
 import { battleHasJoinedSet } from '@/model/battle/actions';
+import { operationBattleSelect } from '@/model/battle/operations/operationBattleSelect';
 
 export const operationPhotoUpload = createAction<string>(
 	'operation:user/photos/upload',
@@ -93,6 +94,7 @@ export function* operationPhotoUploadWorker({
 		yield put(userCoinsAdd(coinsForPhoto));
 		yield put(userPhotosSet(newPhotos));
 		yield put(battleHasJoinedSet(true));
+		yield put(operationBattleSelect(battleId));
 	} catch (error) {
 		Sentry.captureException(error, {
 			contexts: {

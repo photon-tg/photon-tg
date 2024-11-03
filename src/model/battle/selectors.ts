@@ -33,6 +33,8 @@ export const battleCanJoinSelector = (state: AppState) =>
 	state.battle.data.canJoin;
 export const battleTimeLeftToJoinSelector = (state: AppState) =>
 	state.battle.data.timeLeftToJoin;
+export const battleTimeLeftToVoteSelector = (state: AppState) =>
+	state.battle.data.timeLeftToVote;
 
 export const battleMessageSelector = (state: AppState) =>
 	state.battle.data.message;

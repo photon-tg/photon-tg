@@ -20,6 +20,7 @@ import { userIdSelector } from '@/model/user/selectors';
 import { operationBattleSelect } from '@/model/battle/operations/operationBattleSelect';
 import { operationBattleCalculateTimeToJoin } from '@/model/battle/operations/operationBattleCalculateTimeToJoin';
 import { operationTranslationBattlesFetch } from '@/model/translations/operations/operationTranslationBattlesFetch';
+import { operationBattleTimeUpdate } from '@/model/battle/operations/operationBattleTimeUpdate';
 
 export const operationBattleInitialize = createAction(
 	'operation:battle/initialize',
@@ -66,6 +67,8 @@ export function* operationBattleInitializeWorker() {
 	if (!userPhotoResponse.error && !!userPhotoResponse?.data?.id) {
 		put(battleHasJoinedSet(true));
 	}
+
+	yield put(operationBattleTimeUpdate());
 
 	yield put(battleIsInitializedSet(true));
 }

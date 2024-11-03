@@ -5,11 +5,7 @@ import {
 	battleMessageContentSet,
 } from '@/model/battle/actions';
 import { likePhoto, viewPhotos } from '@/model/battle/services';
-import {
-	userCoinsSelector,
-	userIdSelector,
-	userSelector,
-} from '@/model/user/selectors';
+import { userSelector } from '@/model/user/selectors';
 import { battleIdSelector } from '@/model/battle/selectors';
 import {
 	getUserLevel,

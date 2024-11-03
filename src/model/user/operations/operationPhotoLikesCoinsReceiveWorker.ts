@@ -34,6 +34,7 @@ export function* operationPhotoLikesCoinsReceiveWorker() {
 	}
 
 	const likesCount = likesResponse.data || 0;
+	// TODO: redo
 	const award = likesCount * levelToReceiveLikeReward.get(level as Level)!;
 
 	if (award <= 0) return;

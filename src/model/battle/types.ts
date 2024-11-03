@@ -24,6 +24,10 @@ export interface BattleState {
 		canJoin: boolean;
 		hasJoined: boolean;
 		timeLeftToJoin: number | null;
+		timeLeftToVote?: {
+			formattedHours: string;
+			formattedMinutes: string;
+		};
 		message: {
 			isShown: boolean;
 			content?: {

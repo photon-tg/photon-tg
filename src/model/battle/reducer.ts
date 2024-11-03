@@ -12,6 +12,7 @@ import {
 	battleMessageIsShownSet,
 	battleSelectedBattleSet,
 	battleTimeLeftToJoinSet,
+	battleTimeLeftToVoteSet,
 } from '@/model/battle/actions';
 
 export const getInitialState = (): BattleState => ({
@@ -87,6 +88,12 @@ const battleReducer = createReducer<BattleState>(initialState, (builder) =>
 			battleTimeLeftToJoinSet,
 			(draftState, { payload: timeLeftToJoin }) => {
 				draftState.data.timeLeftToJoin = timeLeftToJoin;
+			},
+		)
+		.addCase(
+			battleTimeLeftToVoteSet,
+			(draftState, { payload: timeLeftToVote }) => {
+				draftState.data.timeLeftToVote = timeLeftToVote;
 			},
 		)
 		.addCase(battleMessageIsShownSet, (draftState, { payload: isShown }) => {

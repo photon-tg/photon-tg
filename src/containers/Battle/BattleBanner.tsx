@@ -1,7 +1,10 @@
 import { useSelector } from 'react-redux';
 import { translationsCurrentBattleSelect } from '@/model/translations/selectors';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { battleCurrentBattleSelector } from '@/model/battle/selectors';
+import {
+	battleCurrentBattleSelector,
+	battleTimeLeftToVoteSelector,
+} from '@/model/battle/selectors';
 import { BattleContent } from '@/model/translations/types';
 
 export interface BattleBannerProps {
@@ -13,37 +16,9 @@ export function BattleBanner(props: BattleBannerProps) {
 	const translation = useSelector(
 		translationsCurrentBattleSelect,
 	) as BattleContent;
-	const currentBattle = useSelector(battleCurrentBattleSelector);
-	const getTimeLeftForVoting = (): {
-		formattedHours: string;
-		formattedMinutes: string;
-	} => {
-		const now = new Date();
+	const timeLeftToVote = useSelector(battleTimeLeftToVoteSelector);
 
-		// Calculate the difference in milliseconds
-		const timeDiff =
-			new Date(currentBattle?.end_date ?? '').getTime() - now.getTime();
-
-		// If the time difference is negative, it means the end date has passed
-		if (timeDiff <= 0) {
-			return { formattedHours: '0', formattedMinutes: '0' };
-		}
-
-		// Convert the time difference from milliseconds to minutes
-		const totalMinutes = Math.floor(timeDiff / (1000 * 60));
-
-		// Calculate hours and remaining minutes
-		const hours = Math.floor(totalMinutes / 60);
-		const minutes = totalMinutes % 60;
-
-		// Format hours and minutes as hh:mm
-		const formattedHours = hours.toString();
-		const formattedMinutes = minutes.toString();
-
-		return { formattedHours, formattedMinutes };
-	};
-
-	const { formattedHours, formattedMinutes } = getTimeLeftForVoting();
+	const { formattedHours, formattedMinutes } = timeLeftToVote || {};
 
 	return (
 		<div

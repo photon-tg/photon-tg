@@ -16,5 +16,6 @@ export const CORE_USER_FIELDS = graphql(`
 		is_referred
 		is_premium
 		last_likes_claim
+		username
 	}
 `);

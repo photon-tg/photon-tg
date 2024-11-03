@@ -11,7 +11,7 @@ import { BattlePhotoFragment, PhotoLikeFragment } from '@/gql/graphql';
 import { userIdSelector } from '@/model/user/selectors';
 
 export const operationBattleSelect = createAction<string>(
-	'battle/battle/select',
+	'operation:battle/battle/select',
 );
 
 export function* operationBattleSelectWorker({

@@ -39,6 +39,10 @@ export const battleCanJoinSet = createAction<boolean>('battle/canJoin/set');
 export const battleTimeLeftToJoinSet = createAction<number | null>(
 	'battle/timeLeftToJoin/set',
 );
+export const battleTimeLeftToVoteSet = createAction<{
+	formattedHours: string;
+	formattedMinutes: string;
+}>('battle/timeLeftToVote/set');
 export const battleMessageIsShownSet = createAction<boolean>(
 	'battle/message/isShown/set',
 );
