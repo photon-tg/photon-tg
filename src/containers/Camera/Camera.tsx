@@ -29,14 +29,6 @@ export function Camera() {
 	} = useCamera();
 	const [isCameraInitialized, setIsCameraInitialized] = useState(false);
 
-	useEffect(() => {
-		window.Telegram.WebApp.setHeaderColor('#000000');
-
-		return () => {
-			window.Telegram.WebApp.setHeaderColor('#092646');
-		};
-	}, []);
-
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
 			<Layout>
@@ -124,10 +116,10 @@ export function Camera() {
 			</div>
 			{isCameraInitialized && (
 				<div
-					className={'absolute bottom-0 h-[120px] w-full'}
+					className={'absolute bottom-0 h-[140px] w-full'}
 					style={{
 						background:
-							'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 95%) 55%, rgba(39, 73, 139, 4%) 98%)',
+							'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 99%) 55%, rgba(39, 73, 139, 5%) 98%)',
 					}}
 				></div>
 			)}
