@@ -6,6 +6,11 @@ export interface BattleContent {
 	id: string;
 }
 
+export interface CommonTranslation {
+	name: string;
+	value: string;
+}
+
 export interface BattleTranslations {
 	battles: Record<string, BattleContent>;
 }
@@ -15,9 +20,11 @@ export interface TranslationsState {
 		Locales,
 		{
 			battles: BattleTranslations;
+			commonTranslations: Record<string, string>;
 		}
 	>;
 	meta: {
+		isInitialized: boolean;
 		selectedLocale: Locales;
 	};
 }

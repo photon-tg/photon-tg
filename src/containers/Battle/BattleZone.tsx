@@ -12,14 +12,8 @@ import {
 	battleMessageContentSet,
 	battleMessageIsShownSet,
 } from '@/model/battle/actions';
-import {
-	userCoinsSelector,
-	userEnergySelector,
-} from '@/model/user/selectors';
-import {
-	getUserLevel,
-	levelToSelectEnergyReduction,
-} from '@/constants';
+import { userCoinsSelector, userEnergySelector } from '@/model/user/selectors';
+import { getUserLevel, levelToSelectEnergyReduction } from '@/constants';
 
 export function BattleZone() {
 	const battlePhotos = useSelector(battlePhotosSelector);

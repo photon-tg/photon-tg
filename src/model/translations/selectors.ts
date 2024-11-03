@@ -10,6 +10,8 @@ export const selectedLocaleSelector = (state: AppState) =>
 
 export const translationsDataSelector = (state: AppState) =>
 	state.translations.data;
+export const translationsIsInitializedSelector = (state: AppState) =>
+	state.translations.meta.isInitialized;
 
 export const translationsBattlesSelector = createSelector(
 	[selectedLocaleSelector, translationsDataSelector],
@@ -25,4 +27,9 @@ export const translationsSelectedBattleSelect = createSelector(
 	[battleSelectedBattleSelector, translationsBattlesSelector],
 	(selectedBattle, battles) =>
 		battles && selectedBattle && battles[selectedBattle.id],
+);
+
+export const translationsCommonTranslationsSelect = createSelector(
+	[selectedLocaleSelector, translationsDataSelector],
+	(locale, data) => data?.[locale]?.commonTranslations,
 );

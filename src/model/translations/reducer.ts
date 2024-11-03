@@ -3,6 +3,8 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
 	selectedLocaleSet,
 	setTranslationBattles,
+	translationsCommonTranslationsSet,
+	translationsIsInitializedSet,
 } from '@/model/translations/actions';
 
 export const getInitialState = (): TranslationsState => ({
@@ -11,14 +13,17 @@ export const getInitialState = (): TranslationsState => ({
 			battles: {
 				battles: {},
 			},
+			commonTranslations: {},
 		},
 		ru: {
 			battles: {
 				battles: {},
 			},
+			commonTranslations: {},
 		},
 	},
 	meta: {
+		isInitialized: false,
 		selectedLocale: 'en-US',
 	},
 });
@@ -35,9 +40,26 @@ const translationsReducer = createReducer<TranslationsState>(
 					draftState.data[locale].battles.battles[battle.id] = battle;
 				}
 			})
+			.addCase(
+				translationsCommonTranslationsSet,
+				(draftState, { payload: commonTranslations }) => {
+					const locale = draftState.meta.selectedLocale;
+					// @ts-ignore
+					commonTranslations?.map((c) => {
+						draftState.data[locale].commonTranslations[c.fields.name] =
+							c.fields.value;
+					});
+				},
+			)
 			.addCase(selectedLocaleSet, (draftState, { payload: locale }) => {
 				draftState.meta.selectedLocale = locale;
-			}),
+			})
+			.addCase(
+				translationsIsInitializedSet,
+				(draftState, { payload: isInitialized }) => {
+					draftState.meta.isInitialized = isInitialized;
+				},
+			),
 );
 
 export default translationsReducer;

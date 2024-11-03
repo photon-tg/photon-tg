@@ -13,6 +13,8 @@ import { userEnergyAdd } from '@/model/user/actions';
 import { operationUserInit } from '@/model/user/operations/operationUserInit';
 import { battleIsInitializedSelector } from '@/model/battle/selectors';
 import { operationBattleInitialize } from '@/model/battle/operations/operationBattleInitialize';
+import { translationsIsInitializedSelector } from '@/model/translations/selectors';
+import { operationTranslationsInit } from '@/model/translations/operations/operationTranslationsInit';
 
 export interface AppContext {}
 
@@ -29,6 +31,9 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	);
 	const isUserInitialized = useSelector(userIsInitializedSelector);
 	const isBattleInitialized = useSelector(battleIsInitializedSelector);
+	const isTranslationsInitialized = useSelector(
+		translationsIsInitializedSelector,
+	);
 
 	useEffect(() => {
 		if (!isDetected || (!process.env.NEXT_PUBLIC_ALLOW_DESKTOP! && !isMobile)) {
@@ -47,12 +52,18 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 			dispatch(operationBattleInitialize());
 			return;
 		}
+
+		if (!isTranslationsInitialized) {
+			dispatch(operationTranslationsInit());
+			return;
+		}
 	}, [
 		dispatch,
 		isApplicationInitialized,
 		isBattleInitialized,
 		isDetected,
 		isMobile,
+		isTranslationsInitialized,
 		isUserInitialized,
 	]);
 
@@ -75,7 +86,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [isApplicationInitialized, isUserInitialized]);
+	}, [dispatch, isApplicationInitialized, isUserInitialized]);
 
 	const value = useMemo(() => ({}), []);
 
@@ -84,6 +95,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		isUserInitialized &&
 		isBattleInitialized &&
 		isApplicationInitialized &&
+		isTranslationsInitialized &&
 		(isMobile || process.env.NEXT_PUBLIC_ALLOW_DESKTOP);
 	return (
 		<AppContext.Provider value={value}>

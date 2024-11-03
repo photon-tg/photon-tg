@@ -16,7 +16,7 @@ export function Settings() {
 	};
 
 	return (
-		<div className={'h-[100px] w-[100px]'}>
+		<div className={'pb-[30px]'}>
 			<div className={'mb-[10px] text-lg'}>Languages</div>
 			<ul>
 				{Object.entries(Locale).map(([code, name]) => (
