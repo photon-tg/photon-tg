@@ -119,7 +119,7 @@ export function Camera() {
 					className={'absolute bottom-0 h-[140px] w-full'}
 					style={{
 						background:
-							'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 99%) 55%, rgba(39, 73, 139, 5%) 98%)',
+							'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 96%) 55%, rgba(39, 73, 139, 3%) 98%)',
 					}}
 				></div>
 			)}
