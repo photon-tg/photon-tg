@@ -20,7 +20,9 @@ export function PhotoReview(props: PhotoReviewProps) {
 
 	return (
 		<div
-			className={'gap-y-[10px] relative grid h-full grid-rows-[min-content_1fr_min-content] bg-[#062243] px-[10px] pt-[20px] items-center justify-center justify-items-center'}
+			className={
+				'relative grid h-full grid-rows-[min-content_1fr_min-content] items-center justify-center justify-items-center gap-y-[10px] bg-[#062243] px-[10px] pt-[20px]'
+			}
 		>
 			<button
 				onClick={goBack}
@@ -33,15 +35,11 @@ export function PhotoReview(props: PhotoReviewProps) {
 			</div>
 			<img
 				className={'rounded-[10px]'}
-				style={{height: 'calc(100vh - 230px)'}}
+				style={{ height: 'calc(100vh - 230px)' }}
 				src={image}
 				alt={''}
 			/>
-			<div
-				className={
-					'flex w-full justify-between gap-x-[10px] pb-[25px]'
-				}
-			>
+			<div className={'flex w-full justify-between gap-x-[10px] pb-[25px]'}>
 				<Button
 					disabled={isPhotoUploading}
 					onClick={onReject}

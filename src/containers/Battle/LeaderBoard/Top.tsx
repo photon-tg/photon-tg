@@ -55,10 +55,12 @@ export function TopCard({
 					</div>
 				</div>
 			</div>
-			{place <= 3 && (<div className={'flex items-center justify-start gap-[5px] w-[30px]'}>
-				<img width={17} src={'/assets/icons/crown.svg'} />
-				<div className={'text-sm font-semibold text-[#42C2FF]'}>{place}</div>
-			</div>)}
+			{place <= 3 && (
+				<div className={'flex w-[30px] items-center justify-start gap-[5px]'}>
+					<img width={17} src={'/assets/icons/crown.svg'} />
+					<div className={'text-sm font-semibold text-[#42C2FF]'}>{place}</div>
+				</div>
+			)}
 		</div>
 	);
 }

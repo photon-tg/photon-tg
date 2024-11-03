@@ -74,7 +74,9 @@ export function Camera() {
 		<div className={'relative h-full bg-[#062243]'}>
 			<button
 				onClick={goBack}
-				className={'px-[10px] py-[10px] absolute left-[10px] top-[10px] z-[5000]'}
+				className={
+					'absolute left-[10px] top-[10px] z-[5000] px-[10px] py-[10px]'
+				}
 			>
 				<ArrowIcon />
 			</button>
@@ -102,7 +104,7 @@ export function Camera() {
 			/>
 			<div
 				className={
-					'z-[300] absolute bottom-0 left-[50%] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[40px]'
+					'absolute bottom-0 left-[50%] z-[300] grid w-full max-w-[375px] translate-x-[-50%] grid-cols-3 justify-items-center pb-[40px]'
 				}
 			>
 				<button />
@@ -120,7 +122,15 @@ export function Camera() {
 					<CameraSwitch />
 				</button>
 			</div>
-			{isCameraInitialized && <div className={'absolute bottom-0 w-full h-[120px]'} style={{background: 'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 95%) 55%, rgba(39, 73, 139, 4%) 98%)'}}></div>}
+			{isCameraInitialized && (
+				<div
+					className={'absolute bottom-0 h-[120px] w-full'}
+					style={{
+						background:
+							'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 95%) 55%, rgba(39, 73, 139, 4%) 98%)',
+					}}
+				></div>
+			)}
 		</div>
 	);
 }

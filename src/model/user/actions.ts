@@ -42,4 +42,6 @@ export const userPassiveIncomeRecalculate = createAction(
 );
 export const userIsReferredSet = createAction<boolean>('user/isReferred/set');
 export const userFriendsSet = createAction<Friend[]>('user/friends/set');
-export const userLastLikesClaimSet = createAction<string>('user/lastLikesClaim/set');
+export const userLastLikesClaimSet = createAction<string>(
+	'user/lastLikesClaim/set',
+);
