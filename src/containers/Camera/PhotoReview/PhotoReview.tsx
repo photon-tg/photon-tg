@@ -21,12 +21,12 @@ export function PhotoReview(props: PhotoReviewProps) {
 	return (
 		<div
 			className={
-				'relative grid h-full grid-rows-[min-content_1fr_min-content] items-center justify-center justify-items-center gap-y-[10px] bg-[#062243] px-[10px] pt-[20px]'
+				'relative grid h-full grid-rows-[min-content_1fr_min-content] items-center justify-center justify-items-center gap-y-[10px] bg-[#062243] px-[10px] pt-[10px]'
 			}
 		>
 			<button
 				onClick={goBack}
-				className={'absolute left-[10px] top-[10px] z-10'}
+				className={'absolute left-[10px] top-[10px] z-10 px-[10px] py-[10px]'}
 			>
 				<ArrowIcon />
 			</button>
