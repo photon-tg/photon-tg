@@ -1,8 +1,8 @@
-export const Locale: Record<string, Locales> = {
-	English: 'en-US',
-	Russian: 'ru',
-};
+export type Locales = 'en-US' | 'ru';
+
+export enum Locale {
+	'en-US' = 'English',
+	'ru' = 'Русский',
+}
 
 const locales = ['English', 'Russian'];
-
-export type Locales = 'en-US' | 'ru';

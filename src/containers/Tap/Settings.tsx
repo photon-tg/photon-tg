@@ -19,9 +19,9 @@ export function Settings() {
 		<div className={'h-[100px] w-[100px]'}>
 			<div className={'mb-[10px] text-lg'}>Languages</div>
 			<ul>
-				{Object.entries(Locale).map(([name, code]) => (
+				{Object.entries(Locale).map(([code, name]) => (
 					<button
-						onClick={() => onSelect(code)}
+						onClick={() => onSelect(code as Locales)}
 						className={'flex flex-row items-center gap-x-[10px] py-[10px]'}
 						key={name}
 					>
