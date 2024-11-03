@@ -10,7 +10,7 @@ import Webcam from 'react-webcam';
 import { Layout } from '@/components/Layout/Layout';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/model/user/selectors';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { PhotoReview } from '@/containers/Camera/PhotoReview/PhotoReview';
 import { BattleBanner } from '@/containers/Battle/BattleBanner';
 
@@ -27,6 +27,7 @@ export function Camera() {
 		onAccept,
 		goBack,
 	} = useCamera();
+	const [isCameraInitialized, setIsCameraInitialized] = useState(false);
 
 	useEffect(() => {
 		window.Telegram.WebApp.setHeaderColor('#000000');
@@ -73,7 +74,7 @@ export function Camera() {
 		<div className={'relative h-full bg-[#062243]'}>
 			<button
 				onClick={goBack}
-				className={'absolute left-[10px] top-[10px] z-[5000]'}
+				className={'px-[10px] py-[10px] absolute left-[10px] top-[10px] z-[5000]'}
 			>
 				<ArrowIcon />
 			</button>
@@ -97,6 +98,7 @@ export function Camera() {
 				style={{
 					transform: 'translateY(-50%) translateY(-35px)',
 				}}
+				onUserMedia={() => setIsCameraInitialized(true)}
 			/>
 			<div
 				className={
@@ -118,7 +120,7 @@ export function Camera() {
 					<CameraSwitch />
 				</button>
 			</div>
-			<div className={'absolute bottom-0 w-full h-[120px]'} style={{background: 'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 95%) 55%, rgba(39, 73, 139, 4%) 98%)'}}></div>
+			{isCameraInitialized && <div className={'absolute bottom-0 w-full h-[120px]'} style={{background: 'linear-gradient(0deg, rgba(15, 27, 56, 100%) 0%, rgba(27, 50, 95, 95%) 55%, rgba(39, 73, 139, 4%) 98%)'}}></div>}
 		</div>
 	);
 }

@@ -33,7 +33,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 			</div>
 			<img
 				className={'rounded-[10px]'}
-				style={{height: 'calc(100vh - 230px)', aspectRatio: '16/9'}}
+				style={{height: 'calc(100vh - 230px)'}}
 				src={image}
 				alt={''}
 			/>
