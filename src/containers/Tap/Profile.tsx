@@ -7,10 +7,18 @@ import {
 	userPassiveIncomeSelector,
 } from '@/model/user/selectors';
 import { getUserLevel, getUserLevelProgress } from '@/constants';
+import { useModalContext } from '@/contexts/ModalContext';
+import { Settings } from '@/containers/Tap/Settings';
 
 export function Profile() {
 	const passiveIncome = useSelector(userPassiveIncomeSelector);
 	const user = useSelector(userDataSelector);
+
+	const { openModal } = useModalContext();
+
+	const openSettings = () => {
+		openModal(<Settings />);
+	};
 
 	return (
 		<div className={'mb-[5px] grid grid-cols-2 gap-x-[10px] pt-[5px]'}>
@@ -22,8 +30,18 @@ export function Profile() {
 					className={'rounded'}
 					alt={'avatar'}
 				/>
-				<div className={'grid content-start'}>
-					<span className={'mb-[7px] text-md'}>{user.user.first_name}</span>
+				<div className={'relative grid content-start'}>
+					<button
+						onClick={openSettings}
+						className={'absolute right-0 top-[5px] h-[18px] w-[18px]'}
+					>
+						<img src={'/assets/icons/settings.svg'} />
+					</button>
+					<span
+						className={'mb-[7px] overflow-hidden overflow-ellipsis text-md'}
+					>
+						{user.user.first_name || user.user.username}
+					</span>
 					<span className={'mb-[3px] text-md font-semibold text-sky-blue'}>
 						Level {getUserLevel(user.user.coins)}
 					</span>

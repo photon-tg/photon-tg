@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	battleIdSelector,
 	battleIsAnimatingSelector,
-	battlePhotosSelector
+	battlePhotosSelector,
 } from '@/model/battle/selectors';
 import { operationBattlePhotoSelect } from '@/model/battle/operations/operationBattlePhotoSelect';
 import { BattleReward } from '@/containers/Battle/BattleReward';
@@ -11,12 +10,16 @@ import { motion } from 'framer-motion';
 import {
 	battleCurrentBattlePhotosRemove,
 	battleMessageContentSet,
-	battleMessageIsShownSet
+	battleMessageIsShownSet,
 } from '@/model/battle/actions';
-import { User } from '@/types/User';
-import { put, select } from '@redux-saga/core/effects';
-import { userCoinsSelector, userEnergySelector, userSelector } from '@/model/user/selectors';
-import { getUserLevel, levelToSelectEnergyReduction, levelToSelectReward } from '@/constants';
+import {
+	userCoinsSelector,
+	userEnergySelector,
+} from '@/model/user/selectors';
+import {
+	getUserLevel,
+	levelToSelectEnergyReduction,
+} from '@/constants';
 
 export function BattleZone() {
 	const battlePhotos = useSelector(battlePhotosSelector);
@@ -34,7 +37,7 @@ export function BattleZone() {
 		if (selectedPhoto) return;
 		const energyReduced = userEnergy - selectEnergyReduction;
 		if (energyReduced < 0) {
-			 dispatch(
+			dispatch(
 				battleMessageContentSet({
 					title: 'Not enough energy to vote',
 					description: 'Wait for some time for it to recover',

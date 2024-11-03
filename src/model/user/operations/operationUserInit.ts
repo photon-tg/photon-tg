@@ -1,13 +1,12 @@
 import { call, put, select, take } from '@redux-saga/core/effects';
 import {
-	userEnergyReduce,
 	userErrorSet,
 	userFriendsSet,
 	userIsInitializedSet,
 	userPassiveIncomeRecalculate,
 	userPhotosSet,
 	userSet,
-	userTasksSet
+	userTasksSet,
 } from '@/model/user/actions';
 import { userIdSelector, userSelector } from '@/model/user/selectors';
 import {

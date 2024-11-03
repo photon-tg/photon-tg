@@ -5,8 +5,17 @@ import {
 	battleSelectedBattleSelector,
 } from '@/model/battle/selectors';
 
-export const translationsBattlesSelector = (state: AppState) =>
-	state.translations.data.battles.battles;
+export const selectedLocaleSelector = (state: AppState) =>
+	state.translations.meta.selectedLocale;
+
+export const translationsDataSelector = (state: AppState) =>
+	state.translations.data;
+
+export const translationsBattlesSelector = createSelector(
+	[selectedLocaleSelector, translationsDataSelector],
+	(locale, data) => data?.[locale]?.battles?.battles,
+);
+
 export const translationsCurrentBattleSelect = createSelector(
 	[battleCurrentBattleIdSelector, translationsBattlesSelector],
 	(battleId, battles) => battles && battleId && battles[battleId],

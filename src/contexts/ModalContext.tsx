@@ -10,6 +10,7 @@ import {
 	useMemo,
 	useState,
 } from 'react';
+import { cn } from '@/utils/cn';
 
 export interface ModalContext {
 	openModal(component: ReactNode): void;
@@ -46,7 +47,10 @@ export function ModalContextProvider({ children }: PropsWithChildren<{}>) {
 		<ModalContext.Provider value={value}>
 			<div
 				style={{ filter: modalContent ? 'blur(3px)' : '' }}
-				className={`h-full w-full ${modalContent && 'z-10 bg-dark-blue opacity-50'}`}
+				className={cn(
+					'h-full w-full',
+					modalContent && 'pointer-events-none z-10 bg-dark-blue opacity-50',
+				)}
 			>
 				{children}
 			</div>

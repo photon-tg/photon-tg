@@ -1,3 +1,5 @@
+import { Locales } from '@/constants/locales';
+
 export interface BattleContent {
 	title: string;
 	description: string;
@@ -9,8 +11,13 @@ export interface BattleTranslations {
 }
 
 export interface TranslationsState {
-	data: {
-		battles: BattleTranslations;
+	data: Record<
+		Locales,
+		{
+			battles: BattleTranslations;
+		}
+	>;
+	meta: {
+		selectedLocale: Locales;
 	};
-	meta: {};
 }

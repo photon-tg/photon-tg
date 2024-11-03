@@ -1,14 +1,26 @@
 import { TranslationsState } from '@/model/translations/types';
 import { createReducer } from '@reduxjs/toolkit';
-import { setTranslationBattles } from '@/model/translations/actions';
+import {
+	selectedLocaleSet,
+	setTranslationBattles,
+} from '@/model/translations/actions';
 
 export const getInitialState = (): TranslationsState => ({
 	data: {
-		battles: {
-			battles: {},
+		'en-US': {
+			battles: {
+				battles: {},
+			},
+		},
+		ru: {
+			battles: {
+				battles: {},
+			},
 		},
 	},
-	meta: {},
+	meta: {
+		selectedLocale: 'en-US',
+	},
 });
 
 const initialState = getInitialState();
@@ -16,13 +28,16 @@ const initialState = getInitialState();
 const translationsReducer = createReducer<TranslationsState>(
 	initialState,
 	(builder) =>
-		builder.addCase(
-			setTranslationBattles,
-			(draftState, { payload: battle }) => {
-				console.log(battle, 'b');
-				draftState.data.battles.battles[battle.id] = battle;
-			},
-		),
+		builder
+			.addCase(setTranslationBattles, (draftState, { payload: battle }) => {
+				const locale = draftState.meta.selectedLocale;
+				if (draftState.data[locale].battles.battles) {
+					draftState.data[locale].battles.battles[battle.id] = battle;
+				}
+			})
+			.addCase(selectedLocaleSet, (draftState, { payload: locale }) => {
+				draftState.meta.selectedLocale = locale;
+			}),
 );
 
 export default translationsReducer;

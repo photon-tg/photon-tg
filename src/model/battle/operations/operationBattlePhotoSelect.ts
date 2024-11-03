@@ -2,7 +2,8 @@ import { createAction, PayloadAction } from '@reduxjs/toolkit';
 import { call, put, select } from '@redux-saga/core/effects';
 import {
 	battleIsAnimatingSet,
-	battleMessageContentSet, battleMessageIsShownSet
+	battleMessageContentSet,
+	battleMessageIsShownSet,
 } from '@/model/battle/actions';
 import { likePhoto, viewPhotos } from '@/model/battle/services';
 import { userSelector } from '@/model/user/selectors';
@@ -36,7 +37,11 @@ export function* operationBattlePhotoSelectWorker({
 	const userLevel = getUserLevel(user.coins);
 	const selectReward = levelToSelectReward.get(userLevel)!;
 	const selectEnergyReduction = levelToSelectEnergyReduction.get(userLevel)!;
-	console.log(user.energy, selectEnergyReduction, user.energy - selectEnergyReduction);
+	console.log(
+		user.energy,
+		selectEnergyReduction,
+		user.energy - selectEnergyReduction,
+	);
 
 	const energyReduced = user.energy - selectEnergyReduction;
 	if (energyReduced < 0) {

@@ -48,8 +48,6 @@ export function* operationBattleInitializeWorker() {
 
 	if (photosResponse.error) return;
 
-	yield put(operationTranslationBattlesFetch({ type: 'currentBattle' }));
-
 	const shuffledPhotos = shuffle(photosResponse.data);
 	const [first, second] = shuffledPhotos;
 	yield put(battleCurrentBattlePhotosSet(shuffledPhotos));
@@ -70,5 +68,6 @@ export function* operationBattleInitializeWorker() {
 
 	yield put(operationBattleTimeUpdate());
 
+	yield put(operationTranslationBattlesFetch({ type: 'currentBattle' }));
 	yield put(battleIsInitializedSet(true));
 }
