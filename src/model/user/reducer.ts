@@ -24,6 +24,7 @@ import {
 	userTasksSet,
 	userTaskUpdate,
 	userTelegramUserSet,
+	userUsernameSet,
 } from '@/model/user/actions';
 import {
 	calculatePassiveIncome,
@@ -195,7 +196,12 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 						draftState.data.user.last_likes_claim = lastLikesClaim;
 					}
 				},
-			),
+			)
+			.addCase(userUsernameSet, (draftState, { payload: username }) => {
+				if (draftState.data.user) {
+					draftState.data.user.username = username;
+				}
+			}),
 );
 
 export default userReducer;

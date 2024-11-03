@@ -9,6 +9,7 @@ export const UPDATE_USER = graphql(`
 		$lastDailyReward: Datetime
 		$isReferred: Boolean
 		$lastLikesClaim: Datetime
+		$username: String
 	) {
 		updateusersCollection(
 			atMost: 1
@@ -19,6 +20,7 @@ export const UPDATE_USER = graphql(`
 				last_daily_reward: $lastDailyReward
 				energy: $energy
 				last_likes_claim: $lastLikesClaim
+				username: $username
 			}
 			filter: { id: { eq: $userId } }
 		) {

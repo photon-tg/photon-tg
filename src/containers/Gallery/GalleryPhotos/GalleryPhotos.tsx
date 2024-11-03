@@ -8,6 +8,7 @@ import {
 	useGalleryPhotos,
 } from '@/containers/Gallery/GalleryPhotos/useGalleryPhotos';
 import { BattlePhotoFragment } from '@/gql/graphql';
+import { MyStats } from '@/containers/Battle/LeaderBoard/Statistics/MyStats';
 
 export interface GalleryPhotosProps {
 	photos: BattlePhotoFragment[];
@@ -37,7 +38,7 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
 				}
 			>
 				{/* selected image */}
-				<div className={'relative'}>
+				<div className={'relative max-h-[280px]'}>
 					{/*arrows*/}
 					{hasPrevPage && (
 						<button
@@ -57,30 +58,7 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
 							<ArrowLeft />
 						</button>
 					)}
-					<div className={'relative'}>
-						<img
-							className={'h-[280px] w-full rounded object-cover'}
-							src={selectedImage.photo_url}
-							alt={''}
-						/>
-						<div
-							className={
-								'absolute bottom-[10px] right-[10px] flex items-center gap-x-[10px] rounded bg-dark-blue px-[10px] py-[5px]'
-							}
-						>
-							<Money
-								amount={
-									levelToPhotoReward.get(
-										selectedImage.user_level as Level,
-									) as number
-								}
-							/>
-							<div className={'flex items-center gap-x-[5px] text-md'}>
-								<Calendar width={18} height={18} />{' '}
-								{formatDate(new Date(selectedImage.created_at))}
-							</div>
-						</div>
-					</div>
+					<SelectedImage selectedImage={selectedImage} />
 				</div>
 				{/* all images */}
 				<div
@@ -110,6 +88,57 @@ export function GalleryPhotos(props: GalleryPhotosProps) {
 			<span className={'block text-center text-sm'}>
 				Page {page + 1} / {totalPages}
 			</span>
+		</div>
+	);
+}
+
+interface SelectedImageProps {
+	selectedImage: BattlePhotoFragment;
+}
+
+export function SelectedImage(props: SelectedImageProps) {
+	const { selectedImage } = props;
+	console.log(selectedImage, 'se');
+	if (selectedImage.battle_id) {
+		return (
+			<div
+				className={
+					'grid max-h-[280px] grid-cols-2 rounded-[10px] bg-[#274784CC]'
+				}
+			>
+				<img
+					className={
+						'h-[280px] rounded-bl-[10px] rounded-tl-[10px] object-cover'
+					}
+					src={selectedImage?.photo_url}
+				/>
+				<MyStats />
+			</div>
+		);
+	}
+
+	return (
+		<div className={'relative h-[280px]'}>
+			<img
+				className={'h-[280px] w-full rounded object-cover'}
+				src={selectedImage.photo_url}
+				alt={''}
+			/>
+			<div
+				className={
+					'absolute bottom-[10px] right-[10px] flex items-center gap-x-[10px] rounded bg-dark-blue px-[10px] py-[5px]'
+				}
+			>
+				<Money
+					amount={
+						levelToPhotoReward.get(selectedImage.user_level as Level) as number
+					}
+				/>
+				<div className={'flex items-center gap-x-[5px] text-md'}>
+					<Calendar width={18} height={18} />{' '}
+					{formatDate(new Date(selectedImage.created_at))}
+				</div>
+			</div>
 		</div>
 	);
 }

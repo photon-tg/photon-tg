@@ -13,6 +13,7 @@ import {
 	userReferredIdSet,
 	userSet,
 	userTelegramUserSet,
+	userUsernameSet,
 } from '@/model/user/actions';
 import { SignUpData, UserCredentials, UserErrorType } from '@/model/user/types';
 import { getSignUpData, getUserCredentials } from '@/model/user/utils';
@@ -37,6 +38,10 @@ export function* operationAuthenticateUserWorker() {
 		}
 
 		yield put(userTelegramUserSet(telegramData.user));
+
+		if (telegramData.user.username) {
+			yield put(userUsernameSet(telegramData.user.username));
+		}
 
 		if (telegramData.referrerId) {
 			yield put(userReferredIdSet(telegramData.referrerId));

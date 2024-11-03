@@ -74,6 +74,7 @@ export function* operationUserInitWorker() {
 			energy: user.energy,
 			coins: user.coins,
 			lastLikesClaim: user.last_likes_claim,
+			username: user.username,
 		} as UpdateUserOptions);
 
 		yield put(userPassiveIncomeRecalculate());
