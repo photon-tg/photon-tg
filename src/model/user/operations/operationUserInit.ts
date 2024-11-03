@@ -78,8 +78,6 @@ export function* operationUserInitWorker() {
 			username: user.username,
 		} as UpdateUserOptions);
 
-		yield put(userEnergyReduce(1500));
-
 		yield put(userPassiveIncomeRecalculate());
 		yield put(userIsInitializedSet(true));
 
