@@ -1,5 +1,5 @@
 import apolloClient from '@/api/graphql';
-import { GetBattles, GetUserBattlePhotos } from '@/model/battle/queries';
+import { GetBattles, GetLastBattles, GetUserBattlePhotos } from '@/model/battle/queries';
 import { parseNodes } from '@/utils/graphql';
 import {
 	BattleFragment,
@@ -29,6 +29,25 @@ export const getBattles = async (): Promise<
 > => {
 	const response = await apolloClient.query({
 		query: GetBattles,
+		fetchPolicy: 'no-cache',
+	});
+
+	const data = parseNodes(response.data.battlesCollection?.edges ?? []);
+
+	if (response.errors?.length) {
+		return {
+			error: true,
+		};
+	}
+
+	return { data };
+};
+
+export const getLastBattles = async (): Promise<
+	GetEntityResult<BattleFragment[]>
+> => {
+	const response = await apolloClient.query({
+		query: GetLastBattles,
 		fetchPolicy: 'no-cache',
 	});
 

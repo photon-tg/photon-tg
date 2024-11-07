@@ -12,6 +12,18 @@ export const GetBattles = graphql(`
 	}
 `);
 
+export const GetLastBattles = graphql(`
+	query GetLastBattles {
+		battlesCollection(last: 2) {
+			edges {
+				node {
+					...Battle
+				}
+			}
+		}
+	}
+`);
+
 export const GetBattlePhotos = graphql(`
 	query GetBattlePhotos($battleId: BigInt!) {
 		battle_photosCollection(filter: { battle_id: { eq: $battleId } }) {

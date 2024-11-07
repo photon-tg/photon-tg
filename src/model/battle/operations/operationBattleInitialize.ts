@@ -3,8 +3,8 @@ import { call, put, select } from '@redux-saga/core/effects';
 import {
 	getBattlePhotos,
 	getBattles,
-	GetEntityResult,
-	getUserBattlePhoto,
+	GetEntityResult, getLastBattles,
+	getUserBattlePhoto
 } from '@/model/battle/services';
 import { BattleFragment, BattlePhotoFragment } from '@/gql/graphql';
 import {
@@ -27,6 +27,7 @@ export const operationBattleInitialize = createAction(
 );
 
 export function* operationBattleInitializeWorker() {
+	yield put(battleIsInitializedSet(true));
 	const userId: string = yield select(userIdSelector);
 	const battlesResponse: GetEntityResult<BattleFragment[]> =
 		yield call(getBattles);
