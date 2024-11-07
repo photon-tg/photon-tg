@@ -16,7 +16,8 @@ export function* operationBattleCalculateTimeToJoinWorker() {
 	const currentBattle: BattleFragment = yield select(
 		battleCurrentBattleSelector,
 	);
-	const minutesSinceStart = minutesSinceUTCDate(currentBattle.start_date);
+	// @ts-ignore
+	const minutesSinceStart = minutesSinceUTCDate(currentBattle.start_date as string);
 	const isFirstHalf = minutesSinceStart < 720;
 	const timeLeftToJoin = isFirstHalf
 		? 720 - minutesSinceStart

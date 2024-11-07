@@ -50,8 +50,8 @@ export function* operationBattleTimeUpdateWorker() {
 		battleCurrentBattleSelector,
 	);
 	if (!currentBattle) return;
-
-	const minutesSinceStart = minutesSinceUTCDate(currentBattle.start_date);
+// @ts-ignore
+	const minutesSinceStart = minutesSinceUTCDate(currentBattle.start_date as string);
 	const isFirstHalf = minutesSinceStart < 720;
 	const timeLeftToJoin = isFirstHalf
 		? 720 - minutesSinceStart
@@ -64,7 +64,8 @@ export function* operationBattleTimeUpdateWorker() {
 	const timeLeftToVote: {
 		formattedHours: string;
 		formattedMinutes: string;
-	} = yield call(getTimeLeftForVoting, currentBattle.end_date);
+		// @ts-ignore
+	} = yield call(getTimeLeftForVoting, currentBattle?.end_date as string);
 
 	yield put(battleTimeLeftToVoteSet(timeLeftToVote));
 }
