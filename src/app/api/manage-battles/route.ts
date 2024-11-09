@@ -1,9 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { minutesSinceUTCDate } from '@/utils/date';
 
-const TWELVE_HOURS = 10;
-const TWENTY_FOUR_HOURS = 13;
-const THIRTY_SIX_HOURS = 17;
+const TWELVE_HOURS = 12;
+const TWENTY_FOUR_HOURS = 24;
+const THIRTY_SIX_HOURS = 36;
 
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
@@ -11,12 +11,12 @@ export const revalidate = 0;
 
 export async function GET(request: Request) {
 	try {
-		// const authHeader = request.headers.get('authorization');
-		// if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-		// 	return new Response('Unauthorized', {
-		// 		status: 401,
-		// 	});
-		// }
+		const authHeader = request.headers.get('authorization');
+		if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+			return new Response('Unauthorized', {
+				status: 401,
+			});
+		}
 
 		const supabase = createClient(
 			process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -104,13 +104,13 @@ export async function GET(request: Request) {
 			return new Response('');
 		}
 
-		if (!secondBattle && !isFirstBattle24HoursIn) {
+		if (!secondBattle || !isFirstBattle24HoursIn) {
 			return new Response('');
 		}
 
 		const isSecondBattle12HoursIn =
 			minutesSinceUTCDate(secondBattle.start_date) >= TWELVE_HOURS;
-		if (firstBattle.stage === 'join' && isSecondBattle12HoursIn) {
+		if (secondBattle.stage === 'join' && isSecondBattle12HoursIn) {
 			/** Need to change stage to 'join_vote' */
 			const response = await supabase
 				.from('battles')
@@ -124,7 +124,7 @@ export async function GET(request: Request) {
 
 		const isSecondBattle24HoursIn =
 			minutesSinceUTCDate(secondBattle.start_date) >= TWENTY_FOUR_HOURS;
-		if (firstBattle.stage === 'join_vote' && isSecondBattle24HoursIn) {
+		if (secondBattle.stage === 'join_vote' && isSecondBattle24HoursIn) {
 			/** Need to change stage to 'vote' */
 			const response = await supabase
 				.from('battles')

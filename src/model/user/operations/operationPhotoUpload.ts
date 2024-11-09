@@ -1,7 +1,6 @@
 import { createAction, PayloadAction } from '@reduxjs/toolkit';
 import { call, put, select } from '@redux-saga/core/effects';
 import {
-	userCoinsAdd,
 	userPhotosIsUploadingSet,
 	userPhotosSet,
 	userSet,
@@ -17,7 +16,7 @@ import { decode } from 'base64-arraybuffer';
 import { getUserLevel, levelToPhotoReward } from '@/constants';
 import { FetchResult } from '@apollo/client';
 import * as Sentry from '@sentry/nextjs';
-import { battleIdSelector } from '@/model/battle/selectors';
+import { activeJoinBattleIdSelector } from '@/model/battle/selectors';
 import { uploadPhoto, uploadPhotoToBucket } from '@/model/battle/services';
 import { bucketURL } from '@/api/supabase';
 import { battleHasJoinedSet } from '@/model/battle/actions';
@@ -33,7 +32,7 @@ export function* operationPhotoUploadWorker({
 	try {
 		yield put(userPhotosIsUploadingSet(true));
 		const userId: string = yield select(userIdSelector);
-		const battleId: string = yield select(battleIdSelector);
+		const battleId: string = yield select(activeJoinBattleIdSelector);
 		const coins: number = yield select(userCoinsSelector);
 		const photos: BattlePhotoFragment[] = yield select(userPhotosSelector);
 		const photoId: string = yield call(uuidv4);
