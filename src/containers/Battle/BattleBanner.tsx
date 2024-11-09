@@ -1,5 +1,8 @@
 import { useSelector } from 'react-redux';
-import { translationsActiveVoteBattleSelector } from '@/model/translations/selectors';
+import {
+	translationsActiveJoinBattleSelector,
+	translationsActiveVoteBattleSelector
+} from '@/model/translations/selectors';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { battleTimeLeftToVoteSelector } from '@/model/battle/selectors';
 import { BattleContent } from '@/model/translations/types';
@@ -10,8 +13,9 @@ export interface BattleBannerProps {
 
 export function BattleBanner(props: BattleBannerProps) {
 	const { noTime = false } = props;
+	// fixiififififiixifxii
 	const translation = useSelector(
-		translationsActiveVoteBattleSelector,
+		translationsActiveJoinBattleSelector,
 	) as BattleContent;
 	const timeLeftToVote = useSelector(battleTimeLeftToVoteSelector);
 

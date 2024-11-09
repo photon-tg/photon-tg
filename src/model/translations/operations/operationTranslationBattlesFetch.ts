@@ -35,6 +35,7 @@ export function* operationTranslationBattlesFetchWorker({
 			activeJoinBattleId,
 			locale,
 		);
+		console.log(data, 'd')
 		if (data) {
 			yield put(setTranslationBattles(data));
 		}
