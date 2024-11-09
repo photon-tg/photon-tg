@@ -62,7 +62,7 @@ export function* operationBattleInitializeWorker() {
 				break;
 		}
 	}
-
+	console.log(currentBattles, activeVoteBattleId, currentBattles)
 	if (currentBattles.length === 2) {
 		const firstActiveBattle = currentBattles[0];
 		const secondActiveBattle = currentBattles[1];
@@ -94,37 +94,37 @@ export function* operationBattleInitializeWorker() {
 		}
 	}
 
-	if (!activeJoinBattleId || !activeVoteBattleId) return;
-
 	yield put(battleBattlesSet(battlesResponse.data));
-	yield put(activeVoteBattleIdSet(activeVoteBattleId));
-	yield put(activeJoinBattleIdSet(activeJoinBattleId));
+	yield put(activeVoteBattleIdSet(activeVoteBattleId as string));
+	yield put(activeJoinBattleIdSet(activeJoinBattleId as string));
 
-	const photosResponse: GetEntityResult<BattlePhotoFragment[]> = yield call(
-		getBattlePhotos,
-		userId,
-		activeVoteBattleId,
-	);
+	if (activeVoteBattleId) {
+		const photosResponse: GetEntityResult<BattlePhotoFragment[]> = yield call(
+			getBattlePhotos,
+			userId,
+			activeVoteBattleId as string,
+		);
+		if (photosResponse.error) return;
 
-	if (photosResponse.error) return;
+		const shuffledPhotos = shuffle(photosResponse.data);
+		const [first, second] = shuffledPhotos;
+		yield put(battleCurrentBattlePhotosSet(shuffledPhotos));
+		yield put(battleActivePhotosSet([first, second]));
+		yield put(operationBattleSelect(activeVoteBattleId as string));
+		yield put(operationBattleCalculateTimeToJoin());
 
-	const shuffledPhotos = shuffle(photosResponse.data);
-	const [first, second] = shuffledPhotos;
-	yield put(battleCurrentBattlePhotosSet(shuffledPhotos));
-	yield put(battleActivePhotosSet([first, second]));
-	yield put(operationBattleSelect(activeVoteBattleId));
-
-	yield put(operationBattleCalculateTimeToJoin());
-
-	const userPhotoResponse: GetEntityResult<BattlePhotoFragment> = yield call(
-		getUserBattlePhoto,
-		activeVoteBattleId,
-		userId,
-	);
-
-	if (!userPhotoResponse.error && !!userPhotoResponse?.data?.id) {
-		put(battleHasJoinedSet(true));
+		const userPhotoResponse: GetEntityResult<BattlePhotoFragment> = yield call(
+			getUserBattlePhoto,
+			activeVoteBattleId as string,
+			userId,
+		);
+		if (!userPhotoResponse.error && !!userPhotoResponse?.data?.id) {
+			put(battleHasJoinedSet(true));
+		}
 	}
+
+
+
 
 	yield put(operationBattleTimeUpdate());
 

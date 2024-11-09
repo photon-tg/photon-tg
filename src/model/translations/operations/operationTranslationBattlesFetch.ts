@@ -27,7 +27,7 @@ export function* operationTranslationBattlesFetchWorker({
 		const activeVoteBattleId: string = yield select(activeVoteBattleIdSelector);
 		const activeJoinBattleId: string = yield select(activeJoinBattleIdSelector);
 
-		if (!activeVoteBattleId || !activeJoinBattleId) return;
+		if (!activeVoteBattleId && !activeJoinBattleId) return;
 		// @ts-ignore
 		const data: any = yield call(
 			getBattleContent,
