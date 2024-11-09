@@ -6,7 +6,7 @@ export const Battle = graphql(`
 		created_at
 		is_active
 		start_date
-		end_date
+		stage
 	}
 `);
 

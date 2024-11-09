@@ -1,6 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { BattleState } from '@/model/battle/types';
 import {
+	activeJoinBattleIdSet,
+	activeVoteBattleIdSet,
 	battleBattlesSet,
 	battleCanJoinSet,
 	battleCurrentBattlePhotosRemove,
@@ -18,10 +20,12 @@ import {
 export const getInitialState = (): BattleState => ({
 	data: {
 		battles: [],
+		activeJoinBattleId: null,
+		activeVoteBattleId: null,
 		currentBattleId: null,
 		currentBattlePhotos: [],
 		selectedBattle: null,
-		canJoin: false,
+		canJoin: true,
 		hasJoined: false,
 		timeLeftToJoin: null,
 		message: {
@@ -101,6 +105,12 @@ const battleReducer = createReducer<BattleState>(initialState, (builder) =>
 		})
 		.addCase(battleMessageContentSet, (draftState, { payload: content }) => {
 			draftState.data.message.content = content;
+		})
+		.addCase(activeJoinBattleIdSet, (draftState, { payload }) => {
+			draftState.data.activeJoinBattleId = payload;
+		})
+		.addCase(activeVoteBattleIdSet, (draftState, { payload }) => {
+			draftState.data.activeVoteBattleId = payload;
 		}),
 );
 

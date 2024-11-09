@@ -1,13 +1,13 @@
 import { createAction } from '@reduxjs/toolkit';
-import { minutesSinceUTCDate } from '@/utils/date';
+import { addHoursToDate, minutesSinceUTCDate } from '@/utils/date';
 import { BattleFragment } from '@/gql/graphql';
 import { call, put, select } from '@redux-saga/core/effects';
-import { battleCurrentBattleSelector } from '@/model/battle/selectors';
 import {
-	battleCanJoinSet,
-	battleTimeLeftToJoinSet,
-	battleTimeLeftToVoteSet,
-} from '@/model/battle/actions';
+	activeJoinBattleSelector,
+	activeVoteBattleSelector,
+} from '@/model/battle/selectors';
+import { battleTimeLeftToVoteSet } from '@/model/battle/actions';
+import { operationBattleCalculateTimeToJoin } from '@/model/battle/operations/operationBattleCalculateTimeToJoin';
 
 const getTimeLeftForVoting = (
 	endDate?: string,
@@ -46,26 +46,25 @@ export const operationBattleTimeUpdate = createAction(
 export function* operationBattleTimeUpdateWorker() {
 	console.log('clall');
 
-	const currentBattle: BattleFragment = yield select(
-		battleCurrentBattleSelector,
+	const activeVoteBattle: BattleFragment = yield select(
+		activeVoteBattleSelector,
 	);
-	if (!currentBattle) return;
-// @ts-ignore
-	const minutesSinceStart = minutesSinceUTCDate(currentBattle.start_date as string);
-	const isFirstHalf = minutesSinceStart < 720;
-	const timeLeftToJoin = isFirstHalf
-		? 720 - minutesSinceStart
-		: 1440 - minutesSinceStart;
-	const canJoin = isFirstHalf;
+	const activeJoinBattle: BattleFragment = yield select(
+		activeJoinBattleSelector,
+	);
 
-	yield put(battleCanJoinSet(canJoin));
-	yield put(battleTimeLeftToJoinSet(timeLeftToJoin));
+	if (activeJoinBattle) {
+		yield put(operationBattleCalculateTimeToJoin());
+	}
 
-	const timeLeftToVote: {
-		formattedHours: string;
-		formattedMinutes: string;
-		// @ts-ignore
-	} = yield call(getTimeLeftForVoting, currentBattle?.end_date as string);
+	if (activeVoteBattle) {
+		const endDate = addHoursToDate(activeVoteBattle.start_date, 24);
+		const timeLeftToVote: {
+			formattedHours: string;
+			formattedMinutes: string;
+			// @ts-ignore
+		} = yield call(getTimeLeftForVoting, endDate.toUTCString());
 
-	yield put(battleTimeLeftToVoteSet(timeLeftToVote));
+		yield put(battleTimeLeftToVoteSet(timeLeftToVote));
+	}
 }

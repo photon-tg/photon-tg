@@ -1,5 +1,6 @@
 import { AppState } from '@/store/types';
 import { createSelector } from 'reselect';
+import { createAction } from '@reduxjs/toolkit';
 
 export const battleIdSelector = (state: AppState) =>
 	state.battle.data.currentBattleId;
@@ -41,3 +42,18 @@ export const battleMessageSelector = (state: AppState) =>
 
 export const battleHasJoinedSelector = (state: AppState) =>
 	state.battle.data.hasJoined;
+
+export const activeJoinBattleIdSelector = (state: AppState) =>
+	state.battle.data.activeJoinBattleId;
+export const activeVoteBattleIdSelector = (state: AppState) =>
+	state.battle.data.activeVoteBattleId;
+
+export const activeJoinBattleSelector = createSelector(
+	[activeJoinBattleIdSelector, battleBattlesSelector],
+	(activeBattleId, battles) => battles.find(({ id }) => id === activeBattleId),
+);
+
+export const activeVoteBattleSelector = createSelector(
+	[activeVoteBattleIdSelector, battleBattlesSelector],
+	(activeBattleId, battles) => battles.find(({ id }) => id === activeBattleId),
+);

@@ -18,6 +18,8 @@ export type SelectedBattle = {
 export interface BattleState {
 	data: {
 		battles: BattleFragment[];
+		activeJoinBattleId: string | null;
+		activeVoteBattleId: string | null;
 		currentBattleId: string | null;
 		currentBattlePhotos: BattlePhotoFragment[];
 		selectedBattle: SelectedBattle | null;

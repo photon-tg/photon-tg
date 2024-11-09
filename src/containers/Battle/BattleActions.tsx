@@ -19,7 +19,6 @@ export function BattleActions() {
 	const userCoins = useSelector(userCoinsSelector);
 	const userLevel = getUserLevel(userCoins);
 	const router = useRouter();
-	const canJoin = useSelector(battleCanJoinSelector);
 	const hasJoined = useSelector(battleHasJoinedSelector);
 	const timeLeftToJoin = useSelector(battleTimeLeftToJoinSelector);
 	const onJoinBattleClick = () => {
@@ -38,7 +37,7 @@ export function BattleActions() {
 	return (
 		<div className={'grid grid-flow-col grid-cols-2 gap-x-[3px]'}>
 			<Button
-				disabled={!canJoin}
+				disabled={hasJoined}
 				height={'52px'}
 				onClick={onJoinBattleClick}
 				size={'sm'}
@@ -50,7 +49,7 @@ export function BattleActions() {
 							You have joined
 						</span>
 					</div>
-				) : canJoin ? (
+				) : (
 					<div className={'flex flex-col'}>
 						<span className={'mb-[2px] text-[15px] text-sm'}>
 							Join current battle
@@ -84,15 +83,6 @@ export function BattleActions() {
 							<div className={'flex items-center gap-x-[1px] text-sm'}>
 								<img src={'/assets/icons/alarm.svg'} /> {formattedTimeLeft}
 							</div>
-						</div>
-					</div>
-				) : (
-					<div className={'flex items-center justify-center gap-x-[5px]'}>
-						<span className={'mb-[2px] text-[15px] text-sm'}>
-							Next battle in
-						</span>
-						<div className={'flex items-center gap-x-[3px] text-sm'}>
-							<img src={'/assets/icons/alarm.svg'} /> {formattedTimeLeft}
 						</div>
 					</div>
 				)}

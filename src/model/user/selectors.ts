@@ -26,6 +26,10 @@ export const userIsDailyRewardClaimedSelector = (state: AppState) =>
 	state.user.data.isDailyRewardClaimed;
 export const userPassiveIncomeSelector = (state: AppState) =>
 	state.user.data.passiveIncome;
+export const userisConsentGivenSelector = (state: AppState) =>
+	state.user.meta.isConsentGiven;
+export const userIsNewUserSelector = (state: AppState) =>
+	state.user.meta.isNewUser;
 export const userIsInitializedSelector = (state: AppState) =>
 	state.user.meta.isInitialized;
 export const userErrorSelector = (state: AppState) => state.user.meta.error;

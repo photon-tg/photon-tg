@@ -3,11 +3,14 @@ import { call, put, select } from '@redux-saga/core/effects';
 import {
 	getBattlePhotos,
 	getBattles,
-	GetEntityResult, getLastBattles,
-	getUserBattlePhoto
+	GetEntityResult,
+	getLastBattles,
+	getUserBattlePhoto,
 } from '@/model/battle/services';
 import { BattleFragment, BattlePhotoFragment } from '@/gql/graphql';
 import {
+	activeJoinBattleIdSet,
+	activeVoteBattleIdSet,
 	battleActivePhotosSet,
 	battleBattlesSet,
 	battleCurrentBattlePhotosSet,
@@ -34,17 +37,73 @@ export function* operationBattleInitializeWorker() {
 
 	if (battlesResponse.error) return;
 
-	const currentBattle = battlesResponse.data.find(({ is_active }) => is_active);
+	const currentBattles = battlesResponse.data.filter(
+		({ is_active }) => is_active,
+	);
 
-	if (!currentBattle) return;
+	if (currentBattles?.length < 1) return;
+
+	let activeJoinBattleId: string | undefined = undefined;
+	let activeVoteBattleId: string | undefined = undefined;
+
+	if (currentBattles.length === 1) {
+		const activeBattle = currentBattles[0];
+
+		switch (activeBattle.stage) {
+			case 'join':
+				activeJoinBattleId = activeBattle.id;
+				break;
+			case 'vote':
+				activeVoteBattleId = activeBattle.id;
+				break;
+			case 'join_vote':
+				activeJoinBattleId = activeBattle.id;
+				activeVoteBattleId = activeBattle.id;
+				break;
+		}
+	}
+
+	if (currentBattles.length === 2) {
+		const firstActiveBattle = currentBattles[0];
+		const secondActiveBattle = currentBattles[1];
+
+		switch (firstActiveBattle.stage) {
+			case 'join':
+				activeJoinBattleId = firstActiveBattle.id;
+				break;
+			case 'vote':
+				activeVoteBattleId = firstActiveBattle.id;
+				break;
+			case 'join_vote':
+				activeJoinBattleId = firstActiveBattle.id;
+				activeVoteBattleId = firstActiveBattle.id;
+				break;
+		}
+
+		switch (secondActiveBattle.stage) {
+			case 'join':
+				activeJoinBattleId = secondActiveBattle.id;
+				break;
+			case 'vote':
+				activeVoteBattleId = secondActiveBattle.id;
+				break;
+			case 'join_vote':
+				activeJoinBattleId = secondActiveBattle.id;
+				activeVoteBattleId = secondActiveBattle.id;
+				break;
+		}
+	}
+
+	if (!activeJoinBattleId || !activeVoteBattleId) return;
 
 	yield put(battleBattlesSet(battlesResponse.data));
-	yield put(battleCurrentIdSet(currentBattle.id));
+	yield put(activeVoteBattleIdSet(activeVoteBattleId));
+	yield put(activeJoinBattleIdSet(activeJoinBattleId));
 
 	const photosResponse: GetEntityResult<BattlePhotoFragment[]> = yield call(
 		getBattlePhotos,
 		userId,
-		currentBattle.id,
+		activeVoteBattleId,
 	);
 
 	if (photosResponse.error) return;
@@ -53,13 +112,13 @@ export function* operationBattleInitializeWorker() {
 	const [first, second] = shuffledPhotos;
 	yield put(battleCurrentBattlePhotosSet(shuffledPhotos));
 	yield put(battleActivePhotosSet([first, second]));
-	yield put(operationBattleSelect(currentBattle.id));
+	yield put(operationBattleSelect(activeVoteBattleId));
 
 	yield put(operationBattleCalculateTimeToJoin());
 
 	const userPhotoResponse: GetEntityResult<BattlePhotoFragment> = yield call(
 		getUserBattlePhoto,
-		currentBattle.id,
+		activeVoteBattleId,
 		userId,
 	);
 

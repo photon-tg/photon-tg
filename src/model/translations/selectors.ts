@@ -1,6 +1,8 @@
 import { AppState } from '@/store/types';
 import { createSelector } from 'reselect';
 import {
+	activeJoinBattleIdSelector,
+	activeVoteBattleIdSelector,
 	battleCurrentBattleIdSelector,
 	battleSelectedBattleSelector,
 } from '@/model/battle/selectors';
@@ -18,8 +20,12 @@ export const translationsBattlesSelector = createSelector(
 	(locale, data) => data?.[locale]?.battles?.battles,
 );
 
-export const translationsCurrentBattleSelect = createSelector(
-	[battleCurrentBattleIdSelector, translationsBattlesSelector],
+export const translationsActiveVoteBattleSelector = createSelector(
+	[activeVoteBattleIdSelector, translationsBattlesSelector],
+	(battleId, battles) => battles && battleId && battles[battleId],
+);
+export const translationsActiveJoinBattleSelector = createSelector(
+	[activeJoinBattleIdSelector, translationsBattlesSelector],
 	(battleId, battles) => battles && battleId && battles[battleId],
 );
 

@@ -2,13 +2,18 @@ import { call, put, select, take } from '@redux-saga/core/effects';
 import {
 	userErrorSet,
 	userFriendsSet,
+	userIsConsentGivenSet,
 	userIsInitializedSet,
 	userPassiveIncomeRecalculate,
 	userPhotosSet,
 	userSet,
 	userTasksSet,
 } from '@/model/user/actions';
-import { userIdSelector, userSelector } from '@/model/user/selectors';
+import {
+	userIdSelector,
+	userisConsentGivenSelector,
+	userSelector,
+} from '@/model/user/selectors';
 import {
 	BattlePhotoFragment,
 	CoreUserFieldsFragment,
@@ -44,10 +49,19 @@ export function* operationUserInitWorker() {
 
 		yield put(operationAuthenticateUser());
 		yield take(userSet.type);
+		yield take(userIsConsentGivenSet.type);
+
+		const isConsentGiven: boolean = yield select(userisConsentGivenSelector);
+		console.log(isConsentGiven, 'is');
+		if (!isConsentGiven) {
+			yield put(userIsInitializedSet(true));
+			return;
+		}
 
 		const userId: string = yield select(userIdSelector);
 
 		const photos: BattlePhotoFragment[] = yield call(fetchPhotos, userId);
+		console.log(photos, 'phtoos');
 		yield put(userPhotosSet(photos));
 
 		const userTasks: UserTaskFragment[] = yield call(fetchTasks, userId);
@@ -75,6 +89,7 @@ export function* operationUserInitWorker() {
 			coins: user.coins,
 			lastLikesClaim: user.last_likes_claim,
 			username: user.username,
+			consentVersion: '1',
 		} as UpdateUserOptions);
 
 		yield put(userPassiveIncomeRecalculate());

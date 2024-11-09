@@ -10,7 +10,9 @@ import {
 	userEnergySet,
 	userErrorSet,
 	userFriendsSet,
+	userIsConsentGivenSet,
 	userIsInitializedSet,
+	userIsNewUserSet,
 	userIsReferredSet,
 	userLastDailyRewardSet,
 	userLastHourlyRewardSet,
@@ -55,6 +57,8 @@ export const getInitialState = ():
 		isInitialized: false,
 		error: null,
 		referrerId: null,
+		isConsentGiven: false,
+		isNewUser: false,
 	},
 });
 
@@ -90,7 +94,6 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 				draftState.meta.referrerId = referrerId;
 			})
 			.addCase(userPhotosSet, (draftState, { payload: photos }) => {
-				console.log(photos, 'sf');
 				draftState.data.photos.data = photos;
 				draftState.data.passiveIncome = calculatePassiveIncome(
 					draftState.data.photos.data,
@@ -201,6 +204,12 @@ const userReducer = createReducer<RegisteredUserState | UninitializedUserState>(
 				if (draftState.data.user) {
 					draftState.data.user.username = username;
 				}
+			})
+			.addCase(userIsConsentGivenSet, (draftState, { payload }) => {
+				draftState.meta.isConsentGiven = payload;
+			})
+			.addCase(userIsNewUserSet, (draftState, { payload }) => {
+				draftState.meta.isNewUser = payload;
 			}),
 );
 

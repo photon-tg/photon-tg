@@ -5,16 +5,25 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDevice } from '@/hooks/useDevice';
 import { applicationIsInitializedSelector } from '@/model/application/selectors';
-import { userIsInitializedSelector } from '@/model/user/selectors';
+import {
+	userisConsentGivenSelector,
+	userIsInitializedSelector,
+} from '@/model/user/selectors';
 import { operationInitApplication } from '@/model/application/operations';
 import { HOME_PAGE } from '@/constants/urls';
 import { LoadingScreen } from '@/components/LoadingScreen';
-import { userEnergyAdd } from '@/model/user/actions';
+import {
+	userEnergyAdd,
+	userIsConsentGivenSet,
+	userIsInitializedSet,
+} from '@/model/user/actions';
 import { operationUserInit } from '@/model/user/operations/operationUserInit';
 import { battleIsInitializedSelector } from '@/model/battle/selectors';
 import { operationBattleInitialize } from '@/model/battle/operations/operationBattleInitialize';
 import { translationsIsInitializedSelector } from '@/model/translations/selectors';
 import { operationTranslationsInit } from '@/model/translations/operations/operationTranslationsInit';
+import { ConsentScreen } from '@/components/ConsentScreen';
+import { useModalContext } from '@/contexts/ModalContext';
 
 export interface AppContext {}
 
@@ -26,10 +35,12 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { isMobile, isDetected } = useDevice();
+	const { openModal, closeModal } = useModalContext();
 	const isApplicationInitialized = useSelector(
 		applicationIsInitializedSelector,
 	);
 	const isUserInitialized = useSelector(userIsInitializedSelector);
+	const isUserConsentGiven = useSelector(userisConsentGivenSelector);
 	const isBattleInitialized = useSelector(battleIsInitializedSelector);
 	const isTranslationsInitialized = useSelector(
 		translationsIsInitializedSelector,
@@ -44,10 +55,14 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 			dispatch(operationInitApplication());
 			return;
 		}
+
 		if (!isUserInitialized) {
 			dispatch(operationUserInit());
 			return;
 		}
+
+		if (!isUserConsentGiven) return;
+
 		if (!isBattleInitialized) {
 			dispatch(operationBattleInitialize());
 			return;
@@ -64,6 +79,7 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		isDetected,
 		isMobile,
 		isTranslationsInitialized,
+		isUserConsentGiven,
 		isUserInitialized,
 	]);
 
@@ -88,6 +104,15 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		};
 	}, [dispatch, isApplicationInitialized, isUserInitialized]);
 
+	const onConsentAccept = () => {
+		dispatch(userIsConsentGivenSet(true));
+		dispatch(userIsInitializedSet(false));
+	};
+
+	const onConsentReject = () => {
+		window.Telegram.WebApp?.close();
+	};
+
 	const value = useMemo(() => ({}), []);
 
 	const shouldChildrenRender =
@@ -97,13 +122,37 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		isApplicationInitialized &&
 		isTranslationsInitialized &&
 		(isMobile || process.env.NEXT_PUBLIC_ALLOW_DESKTOP);
+
+	useEffect(() => {
+		if (!isUserInitialized) return;
+		closeModal();
+		if (!isUserConsentGiven) {
+			openModal(
+				<ConsentScreen onAccept={onConsentAccept} onReject={onConsentReject} />,
+				{
+					position: 'center',
+					withoutClose: true,
+				},
+			);
+		}
+
+		return () => {
+			closeModal();
+		};
+	}, [closeModal, isUserConsentGiven, onConsentAccept, openModal]);
+
 	return (
 		<AppContext.Provider value={value}>
 			{shouldChildrenRender ? (
 				children
 			) : (
 				<LoadingScreen
-					isLoading={!isDetected || !isUserInitialized}
+					isLoading={
+						!isDetected ||
+						!isUserInitialized ||
+						!isBattleInitialized ||
+						!isUserConsentGiven
+					}
 					isMobile={isMobile}
 				/>
 			)}

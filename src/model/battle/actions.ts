@@ -51,3 +51,10 @@ export const battleMessageContentSet = createAction<{
 	description: string;
 }>('battle/message/content/set');
 export const battleHasJoinedSet = createAction<boolean>('battle/hasJoined/set');
+
+export const activeJoinBattleIdSet = createAction<string>(
+	'battle/activeJoinBattleId/set',
+);
+export const activeVoteBattleIdSet = createAction<string>(
+	'battle/activeVoteBattleId/set',
+);

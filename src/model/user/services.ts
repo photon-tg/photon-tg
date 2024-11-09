@@ -312,6 +312,7 @@ export type UpdateUserOptions = {
 	isReferred?: boolean;
 	energy?: number;
 	username?: string;
+	consentVersion?: string;
 };
 
 export async function updateUser({
@@ -324,6 +325,7 @@ export async function updateUser({
 	isReferred,
 	lastLikesClaim,
 	username,
+	consentVersion,
 }: UpdateUserOptions) {
 	const { errors, data } = await apolloClient.mutate({
 		mutation: UPDATE_USER,
@@ -337,6 +339,7 @@ export async function updateUser({
 			energy: energy ?? user.energy,
 			lastLikesClaim: lastLikesClaim ?? user.last_likes_claim,
 			username: username ?? user.username,
+			consentVersion: consentVersion ?? user.consent_version,
 		},
 	});
 

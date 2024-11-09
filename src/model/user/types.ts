@@ -28,6 +28,8 @@ export interface UserStateMeta {
 	isInitialized: boolean;
 	referrerId: string | null;
 	error: null | UserErrorType;
+	isConsentGiven: boolean;
+	isNewUser: boolean;
 }
 
 export interface UninitializedUserState {

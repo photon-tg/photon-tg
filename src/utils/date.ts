@@ -219,3 +219,10 @@ export function minutesSinceUTCDate(pastDate: string): number {
 	const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
 	return diffInMinutes;
 }
+
+export function addHoursToDate(date: string, hoursToAdd: number): Date {
+	// Create a new Date object to avoid mutating the original date
+	const updatedDate = new Date(date);
+	updatedDate.setHours(updatedDate.getHours() + hoursToAdd);
+	return updatedDate;
+}

@@ -46,3 +46,8 @@ export const userUsernameSet = createAction<string>('user/username/set');
 export const userLastLikesClaimSet = createAction<string>(
 	'user/lastLikesClaim/set',
 );
+
+export const userIsConsentGivenSet = createAction<boolean>(
+	'user/consentAccepted/set',
+);
+export const userIsNewUserSet = createAction<boolean>('user/isNewUser/set');

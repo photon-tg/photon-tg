@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation';
 import { useModalContext } from '@/contexts/ModalContext';
 import Tick from '../../../../public/assets/icons/tick.svg';
 import { cn } from '@/utils/cn';
+import { translationsActiveJoinBattleSelector } from '@/model/translations/selectors';
+import { BattleContent } from '@/model/translations/types';
 
 interface DailyPhotoModalProps {
 	task: Task;
@@ -26,6 +28,8 @@ export function DailyPhotoModal(props: DailyPhotoModalProps) {
 	const isDailyPhotoCompleted = useSelector(userDailyPhotoIsCompleted);
 	const router = useRouter();
 	const { closeModal } = useModalContext();
+
+	const tr = useSelector(translationsActiveJoinBattleSelector) as BattleContent;
 
 	const onClick = () => {
 		const redirectTo = isDailyPhotoCompleted

@@ -1,5 +1,9 @@
 import apolloClient from '@/api/graphql';
-import { GetBattles, GetLastBattles, GetUserBattlePhotos } from '@/model/battle/queries';
+import {
+	GetBattles,
+	GetLastBattles,
+	GetUserBattlePhotos,
+} from '@/model/battle/queries';
 import { parseNodes } from '@/utils/graphql';
 import {
 	BattleFragment,

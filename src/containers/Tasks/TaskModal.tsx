@@ -6,6 +6,9 @@ import { isToday } from '@/utils/date';
 import { DailyRewardModal } from '@/containers/Tasks/modals/DailyRewardModal';
 import { DailyPhotoModal } from '@/containers/Tasks/modals/DailyPhotoModal';
 import { LinkModal } from '@/containers/Tasks/modals/LinkModal';
+import { translationsActiveJoinBattleSelector } from '@/model/translations/selectors';
+import { BattleContent } from '@/model/translations/types';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 export interface TaskModalProps {
 	taskId: string;
@@ -17,16 +20,20 @@ export function TaskModal(props: TaskModalProps) {
 	const userTasks = useSelector(userTasksSelector);
 	const userTask = userTasks.find((task) => task.tasks.id === taskId);
 	const task = tasks.find((task) => task.id === taskId);
-
+	const tr = useSelector(translationsActiveJoinBattleSelector) as BattleContent;
 	if (!task) {
 		return null;
 	}
 
+	const isCMS = task.id === 'daily_photo';
+
 	const todaysText = task.textByDate?.find((tbd) => isToday(tbd.date));
-	const name = todaysText?.name || task.name;
-	const description = todaysText?.description
-		? `"${todaysText?.description}"`
-		: task.description;
+	const name = isCMS ? tr.title : todaysText?.name || task.name;
+	const description = isCMS
+		? tr.description
+		: todaysText?.description
+			? `"${todaysText?.description}"`
+			: task.description;
 
 	return (
 		<div className={'flex flex-col'}>
@@ -43,7 +50,8 @@ export function TaskModal(props: TaskModalProps) {
 					'mx-auto mb-[20px] max-w-[80%] text-pretty text-center text-md font-normal'
 				}
 			>
-				{description}
+				{/* @ts-ignore */}
+				{isCMS ? documentToReactComponents(description as any) : description}
 			</p>
 			{task.rewardByDay && <DailyRewardModal task={task} userTask={userTask} />}
 

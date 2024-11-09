@@ -33,7 +33,10 @@ import {
 	operationBattleTimeUpdateWorker,
 } from '@/model/battle/operations/operationBattleTimeUpdate';
 import { BattleFragment } from '@/gql/graphql';
-import { battleCurrentBattleSelector } from '@/model/battle/selectors';
+import {
+	activeVoteBattleSelector,
+	battleCurrentBattleSelector,
+} from '@/model/battle/selectors';
 
 function delay(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -41,12 +44,12 @@ function delay(ms: number) {
 
 function* battleTimeWatcher() {
 	while (true) {
-		const currentBattle: BattleFragment = yield select(
-			battleCurrentBattleSelector,
+		const activeVoteBattle: BattleFragment = yield select(
+			activeVoteBattleSelector,
 		);
 		yield put(operationBattleTimeUpdate());
-		if (currentBattle?.id) {
-			yield put(operationBattleSelect(currentBattle.id));
+		if (activeVoteBattle?.id) {
+			yield put(operationBattleSelect(activeVoteBattle.id));
 		}
 
 		yield call(delay, 60000);

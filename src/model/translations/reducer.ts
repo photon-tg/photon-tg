@@ -34,10 +34,12 @@ const translationsReducer = createReducer<TranslationsState>(
 	initialState,
 	(builder) =>
 		builder
-			.addCase(setTranslationBattles, (draftState, { payload: battle }) => {
+			.addCase(setTranslationBattles, (draftState, { payload: battles }) => {
 				const locale = draftState.meta.selectedLocale;
 				if (draftState.data[locale].battles.battles) {
-					draftState.data[locale].battles.battles[battle.id] = battle;
+					battles.forEach((battle) => {
+						draftState.data[locale].battles.battles[battle.id] = battle;
+					});
 				}
 			})
 			.addCase(

@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { ValidatedTelegramUser } from '@/app/api/check-telegram-data/route';
-import { call, put } from '@redux-saga/core/effects';
+import { call, put, select } from '@redux-saga/core/effects';
 import {
 	fetchUser,
 	FetchUserResponse,
@@ -10,6 +10,8 @@ import {
 } from '@/model/user/services';
 import {
 	userErrorSet,
+	userIsConsentGivenSet,
+	userIsNewUserSet,
 	userReferredIdSet,
 	userSet,
 	userTelegramUserSet,
@@ -19,6 +21,10 @@ import { SignUpData, UserCredentials, UserErrorType } from '@/model/user/types';
 import { getSignUpData, getUserCredentials } from '@/model/user/utils';
 import { AuthResponse, AuthTokenResponsePassword } from '@supabase/auth-js';
 import { createAction } from '@reduxjs/toolkit';
+import {
+	userisConsentGivenSelector,
+	userIsNewUserSelector,
+} from '@/model/user/selectors';
 
 export const operationAuthenticateUser = createAction(
 	'operation:user/authenticate',
@@ -29,6 +35,9 @@ export function* operationAuthenticateUserWorker() {
 		const dataCheckString = window.Telegram.WebApp.initData;
 		const { data: telegramData }: AxiosResponse<ValidatedTelegramUser> =
 			yield call(validateTelegramData, dataCheckString);
+
+		const isNewUser: boolean = yield select(userIsNewUserSelector);
+		const isConsentGiven: boolean = yield select(userisConsentGivenSelector);
 
 		if (!telegramData.isValid) {
 			yield put(
@@ -53,6 +62,38 @@ export function* operationAuthenticateUserWorker() {
 			telegramId,
 		);
 
+		if (isNewUser) {
+			/** Sign up */
+			const signUpData: SignUpData = yield call(
+				getSignUpData,
+				telegramData.user,
+				telegramId,
+			);
+			const signUpResponse: AuthResponse = yield call(
+				signUp,
+				credentials,
+				signUpData,
+			);
+
+			if (!signUpResponse.error && signUpResponse.data.user) {
+				const user: FetchUserResponse = yield call(
+					fetchUser,
+					signUpResponse.data.user.id,
+				);
+
+				if (user.meta?.error) {
+					yield put(userErrorSet(user.meta.error));
+				} else {
+					yield put(userSet(user.data!));
+				}
+
+				return;
+			}
+
+			return;
+		}
+
+		/** Sign in */
 		const signInResponse: AuthTokenResponsePassword = yield call(
 			signIn,
 			credentials,
@@ -66,44 +107,21 @@ export function* operationAuthenticateUserWorker() {
 
 			if (user.meta?.error) {
 				yield put(userErrorSet(user.meta.error));
-			} else {
-				yield put(userSet(user.data!));
+				return;
 			}
 
-			return;
-		}
-
-		if (signInResponse.error && signInResponse.error.status !== 400) {
-			yield put(userErrorSet(UserErrorType.SERVER_ERROR));
-			return;
-		}
-
-		const signUpData: SignUpData = yield call(
-			getSignUpData,
-			telegramData.user,
-			telegramId,
-		);
-		const signUpResponse: AuthResponse = yield call(
-			signUp,
-			credentials,
-			signUpData,
-		);
-
-		if (!signUpResponse.error && signUpResponse.data.user) {
-			const user: FetchUserResponse = yield call(
-				fetchUser,
-				signUpResponse.data.user.id,
+			console.log(user, 'user', !!user.data?.consent_version || isConsentGiven);
+			yield put(userSet(user.data!));
+			yield put(
+				userIsConsentGivenSet(!!user.data?.consent_version || isConsentGiven),
 			);
-
-			if (user.meta?.error) {
-				yield put(userErrorSet(user.meta.error));
-			} else {
-				yield put(userSet(user.data!));
-			}
+			yield put(userIsNewUserSet(false));
 
 			return;
 		}
-		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
+
+		if (signInResponse.error && signInResponse.error.status !== 400)
+			throw new Error(UserErrorType.SERVER_ERROR);
 	} catch (error) {
 		yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 	}

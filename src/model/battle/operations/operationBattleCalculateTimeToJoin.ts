@@ -1,11 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
 import { minutesSinceUTCDate } from '@/utils/date';
 import { put, select } from '@redux-saga/core/effects';
-import {
-	battleCanJoinSet,
-	battleTimeLeftToJoinSet,
-} from '@/model/battle/actions';
-import { battleCurrentBattleSelector } from '@/model/battle/selectors';
+import { battleTimeLeftToJoinSet } from '@/model/battle/actions';
+import { activeJoinBattleSelector } from '@/model/battle/selectors';
 import { BattleFragment } from '@/gql/graphql';
 
 export const operationBattleCalculateTimeToJoin = createAction(
@@ -13,17 +10,12 @@ export const operationBattleCalculateTimeToJoin = createAction(
 );
 
 export function* operationBattleCalculateTimeToJoinWorker() {
-	const currentBattle: BattleFragment = yield select(
-		battleCurrentBattleSelector,
-	);
-	// @ts-ignore
-	const minutesSinceStart = minutesSinceUTCDate(currentBattle.start_date as string);
-	const isFirstHalf = minutesSinceStart < 720;
-	const timeLeftToJoin = isFirstHalf
-		? 720 - minutesSinceStart
-		: 1440 - minutesSinceStart;
-	const canJoin = isFirstHalf;
+	const currentBattle: BattleFragment = yield select(activeJoinBattleSelector);
 
-	yield put(battleCanJoinSet(canJoin));
+	// @ts-ignore
+	const minutesSinceStart = minutesSinceUTCDate(
+		currentBattle.start_date as string,
+	);
+	const timeLeftToJoin = 1440 - minutesSinceStart;
 	yield put(battleTimeLeftToJoinSet(timeLeftToJoin));
 }

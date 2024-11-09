@@ -1,15 +1,16 @@
 import cms from '@/api/cms';
 
 export const getBattleContent = async (
-	battleId: string,
+	voteId: string,
+	joinId: string,
 	locale: string,
 ): Promise<any> => {
 	const response = await cms.getEntries({
 		content_type: 'battleContent',
 		locale,
-		'fields.id': battleId,
+		'fields.id[in]': `${voteId},${joinId}`,
 	});
-	return response.items[0]?.fields;
+	return response.items.map(({ fields }) => fields);
 };
 
 export const getCommonTranslations = async (locale: string): Promise<any> => {

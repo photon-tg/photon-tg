@@ -1,6 +1,9 @@
 import { createAction, PayloadAction } from '@reduxjs/toolkit';
 import { call, put, select } from '@redux-saga/core/effects';
-import { battleCurrentBattleIdSelector } from '@/model/battle/selectors';
+import {
+	activeJoinBattleIdSelector,
+	activeVoteBattleIdSelector,
+} from '@/model/battle/selectors';
 import { getBattleContent } from '@/model/translations/services';
 import { setTranslationBattles } from '@/model/translations/actions';
 import { selectedLocaleSelector } from '@/model/translations/selectors';
@@ -21,12 +24,18 @@ export function* operationTranslationBattlesFetchWorker({
 	const locale: Locales = yield select(selectedLocaleSelector);
 	const { type } = payload;
 	if (type === 'currentBattle') {
-		// @ts-ignore
-		const currentBattleId = yield select(battleCurrentBattleIdSelector);
+		const activeVoteBattleId: string = yield select(activeVoteBattleIdSelector);
+		const activeJoinBattleId: string = yield select(activeJoinBattleIdSelector);
 
-		if (!currentBattleId) return;
+		if (!activeVoteBattleId || !activeJoinBattleId) return;
 		// @ts-ignore
-		const data: any = yield call(getBattleContent, currentBattleId, locale);
+		const data: any = yield call(
+			getBattleContent,
+			activeVoteBattleId,
+			activeJoinBattleId,
+			locale,
+		);
+		console.log('data', data);
 		if (data) {
 			yield put(setTranslationBattles(data));
 		}
