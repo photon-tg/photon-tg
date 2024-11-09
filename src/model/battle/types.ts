@@ -33,7 +33,7 @@ export interface BattleState {
 		message: {
 			isShown: boolean;
 			content?: {
-				title: string;
+				title?: string;
 				description: string;
 			};
 		};

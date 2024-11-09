@@ -54,7 +54,7 @@ export function BattleActions() {
 						<span className={'mb-[2px] text-[15px] text-sm'}>
 							Join current battle
 						</span>
-						<div className={'flex items-center gap-x-[5px] self-start'}>
+						<div className={'flex items-center gap-x-[2px] self-start'}>
 							<div
 								className={
 									'text-xs flex text-[#42C2FF]'
