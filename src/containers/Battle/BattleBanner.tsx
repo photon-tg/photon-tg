@@ -21,9 +21,8 @@ export function BattleBanner(props: BattleBannerProps) {
 		translationsActiveJoinBattleSelector,
 	) as BattleContent;
 	const timeLeftToVote = useSelector(battleTimeLeftToVoteSelector);
-	const translation = isJoin ? translationJoin : translationVote;
+	const translation = isJoin || !translationVote ? translationJoin : translationVote;
 	const { formattedHours, formattedMinutes } = timeLeftToVote || {};
-
 	return (
 		<div
 			className={
@@ -36,7 +35,7 @@ export function BattleBanner(props: BattleBannerProps) {
 			<div className={'font-regular mb-[5px] text-sm'}>
 				{documentToReactComponents(translation?.description as any)}
 			</div>
-			{!noTime && (
+			{!noTime && formattedHours && (
 				<div className={'text-sm font-semibold text-[#488ae5]'}>
 					Time left for voting {formattedHours}hrs {formattedMinutes}min
 				</div>

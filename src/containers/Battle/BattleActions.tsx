@@ -57,7 +57,7 @@ export function BattleActions() {
 						<div className={'flex items-center gap-x-[5px] self-start'}>
 							<div
 								className={
-									'text-xs flex gap-x-[3px] font-semibold text-[#42C2FF]'
+									'text-xs flex text-[#42C2FF]'
 								}
 							>
 								<Money
