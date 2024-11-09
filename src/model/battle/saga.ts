@@ -3,7 +3,6 @@ import {
 	fork,
 	put,
 	select,
-	take,
 	takeEvery,
 	takeLeading,
 } from '@redux-saga/core/effects';
@@ -35,7 +34,6 @@ import {
 import { BattleFragment } from '@/gql/graphql';
 import {
 	activeVoteBattleSelector,
-	battleCurrentBattleSelector,
 } from '@/model/battle/selectors';
 
 function delay(ms: number) {

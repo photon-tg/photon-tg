@@ -1,9 +1,6 @@
 import { AppState } from '@/store/types';
 import { createSelector } from 'reselect';
-import { createAction } from '@reduxjs/toolkit';
 
-export const battleIdSelector = (state: AppState) =>
-	state.battle.data.currentBattleId;
 export const battlePhotosSelector = (state: AppState) =>
 	state.battle.data.currentBattlePhotos;
 export const battleIsAnimatingSelector = (state: AppState) =>
@@ -23,11 +20,7 @@ export const battleSelectedBattleDataSelector = createSelector(
 	(selectedBattle, battles) =>
 		battles.find(({ id }) => id === selectedBattle?.id),
 );
-export const battleCurrentBattleSelector = createSelector(
-	[battleCurrentBattleIdSelector, battleBattlesSelector],
-	(currentBattleId, battles) =>
-		battles.find(({ id }) => id === currentBattleId),
-);
+
 export const battleSelectedBattleUserPhoto = (state: AppState) =>
 	state.battle.data.selectedBattle?.userPhoto;
 export const battleCanJoinSelector = (state: AppState) =>

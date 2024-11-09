@@ -7,7 +7,7 @@ import {
 } from '@/model/battle/actions';
 import { likePhoto, viewPhotos } from '@/model/battle/services';
 import { userSelector } from '@/model/user/selectors';
-import { battleIdSelector } from '@/model/battle/selectors';
+import { activeVoteBattleIdSelector } from '@/model/battle/selectors';
 import {
 	getUserLevel,
 	levelToSelectEnergyReduction,
@@ -33,7 +33,7 @@ export function* operationBattlePhotoSelectWorker({
 	yield put(battleIsAnimatingSet(true));
 
 	const user: User = yield select(userSelector);
-	const battleId: string = yield select(battleIdSelector);
+	const battleId: string = yield select(activeVoteBattleIdSelector);
 	const userLevel = getUserLevel(user.coins);
 	const selectReward = levelToSelectReward.get(userLevel)!;
 	const selectEnergyReduction = levelToSelectEnergyReduction.get(userLevel)!;

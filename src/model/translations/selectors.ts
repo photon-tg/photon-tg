@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import {
 	activeJoinBattleIdSelector,
 	activeVoteBattleIdSelector,
-	battleCurrentBattleIdSelector,
 	battleSelectedBattleSelector,
 } from '@/model/battle/selectors';
 
