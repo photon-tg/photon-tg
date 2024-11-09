@@ -31,7 +31,7 @@ export function PhotoReview(props: PhotoReviewProps) {
 				<ArrowIcon />
 			</button>
 			<div className={''}>
-				<BattleBanner noTime />
+				<BattleBanner noTime isJoin />
 			</div>
 			<img
 				className={'rounded-[10px]'}

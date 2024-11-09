@@ -9,16 +9,19 @@ import { BattleContent } from '@/model/translations/types';
 
 export interface BattleBannerProps {
 	noTime?: boolean;
+	isJoin?: boolean;
 }
 
 export function BattleBanner(props: BattleBannerProps) {
-	const { noTime = false } = props;
-	// fixiififififiixifxii
-	const translation = useSelector(
+	const { noTime = false, isJoin = false } = props;
+	const translationVote = useSelector(
+		translationsActiveVoteBattleSelector,
+	) as BattleContent;
+	const translationJoin = useSelector(
 		translationsActiveJoinBattleSelector,
 	) as BattleContent;
 	const timeLeftToVote = useSelector(battleTimeLeftToVoteSelector);
-
+	const translation = isJoin ? translationJoin : translationVote;
 	const { formattedHours, formattedMinutes } = timeLeftToVote || {};
 
 	return (
