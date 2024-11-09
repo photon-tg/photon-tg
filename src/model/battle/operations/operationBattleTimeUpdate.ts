@@ -44,8 +44,6 @@ export const operationBattleTimeUpdate = createAction(
 );
 
 export function* operationBattleTimeUpdateWorker() {
-	console.log('clall');
-
 	const activeVoteBattle: BattleFragment = yield select(
 		activeVoteBattleSelector,
 	);

@@ -123,9 +123,6 @@ export function* operationBattleInitializeWorker() {
 		}
 	}
 
-
-
-
 	yield put(operationBattleTimeUpdate());
 
 	yield put(operationTranslationBattlesFetch({ type: 'currentBattle' }));
