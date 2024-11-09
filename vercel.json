@@ -2,7 +2,11 @@
 	"crons": [
 		{
 			"path": "/api/manage-battles",
-			"schedule": "0 * * * *"
+			"schedule": "0 12 * * *"
+		},
+		{
+			"path": "/api/manage-battles",
+			"schedule": "1 0 * * *"
 		}
 	]
 }
