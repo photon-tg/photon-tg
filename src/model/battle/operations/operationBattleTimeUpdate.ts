@@ -8,6 +8,7 @@ import {
 } from '@/model/battle/selectors';
 import { battleTimeLeftToVoteSet } from '@/model/battle/actions';
 import { operationBattleCalculateTimeToJoin } from '@/model/battle/operations/operationBattleCalculateTimeToJoin';
+import { operationBattleInitialize } from '@/model/battle/operations/operationBattleInitialize';
 
 const getTimeLeftForVoting = (
 	endDate?: string,
@@ -63,7 +64,7 @@ export function* operationBattleTimeUpdateWorker() {
 			// @ts-ignore
 		} = yield call(getTimeLeftForVoting, endDate.toUTCString());
 
-		if (timeLeftToVote.formattedHours <= 0 && timeLeftToVote.formattedMinutes <= 0) {
+		if (Number(timeLeftToVote.formattedHours) <= 0 && Number(timeLeftToVote.formattedMinutes) <= 0) {
 			yield put(operationBattleInitialize());
 		}
 
