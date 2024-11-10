@@ -68,6 +68,7 @@ export function* operationAuthenticateUserWorker() {
 				getSignUpData,
 				telegramData.user,
 				telegramId,
+				'1',
 			);
 			const signUpResponse: AuthResponse = yield call(
 				signUp,
@@ -84,6 +85,7 @@ export function* operationAuthenticateUserWorker() {
 				if (user.meta?.error) {
 					yield put(userErrorSet(user.meta.error));
 				} else {
+					yield put(userIsConsentGivenSet(true));
 					yield put(userSet(user.data!));
 				}
 
@@ -118,6 +120,11 @@ export function* operationAuthenticateUserWorker() {
 			yield put(userIsNewUserSet(false));
 
 			return;
+		}
+
+		if (signInResponse.error && signInResponse.error.status === 400) {
+			yield put(userIsNewUserSet(true));
+			yield put(userIsConsentGivenSet(false));
 		}
 
 		if (signInResponse.error && signInResponse.error.status !== 400)

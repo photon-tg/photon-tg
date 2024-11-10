@@ -18,6 +18,7 @@ export function getUserCredentials(telegramId: string): UserCredentials {
 export function getSignUpData(
 	telegramUser: WebAppUser,
 	telegramId: string,
+	consentVersion: string,
 ): SignUpData {
 	return {
 		first_name: telegramUser.first_name,
@@ -25,6 +26,7 @@ export function getSignUpData(
 		is_premium: telegramUser.is_premium ?? false,
 		telegram_id: telegramId,
 		username: telegramUser.username,
+		consent_version: consentVersion,
 	};
 }
 
