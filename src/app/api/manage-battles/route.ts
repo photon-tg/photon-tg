@@ -49,9 +49,12 @@ export async function GET(request: Request) {
 			throw new Error('no active battles');
 		}
 
-		const isFirstBattle36HoursIn = minutesSinceUTCDate(firstBattle.start_date) >= THIRTY_SIX_HOURS;
-		const isFirstBattle24HoursIn = minutesSinceUTCDate(firstBattle.start_date) >= TWENTY_FOUR_HOURS;
-		const isFirstBattle12HoursIn = minutesSinceUTCDate(firstBattle.start_date) >= TWELVE_HOURS;
+		const isFirstBattle36HoursIn =
+			minutesSinceUTCDate(firstBattle.start_date) >= THIRTY_SIX_HOURS;
+		const isFirstBattle24HoursIn =
+			minutesSinceUTCDate(firstBattle.start_date) >= TWENTY_FOUR_HOURS;
+		const isFirstBattle12HoursIn =
+			minutesSinceUTCDate(firstBattle.start_date) >= TWELVE_HOURS;
 
 		if (firstBattle.stage === 'vote' && isFirstBattle36HoursIn) {
 			/** Need to change stage to 'finish' */
@@ -64,7 +67,6 @@ export async function GET(request: Request) {
 				console.error(response);
 			}
 		}
-
 
 		if (firstBattle.stage === 'join_vote' && isFirstBattle24HoursIn) {
 			/** Need to change stage to 'vote' */
@@ -89,7 +91,6 @@ export async function GET(request: Request) {
 				console.error(response);
 			}
 		}
-
 
 		if (!secondBattle && isFirstBattle24HoursIn) {
 			/** Need to create next battle */

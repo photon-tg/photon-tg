@@ -14,7 +14,7 @@ import {
 	activeVoteBattleIdSelector,
 	battleCanJoinSelector,
 	battleHasJoinedSelector,
-	battleTimeLeftToJoinSelector
+	battleTimeLeftToJoinSelector,
 } from '@/model/battle/selectors';
 
 export function BattleActions() {
@@ -24,7 +24,7 @@ export function BattleActions() {
 	const hasJoined = useSelector(battleHasJoinedSelector);
 	const timeLeftToJoin = useSelector(battleTimeLeftToJoinSelector);
 	const voteBattleId = useSelector(activeVoteBattleIdSelector);
-	const joinBattleId = useSelector(activeJoinBattleIdSelector)
+	const joinBattleId = useSelector(activeJoinBattleIdSelector);
 	const onJoinBattleClick = () => {
 		router.push('/photo/camera');
 	};
@@ -59,11 +59,7 @@ export function BattleActions() {
 							Join {joinBattleId === voteBattleId ? 'current' : 'next'} battle
 						</span>
 						<div className={'flex items-center gap-x-[2px] self-start'}>
-							<div
-								className={
-									'text-xs flex text-[#42C2FF]'
-								}
-							>
+							<div className={'text-xs flex text-[#42C2FF]'}>
 								<Money
 									bold
 									activeColor

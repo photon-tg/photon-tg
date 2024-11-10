@@ -39,12 +39,10 @@ export function TopCard({
 
 	return (
 		<div
-			className={
-				cn(
-					'flex w-full items-center justify-between rounded-[10px] bg-[#205295] px-[15px] py-[6px]',
-					selectedBattle?.userPhoto?.id === photo_id.toString() && 'bg-[#4694ff]'
-				)
-			}
+			className={cn(
+				'flex w-full items-center justify-between rounded-[10px] bg-[#205295] px-[15px] py-[6px]',
+				selectedBattle?.userPhoto?.id === photo_id.toString() && 'bg-[#4694ff]',
+			)}
 		>
 			<div className={'flex items-center justify-start'}>
 				<div className={'flex items-center justify-start'}>

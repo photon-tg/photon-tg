@@ -3,16 +3,21 @@ import {
 	userErrorSet,
 	userFriendsSet,
 	userIsConsentGivenSet,
-	userIsInitializedSet, userIsNewUserSet,
+	userIsInitializedSet,
+	userIsNewUserSet,
 	userPassiveIncomeRecalculate,
-	userPhotosSet, userReferredIdSet,
+	userPhotosSet,
+	userReferredIdSet,
 	userSet,
-	userTasksSet, userTelegramUserSet, userUsernameSet
+	userTasksSet,
+	userTelegramUserSet,
+	userUsernameSet,
 } from '@/model/user/actions';
 import {
 	userIdSelector,
-	userisConsentGivenSelector, userIsNewUserSelector,
-	userSelector
+	userisConsentGivenSelector,
+	userIsNewUserSelector,
+	userSelector,
 } from '@/model/user/selectors';
 import {
 	BattlePhotoFragment,
@@ -22,9 +27,14 @@ import {
 import {
 	fetchFriends,
 	fetchPhotos,
-	fetchTasks, fetchUser, FetchUserResponse, signIn, signUp,
+	fetchTasks,
+	fetchUser,
+	FetchUserResponse,
+	signIn,
+	signUp,
 	updateUser,
-	UpdateUserOptions, validateTelegramData
+	UpdateUserOptions,
+	validateTelegramData,
 } from '@/model/user/services';
 import { SignUpData, UserCredentials, UserErrorType } from '@/model/user/types';
 
@@ -129,10 +139,16 @@ export function* operationUserInitWorker() {
 						return;
 					}
 
-					console.log(user, 'user', !!user.data?.consent_version || isConsentGiven);
+					console.log(
+						user,
+						'user',
+						!!user.data?.consent_version || isConsentGiven,
+					);
 					yield put(userSet(user.data!));
 					yield put(
-						userIsConsentGivenSet(!!user.data?.consent_version || isConsentGiven),
+						userIsConsentGivenSet(
+							!!user.data?.consent_version || isConsentGiven,
+						),
 					);
 					yield put(userIsNewUserSet(false));
 				}
@@ -146,7 +162,7 @@ export function* operationUserInitWorker() {
 					throw new Error(UserErrorType.SERVER_ERROR);
 			}
 		} catch (error) {
-			console.log('here', error)
+			console.log('here', error);
 			yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 		}
 

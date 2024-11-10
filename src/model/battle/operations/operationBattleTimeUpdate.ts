@@ -64,7 +64,10 @@ export function* operationBattleTimeUpdateWorker() {
 			// @ts-ignore
 		} = yield call(getTimeLeftForVoting, endDate.toUTCString());
 
-		if (Number(timeLeftToVote.formattedHours) <= 0 && Number(timeLeftToVote.formattedMinutes) <= 0) {
+		if (
+			Number(timeLeftToVote.formattedHours) <= 0 &&
+			Number(timeLeftToVote.formattedMinutes) <= 0
+		) {
 			yield put(operationBattleInitialize());
 		}
 

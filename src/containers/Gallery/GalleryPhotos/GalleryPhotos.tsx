@@ -102,9 +102,7 @@ export function SelectedImage(props: SelectedImageProps) {
 	if (selectedImage.battle_id) {
 		return (
 			<div
-				className={
-					'grid max-h-[280px] grid-cols-2 rounded-[10px] bg-[#205295]'
-				}
+				className={'grid max-h-[280px] grid-cols-2 rounded-[10px] bg-[#205295]'}
 			>
 				<img
 					className={

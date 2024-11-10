@@ -62,7 +62,7 @@ export function* operationBattleInitializeWorker() {
 				break;
 		}
 	}
-	console.log(currentBattles, activeVoteBattleId, currentBattles)
+	console.log(currentBattles, activeVoteBattleId, currentBattles);
 	if (currentBattles.length === 2) {
 		const firstActiveBattle = currentBattles[0];
 		const secondActiveBattle = currentBattles[1];

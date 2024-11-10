@@ -32,9 +32,7 @@ import {
 	operationBattleTimeUpdateWorker,
 } from '@/model/battle/operations/operationBattleTimeUpdate';
 import { BattleFragment } from '@/gql/graphql';
-import {
-	activeVoteBattleSelector,
-} from '@/model/battle/selectors';
+import { activeVoteBattleSelector } from '@/model/battle/selectors';
 
 function delay(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));

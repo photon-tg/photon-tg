@@ -77,7 +77,9 @@ function StatisticsContent() {
 				<p className={'mb-[20px] text-sm font-semibold'}>
 					You have not joined the battle yet!
 				</p>
-				<Button variant={'filled'} onClick={() => router.push('/photo/camera')}>Join the battle</Button>
+				<Button variant={'filled'} onClick={() => router.push('/photo/camera')}>
+					Join the battle
+				</Button>
 			</div>
 		);
 	}
