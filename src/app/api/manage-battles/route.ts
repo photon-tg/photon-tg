@@ -12,7 +12,7 @@ export const revalidate = 0;
 export async function GET(request: Request) {
 	try {
 		const authHeader = request.headers.get('authorization');
-		console.log(authHeader, request.headers.keys(),  request.headers.values(), request.headers.entries(), 'auth')
+		console.log(authHeader, request.headers.keys().reduce((acc, curr) => `${acc},${curr}`, ''),  request.headers.values().reduce((acc, curr) => `${acc},${curr}`, ''), request.headers.entries().reduce((acc, curr) => `${acc},${curr}`, ''), 'auth')
 		if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
 			return new Response('Unauthorized', {
 				status: 401,
