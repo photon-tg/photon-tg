@@ -10,9 +10,11 @@ import { useSelector } from 'react-redux';
 import { userCoinsSelector } from '@/model/user/selectors';
 import { useMemo } from 'react';
 import {
+	activeJoinBattleIdSelector,
+	activeVoteBattleIdSelector,
 	battleCanJoinSelector,
 	battleHasJoinedSelector,
-	battleTimeLeftToJoinSelector,
+	battleTimeLeftToJoinSelector
 } from '@/model/battle/selectors';
 
 export function BattleActions() {
@@ -21,6 +23,8 @@ export function BattleActions() {
 	const router = useRouter();
 	const hasJoined = useSelector(battleHasJoinedSelector);
 	const timeLeftToJoin = useSelector(battleTimeLeftToJoinSelector);
+	const voteBattleId = useSelector(activeVoteBattleIdSelector);
+	const joinBattleId = useSelector(activeJoinBattleIdSelector)
 	const onJoinBattleClick = () => {
 		router.push('/photo/camera');
 	};
@@ -52,7 +56,7 @@ export function BattleActions() {
 				) : (
 					<div className={'flex flex-col'}>
 						<span className={'mb-[2px] text-[15px] text-sm'}>
-							Join current battle
+							Join {joinBattleId === voteBattleId ? 'current' : 'next'} battle
 						</span>
 						<div className={'flex items-center gap-x-[2px] self-start'}>
 							<div
