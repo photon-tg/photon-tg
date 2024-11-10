@@ -54,7 +54,7 @@ export function Statistics() {
 					<ArrowIcon />
 				</button>
 			</header>
-			<div className={'h-[280px]'}>
+			<div className={'h-[300px]'}>
 				<StatisticsContent />
 			</div>
 		</div>
@@ -70,7 +70,7 @@ function StatisticsContent() {
 		return (
 			<div
 				className={
-					'flex h-[280px] flex-col items-center justify-center rounded-bl-[10px] rounded-br-[10px] bg-[#205295] px-[30px] py-[30px]'
+					'flex h-[300px] flex-col items-center justify-center rounded-bl-[10px] rounded-br-[10px] bg-[#205295] px-[30px] py-[30px]'
 				}
 			>
 				<img className={'mb-[30px]'} src={'/assets/icons/sad.svg'} />
@@ -86,7 +86,7 @@ function StatisticsContent() {
 		return (
 			<div
 				className={
-					'flex h-[280px] flex-col items-center justify-center rounded-bl-[10px] rounded-br-[10px] bg-[#205295] px-[30px] py-[30px]'
+					'flex h-[300px] flex-col items-center justify-center rounded-bl-[10px] rounded-br-[10px] bg-[#205295] px-[30px] py-[30px]'
 				}
 			>
 				<img className={'mb-[30px]'} src={'/assets/icons/sad.svg'} />
@@ -103,11 +103,11 @@ function StatisticsContent() {
 	return (
 		<div
 			className={
-				'grid max-h-[280px] grid-cols-2 rounded-bl-[10px] rounded-br-[10px] bg-[#205295]'
+				'grid max-h-[300px] grid-cols-2 rounded-bl-[10px] rounded-br-[10px] bg-[#205295]'
 			}
 		>
 			<img
-				className={'h-[280px] rounded-bl-[10px] object-cover'}
+				className={'h-[300px] rounded-bl-[10px] object-cover'}
 				src={selectedBattlePhoto?.photo_url}
 			/>
 			<MyStats />

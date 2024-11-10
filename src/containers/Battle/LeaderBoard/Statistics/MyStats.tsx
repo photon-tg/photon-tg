@@ -40,7 +40,7 @@ export function MyStats() {
 	return (
 		<div
 			className={
-				'flex h-[280px] flex-col gap-y-[15px] px-[15px] pb-[10px] pt-[8px]'
+				'flex h-[300px] flex-col gap-y-[15px] px-[15px] pb-[10px] pt-[8px]'
 			}
 		>
 			<span
