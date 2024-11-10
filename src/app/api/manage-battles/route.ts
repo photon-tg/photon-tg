@@ -29,6 +29,8 @@ export async function GET(request: Request) {
 			.eq('is_active', true)
 			.order('start_date', { ascending: true });
 
+		console.log('call');
+
 		if (activeBattlesError) {
 			console.error(
 				'Error fetching ACTIVE battles:',
