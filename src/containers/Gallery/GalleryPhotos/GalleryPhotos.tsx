@@ -103,7 +103,7 @@ export function SelectedImage(props: SelectedImageProps) {
 		return (
 			<div
 				className={
-					'grid max-h-[280px] grid-cols-2 rounded-[10px] bg-[#274784CC]'
+					'grid max-h-[280px] grid-cols-2 rounded-[10px] bg-[#205295]'
 				}
 			>
 				<img

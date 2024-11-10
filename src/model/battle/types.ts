@@ -5,6 +5,7 @@ export type Top = {
 	like_count: number;
 	username?: string;
 	first_name: string;
+	photo_id: string;
 };
 
 export type UserPhoto = BattlePhotoFragment & { likes_count: number };

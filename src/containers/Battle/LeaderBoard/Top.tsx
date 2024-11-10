@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Top as TopType } from '@/model/battle/types';
 import { battleSelectedBattleSelector } from '@/model/battle/selectors';
+import { cn } from '@/utils/cn';
 
 export function Top() {
 	const selectedBattle = useSelector(battleSelectedBattleSelector);
@@ -32,11 +33,17 @@ export function TopCard({
 	place,
 	username,
 	first_name,
+	photo_id,
 }: TopCardProps) {
+	const selectedBattle = useSelector(battleSelectedBattleSelector);
+
 	return (
 		<div
 			className={
-				'flex w-full items-center justify-between rounded-[10px] bg-[#205295] px-[15px] py-[6px]'
+				cn(
+					'flex w-full items-center justify-between rounded-[10px] bg-[#205295] px-[15px] py-[6px]',
+					selectedBattle?.userPhoto?.id === photo_id.toString() && 'bg-[#4694ff]'
+				)
 			}
 		>
 			<div className={'flex items-center justify-start'}>
