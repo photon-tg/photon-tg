@@ -56,7 +56,7 @@ export function* operationBattleTimeUpdateWorker() {
 	}
 
 	if (activeVoteBattle) {
-		const endDate = addHoursToDate(activeVoteBattle.start_date, 24);
+		const endDate = addHoursToDate(activeVoteBattle.start_date, 36);
 		const timeLeftToVote: {
 			formattedHours: string;
 			formattedMinutes: string;
