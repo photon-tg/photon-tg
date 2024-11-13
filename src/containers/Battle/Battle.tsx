@@ -14,6 +14,7 @@ import { BattleEmptyPhotos } from '@/containers/Battle/BattleEmptyPhotos';
 import { useState } from 'react';
 import { BattleMessage } from '@/containers/Battle/BattleMessage';
 import { battleMessageIsShownSet } from '@/model/battle/actions';
+import { userSelector } from '@/model/user/selectors';
 
 export function Battle() {
 	const battlePhotos = useSelector(battlePhotosSelector);
@@ -22,9 +23,11 @@ export function Battle() {
 
 	const message = useSelector(battleMessageSelector);
 	const dispatch = useDispatch();
+	const user = useSelector(userSelector);
 
 	return (
 		<div className={'px-[10px]'}>
+			{user && user.first_name === 'Evgeny' && <input type="file" accept="image/*" capture="environment" id="cameraInput" />}
 			<div className={'mb-[10px] mt-[10px] flex justify-between gap-x-[25px]'}>
 				<Coins />
 				<Energy />
