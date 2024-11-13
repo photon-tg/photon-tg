@@ -28,9 +28,9 @@ export function TaskModal(props: TaskModalProps) {
 	const isCMS = task.id === 'daily_photo';
 
 	const todaysText = task.textByDate?.find((tbd) => isToday(tbd.date));
-	const name = isCMS ? tr.title : todaysText?.name || task.name;
+	const name = isCMS ? tr?.title : todaysText?.name || task.name;
 	const description = isCMS
-		? tr.description
+		? tr?.description
 		: todaysText?.description
 			? `"${todaysText?.description}"`
 			: task.description;
