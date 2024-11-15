@@ -10,9 +10,10 @@ import Webcam from 'react-webcam';
 import { Layout } from '@/components/Layout/Layout';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/model/user/selectors';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { PhotoReview } from '@/containers/Camera/PhotoReview/PhotoReview';
 import { BattleBanner } from '@/containers/Battle/BattleBanner';
+import { AppContext } from '@/contexts/AppContext';
 
 export function Camera() {
 	const router = useRouter();
@@ -28,7 +29,7 @@ export function Camera() {
 		goBack,
 	} = useCamera();
 	const [isCameraInitialized, setIsCameraInitialized] = useState(false);
-
+	const { lang } = useContext(AppContext);
 	if (user.last_photo && isDateTodayUTC(new Date(user.last_photo))) {
 		return (
 			<Layout>
@@ -45,7 +46,7 @@ export function Camera() {
 							You can make photos only once a day
 						</div>
 						<Button
-							onClick={() => router.push('/photo/gallery')}
+							onClick={() => router.push(`/${lang}/photo/gallery`)}
 							width={'100%'}
 						>
 							Return

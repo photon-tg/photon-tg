@@ -6,9 +6,9 @@ import { isToday } from '@/utils/date';
 import { DailyRewardModal } from '@/containers/Tasks/modals/DailyRewardModal';
 import { DailyPhotoModal } from '@/containers/Tasks/modals/DailyPhotoModal';
 import { LinkModal } from '@/containers/Tasks/modals/LinkModal';
-import { translationsActiveJoinBattleSelector } from '@/model/translations/selectors';
-import { BattleContent } from '@/model/translations/types';
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { activeJoinBattleIdSelector } from '@/model/battle/selectors';
+import { useContext } from 'react';
+import { AppContext } from '@/contexts/AppContext';
 
 export interface TaskModalProps {
 	taskId: string;
@@ -20,7 +20,10 @@ export function TaskModal(props: TaskModalProps) {
 	const userTasks = useSelector(userTasksSelector);
 	const userTask = userTasks.find((task) => task.tasks.id === taskId);
 	const task = tasks.find((task) => task.id === taskId);
-	const tr = useSelector(translationsActiveJoinBattleSelector) as BattleContent;
+	const activeJoinBattleId = useSelector(activeJoinBattleIdSelector);
+	const { lang, battlesContent } = useContext(AppContext);
+	const tr = battlesContent.find((c) => c.id === activeJoinBattleId);
+
 	if (!task) {
 		return null;
 	}
@@ -28,9 +31,9 @@ export function TaskModal(props: TaskModalProps) {
 	const isCMS = task.id === 'daily_photo';
 
 	const todaysText = task.textByDate?.find((tbd) => isToday(tbd.date));
-	const name = isCMS ? tr?.title : todaysText?.name || task.name;
+	const name = isCMS ? tr?.name?.[lang] : todaysText?.name || task.name;
 	const description = isCMS
-		? tr?.description
+		? tr?.description?.[lang]
 		: todaysText?.description
 			? `"${todaysText?.description}"`
 			: task.description;
@@ -50,8 +53,7 @@ export function TaskModal(props: TaskModalProps) {
 					'mx-auto mb-[20px] max-w-[80%] text-pretty text-center text-md font-normal'
 				}
 			>
-				{/* @ts-ignore */}
-				{isCMS ? documentToReactComponents(description as any) : description}
+				{description}
 			</p>
 			{task.rewardByDay && <DailyRewardModal task={task} userTask={userTask} />}
 

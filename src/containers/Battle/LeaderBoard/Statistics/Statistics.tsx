@@ -10,16 +10,16 @@ import {
 } from '@/model/battle/selectors';
 import { operationBattleSelect } from '@/model/battle/operations/operationBattleSelect';
 import { useRouter } from 'next/navigation';
-import { translationsSelectedBattleSelect } from '@/model/translations/selectors';
-import { BattleContent } from '@/model/translations/types';
+import { useContext } from 'react';
+import { AppContext } from '@/contexts/AppContext';
+import { useContent } from '@/containers/Battle/useContent';
 
 export function Statistics() {
 	const dispatch = useDispatch();
 	const battles = useSelector(battleBattlesSelector);
 	const selectedBattle = useSelector(battleSelectedBattleSelector);
-	const translation = useSelector(
-		translationsSelectedBattleSelect,
-	) as BattleContent;
+	const { battlesContent, lang } = useContext(AppContext);
+	const translation = battlesContent.find((c) => c.id === selectedBattle?.id);
 
 	const changeBattle = (type: 'next' | 'prev') => {
 		const currentIndex = battles.findIndex(
@@ -30,6 +30,8 @@ export function Statistics() {
 			dispatch(operationBattleSelect(battles[nextIndex].id));
 		}
 	};
+
+	if (!selectedBattle) return null;
 
 	return (
 		<div className={'pt-[10px]'}>
@@ -45,7 +47,7 @@ export function Statistics() {
 					<ArrowIcon />
 				</button>
 				<div>
-					<span>{translation?.title}</span>
+					<span>{translation?.name?.[lang]}</span>
 				</div>
 				<button
 					onClick={() => changeBattle('next')}
@@ -65,7 +67,8 @@ function StatisticsContent() {
 	const selectedBattle = useSelector(battleSelectedBattleDataSelector);
 	const selectedBattlePhoto = useSelector(battleSelectedBattleUserPhoto);
 	const router = useRouter();
-
+	const { lang } = useContext(AppContext);
+	const content = useContent();
 	if (!selectedBattlePhoto && selectedBattle?.is_active) {
 		return (
 			<div
@@ -75,10 +78,10 @@ function StatisticsContent() {
 			>
 				<img className={'mb-[30px]'} src={'/assets/icons/sad.svg'} />
 				<p className={'mb-[20px] text-sm font-semibold'}>
-					You have not joined the battle yet!
+					{content.youHaveNotJoinedTheBattleYet}
 				</p>
 				<Button variant={'filled'} onClick={() => router.push('/photo/camera')}>
-					Join the battle
+					{content.joinTheBattle}
 				</Button>
 			</div>
 		);
@@ -93,10 +96,13 @@ function StatisticsContent() {
 			>
 				<img className={'mb-[30px]'} src={'/assets/icons/sad.svg'} />
 				<p className={'mb-[20px] text-sm font-semibold'}>
-					You have missed the battle
+					{content.youHaveMissedTheBattle}
 				</p>
-				<Button onClick={() => router.push('/photo/camera')} variant={'filled'}>
-					Join current battle
+				<Button
+					onClick={() => router.push(`/${lang}/photo/camera`)}
+					variant={'filled'}
+				>
+					{content.joinCurrentBattle}
 				</Button>
 			</div>
 		);

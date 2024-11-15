@@ -6,7 +6,7 @@ import {
 import { operationBattlePhotoSelect } from '@/model/battle/operations/operationBattlePhotoSelect';
 import { BattleReward } from '@/containers/Battle/BattleReward';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import {
 	battleCurrentBattlePhotosRemove,
 	battleMessageContentSet,
@@ -14,6 +14,7 @@ import {
 } from '@/model/battle/actions';
 import { userCoinsSelector, userEnergySelector } from '@/model/user/selectors';
 import { getUserLevel, levelToSelectEnergyReduction } from '@/constants';
+import { useContent } from '@/containers/Battle/useContent';
 
 export function BattleZone() {
 	const battlePhotos = useSelector(battlePhotosSelector);
@@ -24,7 +25,7 @@ export function BattleZone() {
 	const userCoins = useSelector(userCoinsSelector);
 	const userLevel = getUserLevel(userCoins);
 	const selectEnergyReduction = levelToSelectEnergyReduction.get(userLevel)!;
-
+	const content = useContent();
 	const [firstPhoto, secondPhoto] = battlePhotos;
 
 	const onSelect = (selectedPhotoId: string) => {
@@ -33,8 +34,8 @@ export function BattleZone() {
 		if (energyReduced < 0) {
 			dispatch(
 				battleMessageContentSet({
-					title: 'Not enough energy to vote',
-					description: 'Wait for some time for it to recover',
+					title: content.notEnoughEnergy,
+					description: content.waitToRecover,
 				}),
 			);
 			dispatch(battleMessageIsShownSet(true));
@@ -64,7 +65,7 @@ export function BattleZone() {
 			>
 				<img width={28} src={'/assets/icons/vs.svg'} />
 			</div>
-			<motion.div className={'relative'}>
+			<div className={'relative'}>
 				<img
 					onClick={() => onSelect(firstPhoto.id)}
 					className={'h-[300px] rounded-[10px] object-cover'}
@@ -73,7 +74,7 @@ export function BattleZone() {
 				{selectedPhoto === firstPhoto.id && (
 					<BattleReward onFinish={() => setSelectedPhoto('')} />
 				)}
-			</motion.div>
+			</div>
 			<div className={'relative'}>
 				<img
 					onClick={() => onSelect(secondPhoto.id)}

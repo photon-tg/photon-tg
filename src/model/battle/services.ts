@@ -28,6 +28,10 @@ export type GetEntityResult<T> =
 			data: T;
 	  };
 
+// export async function getSupabaseBattles() {
+// 	const
+// }
+
 export const getBattles = async (): Promise<
 	GetEntityResult<BattleFragment[]>
 > => {
@@ -177,8 +181,6 @@ export const getNotClaimedPhotoLikes = async (
 	}
 
 	const response = await query;
-
-	console.log(response);
 
 	if (response.error) {
 		return {

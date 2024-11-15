@@ -22,7 +22,6 @@ import shuffle from 'lodash/shuffle';
 import { userIdSelector } from '@/model/user/selectors';
 import { operationBattleSelect } from '@/model/battle/operations/operationBattleSelect';
 import { operationBattleCalculateTimeToJoin } from '@/model/battle/operations/operationBattleCalculateTimeToJoin';
-import { operationTranslationBattlesFetch } from '@/model/translations/operations/operationTranslationBattlesFetch';
 import { operationBattleTimeUpdate } from '@/model/battle/operations/operationBattleTimeUpdate';
 
 export const operationBattleInitialize = createAction(
@@ -62,7 +61,7 @@ export function* operationBattleInitializeWorker() {
 				break;
 		}
 	}
-	console.log(currentBattles, activeVoteBattleId, currentBattles);
+
 	if (currentBattles.length === 2) {
 		const firstActiveBattle = currentBattles[0];
 		const secondActiveBattle = currentBattles[1];
@@ -124,7 +123,5 @@ export function* operationBattleInitializeWorker() {
 	}
 
 	yield put(operationBattleTimeUpdate());
-
-	yield put(operationTranslationBattlesFetch({ type: 'currentBattle' }));
 	yield put(battleIsInitializedSet(true));
 }

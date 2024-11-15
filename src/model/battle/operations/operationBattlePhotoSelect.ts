@@ -37,11 +37,6 @@ export function* operationBattlePhotoSelectWorker({
 	const userLevel = getUserLevel(user.coins);
 	const selectReward = levelToSelectReward.get(userLevel)!;
 	const selectEnergyReduction = levelToSelectEnergyReduction.get(userLevel)!;
-	console.log(
-		user.energy,
-		selectEnergyReduction,
-		user.energy - selectEnergyReduction,
-	);
 
 	const energyReduced = user.energy - selectEnergyReduction;
 	if (energyReduced < 0) {

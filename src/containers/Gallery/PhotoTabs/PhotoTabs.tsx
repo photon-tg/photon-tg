@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Link from 'next/link';
+import { AppContext } from '@/contexts/AppContext';
 
 const tabs = [
 	{
@@ -44,6 +45,7 @@ export interface TabProps {
 }
 
 export function Tab({ name, icon, url, isActive, onClick }: TabProps) {
+	const { lang } = useContext(AppContext);
 	return (
 		<Link
 			style={{
@@ -52,7 +54,7 @@ export function Tab({ name, icon, url, isActive, onClick }: TabProps) {
 			className={
 				'flex w-[130px] flex-col items-center gap-y-[6px] rounded px-[30px] py-[8px]'
 			}
-			href={url}
+			href={`/${lang}${url}`}
 			onClick={onClick}
 		>
 			<img width={40} src={icon} />

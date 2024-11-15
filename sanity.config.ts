@@ -1,21 +1,20 @@
-// sanity.config.js
-import { defineConfig } from 'sanity';
+import { defineConfig } from 'sanity'
+import { I18nFields } from 'sanity-plugin-i18n-fields';
 import { schema } from './sanity/schemaTypes';
 import { structureTool } from 'sanity/structure';
-import { I18nFields } from 'sanity-plugin-i18n-fields';
+import { visionTool } from '@sanity/vision';
 
 export default defineConfig({
-	title: 'Photon',
-	projectId: 'pq53z0fe',
+	projectId: 's63tg1ep',
 	dataset: 'production',
-	plugins: [structureTool(), I18nFields({
+	plugins: [structureTool({ name: 'Photon', title: 'Content' }), I18nFields({
 		ui: {
 			position: 'bottom'
 		},
 		locales: [
 			{ code: 'en', label: 'en', title: 'English', default: true },
 			{ code: 'ru', label: 'ru', title: 'Russian', default: false },
-		]
-	})],
+		],
+	}), visionTool()],
 	schema: schema,
 });

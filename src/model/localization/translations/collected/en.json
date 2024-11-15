@@ -1,0 +1,50 @@
+{
+	"battles-rules": {
+		"defaultMessage": "<div> <span>Choose a photo</span> <ul> <li>Authors get coins for likes</li> <li>You get coins for voting</li> </ul> </div>"
+	},
+	"check-battle-leaders": {
+		"defaultMessage": "Check battle leaders"
+	},
+	"join-current-battle": {
+		"defaultMessage": "Join current battle"
+	},
+	"join-next-battle": {
+		"defaultMessage": "Join next battle"
+	},
+	"join-the-battle": {
+		"defaultMessage": "Join the battle"
+	},
+	"languages": {
+		"defaultMessage": "Languages"
+	},
+	"not-enough-energy": {
+		"defaultMessage": "Not enough energy to vote"
+	},
+	"profit-per-hour": {
+		"defaultMessage": "Profit per hour"
+	},
+	"there-are-no-photos": {
+		"defaultMessage": "There are no photos to choose from yet"
+	},
+	"time-left-for-voting": {
+		"defaultMessage": "Time left for voting"
+	},
+	"top-of-the-day": {
+		"defaultMessage": "Top of the day"
+	},
+	"wait-to-recover": {
+		"defaultMessage": "Wait for some time for it to recover"
+	},
+	"you-are-a-great-judge": {
+		"defaultMessage": "You are a great judge"
+	},
+	"you-have-joined": {
+		"defaultMessage": "You have joined"
+	},
+	"you-have-missed-the-battle": {
+		"defaultMessage": "You have missed the battle"
+	},
+	"you-have-not-joined-the-battle-yet": {
+		"defaultMessage": "You have not joined the battle yet"
+	}
+}

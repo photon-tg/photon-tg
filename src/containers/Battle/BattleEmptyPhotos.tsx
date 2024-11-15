@@ -1,4 +1,7 @@
+import { useContent } from '@/containers/Battle/useContent';
+
 export function BattleEmptyPhotos() {
+	const content = useContent();
 	return (
 		<div
 			className={
@@ -7,11 +10,9 @@ export function BattleEmptyPhotos() {
 		>
 			<img className={'mb-[30px]'} src={'/assets/icons/smile.svg'} />
 			<p className={'mb-[10px] text-md font-semibold'}>
-				You are a great judge!
+				{content.youAreAGreatJudge}
 			</p>
-			<p className={'mb-[20px] text-md'}>
-				There are yet no photos to choose from
-			</p>
+			<p className={'mb-[20px] text-md'}>{content.thereAreNoPhotos}</p>
 		</div>
 	);
 }

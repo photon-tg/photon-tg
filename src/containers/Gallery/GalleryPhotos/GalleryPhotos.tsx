@@ -98,7 +98,7 @@ interface SelectedImageProps {
 
 export function SelectedImage(props: SelectedImageProps) {
 	const { selectedImage } = props;
-	console.log(selectedImage, 'se');
+
 	if (selectedImage.battle_id) {
 		return (
 			<div

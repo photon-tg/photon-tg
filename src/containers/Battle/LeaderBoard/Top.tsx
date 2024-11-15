@@ -2,10 +2,11 @@ import { useSelector } from 'react-redux';
 import { Top as TopType } from '@/model/battle/types';
 import { battleSelectedBattleSelector } from '@/model/battle/selectors';
 import { cn } from '@/utils/cn';
+import { useContent } from '@/containers/Battle/useContent';
 
 export function Top() {
 	const selectedBattle = useSelector(battleSelectedBattleSelector);
-
+	const content = useContent();
 	if (!selectedBattle?.top?.length) {
 		return null;
 	}
@@ -13,7 +14,7 @@ export function Top() {
 	return (
 		<div className={'flex max-h-[100px] flex-col items-center'}>
 			<span className={'mb-[10px] block text-lg font-semibold'}>
-				Top of the day
+				{content.topOfTheDay}
 			</span>
 			<div className={'flex w-full flex-col gap-y-[5px]'}>
 				{selectedBattle?.top?.map((topItem, index) => (

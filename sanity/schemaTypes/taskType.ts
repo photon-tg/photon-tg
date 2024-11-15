@@ -1,29 +1,33 @@
-import { defineField, defineType } from '@sanity/types';
+import { defineType } from 'sanity';
 
 export const taskType = defineType({
-	name: 'taks',
 	title: 'Task',
+	name: 'task',
 	type: 'document',
 	fields: [
-		defineField({
-			name: 'name',
+		defineType({
 			title: 'Name',
-			type: 'i18n.string'
-		}),
-		defineField({
-			name: 'description',
-			title: 'Description',
-			type: 'i18n.text',
-		}),
-		defineField({
-			name: 'cta_text',
-			title: 'CTA text',
+			name: 'name',
 			type: 'i18n.string',
 		}),
-		defineField({
-			name: 'reward_coins',
-			title: 'Reward coins',
-			type: 'number',
-		})
+		defineType({
+			title: 'Description',
+			name: 'description',
+			type: 'i18n.text',
+		}),
+		defineType({
+			title: 'Type',
+			name: 'type',
+			type: 'string',
+			options: {
+				list: [
+					{ title: 'Link', value: 'link' },
+					{ title: 'Daily reward', value: 'daily_reward' },
+					{ title: 'Daily photo', value: 'daily_photo' },
+					{ title: 'Daily photo', value: 'daily_photo' },
+				],
+				layout: 'radio',
+			}
+		}),
 	]
-});
+})
