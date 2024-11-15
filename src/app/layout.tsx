@@ -21,13 +21,11 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({
 	children,
-	params,
 }: Readonly<{
 	children: React.ReactNode;
-	params: { lang: Locale };
 }>) {
 	return (
-		<html className={inter.className} lang={params.lang}>
+		<html className={inter.className}>
 			<body
 				className={
 					'h-full bg-gradient-to-b from-[#0A2647] from-0% to-[#062243] to-100% bg-no-repeat'
