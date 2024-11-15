@@ -1,0 +1,18 @@
+{
+	"battles-rules": "<div> <span>Choose a photo</span> <ul> <li>Authors get coins for likes</li> <li>You get coins for voting</li> </ul> </div>",
+	"check-battle-leaders": "Посмотреть лидеров",
+	"join-current-battle": "Присоединиться",
+	"join-next-battle": "Присоединиться к след. батлу",
+	"join-the-battle": "Присоединиться к батлу",
+	"languages": "Языки",
+	"not-enough-energy": "Недостаточно энергии для голосования",
+	"profit-per-hour": "Доход в час",
+	"there-are-no-photos": "Недостаточно фотографий для голосования на данный момент",
+	"time-left-for-voting": "Времени для голосования",
+	"top-of-the-day": "Топ дня",
+	"wait-to-recover": "Подождите, чтобы она восстановилась",
+	"you-are-a-great-judge": "Вы прекрасный судья",
+	"you-have-joined": "Вы присоединились",
+	"you-have-missed-the-battle": "Вы пропустили батл",
+	"you-have-not-joined-the-battle-yet": "Вы еще не присоединились к батлу"
+}

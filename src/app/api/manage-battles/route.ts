@@ -12,7 +12,6 @@ export const revalidate = 0;
 export async function GET(request: Request) {
 	try {
 		const authHeader = request.headers.get('auth');
-		console.log(request.headers.get('auth'), 'auth')
 
 		if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
 			return new Response('Unauthorized', {
@@ -31,8 +30,6 @@ export async function GET(request: Request) {
 			.eq('is_active', true)
 			.order('start_date', { ascending: true });
 
-		console.log('call');
-
 		if (activeBattlesError) {
 			console.error(
 				'Error fetching ACTIVE battles:',
@@ -42,12 +39,6 @@ export async function GET(request: Request) {
 		}
 
 		const [firstBattle, secondBattle] = activeBattles || [];
-
-		console.log(
-			activeBattles,
-			'activeBattles, minutesSinceStart',
-			firstBattle?.start_date && minutesSinceUTCDate(firstBattle.start_date),
-		);
 
 		if (activeBattles?.length < 1) {
 			throw new Error('no active battles');

@@ -139,11 +139,6 @@ export function* operationUserInitWorker() {
 						return;
 					}
 
-					console.log(
-						user,
-						'user',
-						!!user.data?.consent_version || isConsentGiven,
-					);
 					yield put(userSet(user.data!));
 					yield put(
 						userIsConsentGivenSet(
@@ -162,12 +157,11 @@ export function* operationUserInitWorker() {
 					throw new Error(UserErrorType.SERVER_ERROR);
 			}
 		} catch (error) {
-			console.log('here', error);
 			yield put(userErrorSet(UserErrorType.SERVER_ERROR));
 		}
 
 		const isConsentGiven: boolean = yield select(userisConsentGivenSelector);
-		console.log(isConsentGiven, 'is');
+
 		if (!isConsentGiven) {
 			yield put(userIsInitializedSet(true));
 			return;
@@ -176,7 +170,6 @@ export function* operationUserInitWorker() {
 		const userId: string = yield select(userIdSelector);
 
 		const photos: BattlePhotoFragment[] = yield call(fetchPhotos, userId);
-		console.log(photos, 'phtoos');
 		yield put(userPhotosSet(photos));
 
 		const userTasks: UserTaskFragment[] = yield call(fetchTasks, userId);

@@ -12,7 +12,6 @@ export interface GalleryProps {
 
 export function Gallery() {
 	const photos = useSelector(userPhotosSelector);
-	console.log(photos, 'photos');
 	return (
 		<div
 			className={

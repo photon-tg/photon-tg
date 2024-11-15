@@ -1,0 +1,18 @@
+{
+	"battles-rules": "<div> <span>Choose a photo</span> <ul> <li>Authors get coins for likes</li> <li>You get coins for voting</li> </ul> </div>",
+	"check-battle-leaders": "Check battle leaders",
+	"join-current-battle": "Join current battle",
+	"join-next-battle": "Join next battle",
+	"join-the-battle": "Join the battle",
+	"languages": "Languages",
+	"not-enough-energy": "Not enough energy to vote",
+	"profit-per-hour": "Profit per hour",
+	"there-are-no-photos": "There are no photos to choose from yet",
+	"time-left-for-voting": "Time left for voting",
+	"top-of-the-day": "Top of the day",
+	"wait-to-recover": "Wait for some time for it to recover",
+	"you-are-a-great-judge": "You are a great judge",
+	"you-have-joined": "You have joined",
+	"you-have-missed-the-battle": "You have missed the battle",
+	"you-have-not-joined-the-battle-yet": "You have not joined the battle yet"
+}

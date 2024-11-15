@@ -1,11 +1,12 @@
 import { useSelector } from 'react-redux';
+
 import {
-	translationsActiveJoinBattleSelector,
-	translationsActiveVoteBattleSelector,
-} from '@/model/translations/selectors';
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { battleTimeLeftToVoteSelector } from '@/model/battle/selectors';
-import { BattleContent } from '@/model/translations/types';
+	activeVoteBattleIdSelector,
+	battleTimeLeftToVoteSelector,
+} from '@/model/battle/selectors';
+import { useContent } from '@/containers/Battle/useContent';
+import { useContext } from 'react';
+import { AppContext } from '@/contexts/AppContext';
 
 export interface BattleBannerProps {
 	noTime?: boolean;
@@ -14,16 +15,23 @@ export interface BattleBannerProps {
 
 export function BattleBanner(props: BattleBannerProps) {
 	const { noTime = false, isJoin = false } = props;
-	const translationVote = useSelector(
-		translationsActiveVoteBattleSelector,
-	) as BattleContent;
-	const translationJoin = useSelector(
-		translationsActiveJoinBattleSelector,
-	) as BattleContent;
+	const { battlesContent, lang } = useContext(AppContext);
+	const activeVoteBattleId = useSelector(activeVoteBattleIdSelector);
+	const activeJoinBattleId = useSelector(activeVoteBattleIdSelector);
+
+	const translationVote = battlesContent.find(
+		(c) => c.id === activeVoteBattleId,
+	);
+	const translationJoin = battlesContent.find(
+		(c) => c.id === activeJoinBattleId,
+	);
+
 	const timeLeftToVote = useSelector(battleTimeLeftToVoteSelector);
 	const translation =
 		isJoin || !translationVote ? translationJoin : translationVote;
 	const { formattedHours, formattedMinutes } = timeLeftToVote || {};
+
+	const content = useContent();
 	return (
 		<div
 			className={
@@ -31,14 +39,14 @@ export function BattleBanner(props: BattleBannerProps) {
 			}
 		>
 			<span className={'mb-[10px] text-lg font-semibold'}>
-				{translation?.title}
+				{translation?.name?.[lang]}
 			</span>
 			<div className={'font-regular mb-[5px] text-sm'}>
-				{documentToReactComponents(translation?.description as any)}
+				{translation?.description?.[lang]}
 			</div>
 			{!noTime && formattedHours && (
 				<div className={'text-sm font-semibold text-[#488ae5]'}>
-					Time left for voting {formattedHours}hrs {formattedMinutes}min
+					{content.timeLeftForVoting} {formattedHours}hrs {formattedMinutes}min
 				</div>
 			)}
 		</div>

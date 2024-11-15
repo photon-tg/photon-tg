@@ -1,8 +1,15 @@
+import { Locale } from '../../i18n-config';
+
 export type Locales = 'en-US' | 'ru';
 
-export enum Locale {
-	'en-US' = 'English',
+export enum CMSLocale {
+	'en' = 'English',
 	'ru' = 'Русский',
 }
 
-const locales = ['English', 'Russian'];
+const localeNames = ['English', 'Russian'];
+
+export const localeToName: Record<Locale, string> = {
+	en: 'English',
+	ru: 'Русский',
+};

@@ -1,7 +1,7 @@
 import { type SchemaTypeDefinition } from 'sanity'
+import { battleType } from './battleType';
 import { taskType } from './taskType';
-import { tasksType } from './tasksType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [taskType, tasksType],
+  types: [battleType, taskType],
 }

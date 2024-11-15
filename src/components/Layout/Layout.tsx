@@ -1,6 +1,5 @@
 import { PropsWithChildren, ReactNode } from 'react';
 import { Navigation } from '@/components/Navigation/Navigation';
-import { LoadingScreen } from '@/components/LoadingScreen';
 
 export interface LayoutProps {
 	externalChildren?: ReactNode | undefined;

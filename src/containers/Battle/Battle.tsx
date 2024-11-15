@@ -25,7 +25,6 @@ export function Battle() {
 
 	return (
 		<div className={'px-[10px]'}>
-			<input type="file" accept="image/*" capture="environment" id="cameraInput" />
 			<div className={'mb-[10px] mt-[10px] flex justify-between gap-x-[25px]'}>
 				<Coins />
 				<Energy />

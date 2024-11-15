@@ -9,15 +9,13 @@ import {
 import { getUserLevel, getUserLevelProgress } from '@/constants';
 import { useModalContext } from '@/contexts/ModalContext';
 import { Settings } from '@/containers/Tap/Settings';
-import { translationsCommonTranslationsSelect } from '@/model/translations/selectors';
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+
+import { useContent } from '@/containers/Tap/useContent';
 
 export function Profile() {
 	const passiveIncome = useSelector(userPassiveIncomeSelector);
 	const user = useSelector(userDataSelector);
-	const commonTranslations =
-		useSelector(translationsCommonTranslationsSelect) || {};
-	console.log('COMMON', commonTranslations);
+	const content = useContent();
 	const { openModal } = useModalContext();
 
 	const openSettings = () => {
@@ -58,13 +56,7 @@ export function Profile() {
 				</div>
 			</div>
 			<div className={'grid rounded bg-[#041837] px-[20px] py-[10px]'}>
-				<span className={'text-md'}>
-					{commonTranslations?.profit_per_hour
-						? documentToReactComponents(
-								commonTranslations?.profit_per_hour as any,
-							)
-						: 'Profit per hour'}
-				</span>
+				<span className={'text-md'}>{content.profitPerHour}</span>
 				<div className={'flex gap-x-[5px] text-md'}>
 					<Coin /> +{passiveIncome}
 				</div>

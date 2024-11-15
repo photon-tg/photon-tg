@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { ReferUserPayload } from '@/model/user/services';
+import { ReferUserPayload } from '../../../model/user/services';
 
 const supabase = createClient(
 	process.env.NEXT_PUBLIC_SUPABASE_URL!,

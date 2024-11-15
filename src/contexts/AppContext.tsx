@@ -20,18 +20,33 @@ import {
 import { operationUserInit } from '@/model/user/operations/operationUserInit';
 import { battleIsInitializedSelector } from '@/model/battle/selectors';
 import { operationBattleInitialize } from '@/model/battle/operations/operationBattleInitialize';
-import { translationsIsInitializedSelector } from '@/model/translations/selectors';
-import { operationTranslationsInit } from '@/model/translations/operations/operationTranslationsInit';
 import { ConsentScreen } from '@/components/ConsentScreen';
 import { useModalContext } from '@/contexts/ModalContext';
+import { Locale } from '../../i18n-config';
+import { BATTLES_QUERYResult } from '../../sanity/types';
 
-export interface AppContext {}
+export interface AppContext {
+	lang: Locale;
+	battlesContent: BATTLES_QUERYResult;
+}
 
-const initialAppContext: AppContext = {};
+const initialAppContext: AppContext = {
+	lang: 'en',
+	battlesContent: [],
+};
 
 export const AppContext = createContext<AppContext>(initialAppContext);
 
-export function AppContextProvider({ children }: PropsWithChildren<{}>) {
+export interface AppContextProviderProps {
+	lang: Locale;
+	battlesContent: BATTLES_QUERYResult;
+}
+
+export function AppContextProvider({
+	children,
+	battlesContent,
+	lang,
+}: PropsWithChildren<AppContextProviderProps>) {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { isMobile, isDetected } = useDevice();
@@ -42,9 +57,6 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 	const isUserInitialized = useSelector(userIsInitializedSelector);
 	const isUserConsentGiven = useSelector(userisConsentGivenSelector);
 	const isBattleInitialized = useSelector(battleIsInitializedSelector);
-	const isTranslationsInitialized = useSelector(
-		translationsIsInitializedSelector,
-	);
 
 	useEffect(() => {
 		if (!isDetected || (!process.env.NEXT_PUBLIC_ALLOW_DESKTOP! && !isMobile)) {
@@ -67,27 +79,21 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 			dispatch(operationBattleInitialize());
 			return;
 		}
-
-		if (!isTranslationsInitialized) {
-			dispatch(operationTranslationsInit());
-			return;
-		}
 	}, [
 		dispatch,
 		isApplicationInitialized,
 		isBattleInitialized,
 		isDetected,
 		isMobile,
-		isTranslationsInitialized,
 		isUserConsentGiven,
 		isUserInitialized,
 	]);
 
 	useEffect(() => {
 		if (isUserInitialized) {
-			router.replace(HOME_PAGE);
+			router.replace(`/${lang}${HOME_PAGE}`);
 		}
-	}, [isUserInitialized, router]);
+	}, [isUserInitialized, lang, router]);
 
 	useEffect(() => {
 		if (!isUserInitialized || !isApplicationInitialized) return;
@@ -113,14 +119,19 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		window.Telegram.WebApp?.close();
 	};
 
-	const value = useMemo(() => ({}), []);
+	const value = useMemo(
+		() => ({
+			lang,
+			battlesContent,
+		}),
+		[battlesContent, lang],
+	);
 
 	const shouldChildrenRender =
 		isDetected &&
 		isUserInitialized &&
 		isBattleInitialized &&
 		isApplicationInitialized &&
-		isTranslationsInitialized &&
 		(isMobile || process.env.NEXT_PUBLIC_ALLOW_DESKTOP);
 
 	useEffect(() => {
@@ -139,7 +150,13 @@ export function AppContextProvider({ children }: PropsWithChildren<{}>) {
 		return () => {
 			closeModal();
 		};
-	}, [closeModal, isUserConsentGiven, onConsentAccept, openModal]);
+	}, [
+		closeModal,
+		isUserConsentGiven,
+		isUserInitialized,
+		onConsentAccept,
+		openModal,
+	]);
 
 	return (
 		<AppContext.Provider value={value}>

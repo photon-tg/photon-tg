@@ -112,7 +112,6 @@ export function* operationAuthenticateUserWorker() {
 				return;
 			}
 
-			console.log(user, 'user', !!user.data?.consent_version || isConsentGiven);
 			yield put(userSet(user.data!));
 			yield put(
 				userIsConsentGivenSet(!!user.data?.consent_version || isConsentGiven),

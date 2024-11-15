@@ -7,6 +7,8 @@ import {
 	userDailyPhotoIsCompleted,
 	userIsDailyRewardClaimedSelector,
 } from '@/model/user/selectors';
+import { useContext } from 'react';
+import { AppContext } from '@/contexts/AppContext';
 
 const tabs: {
 	icon: string;
@@ -44,6 +46,7 @@ const tabs: {
 
 export function Navigation() {
 	const pathname = usePathname();
+	const { lang } = useContext(AppContext);
 	return (
 		<div
 			className={
@@ -53,7 +56,11 @@ export function Navigation() {
 			{tabs
 				.filter(({ isHidden }) => !isHidden)
 				.map((tab) => (
-					<Tab {...tab} key={tab.name} isActive={tab.url === pathname} />
+					<Tab
+						{...tab}
+						key={tab.name}
+						isActive={`/${lang}${tab.url}` === pathname}
+					/>
 				))}
 		</div>
 	);
@@ -70,6 +77,8 @@ export function Tab({ name, icon, url, isActive }: TabProps) {
 	const isDailyRewardClaimed = useSelector(userIsDailyRewardClaimedSelector);
 	const isDailyPhotoCompleted = useSelector(userDailyPhotoIsCompleted);
 
+	const { lang } = useContext(AppContext);
+
 	return (
 		<Link
 			style={{ backgroundColor: isActive ? '#144272' : 'transparent' }}
@@ -79,7 +88,7 @@ export function Tab({ name, icon, url, isActive }: TabProps) {
 			onClick={() =>
 				window.Telegram.WebApp.HapticFeedback.impactOccurred('medium')
 			}
-			href={url}
+			href={`/${lang}${url}`}
 		>
 			{name === 'Tasks' &&
 				(!isDailyRewardClaimed || !isDailyPhotoCompleted) && (

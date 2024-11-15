@@ -1,7 +1,12 @@
 'use client';
 
-import { Index } from '@/containers/Index/Index';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function IndexPage() {
-	return <Index />;
+	const router = useRouter();
+	useEffect(() => {
+		router.replace('/en/battle');
+	}, [router]);
+	return null;
 }

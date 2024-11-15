@@ -35,34 +35,34 @@ const config: Config = {
       'overlay': '10px',
     },
     fontSize: {
-      'xsm': ['0.620rem', {
-        lineHeight: '0.800rem',
-        letterSpacing: '0.01rem',
+      'xsm': ['9.9px', {
+        lineHeight: '12.8px',
+        letterSpacing: '0.16px',
         fontWeight: '500',
       }],
-      'sm': ['0.750rem', {
-        lineHeight: '0.975rem',
-        letterSpacing: '0.01em',
+      'sm': ['12px', {
+        lineHeight: '15.6px',
+        letterSpacing: '0.16px',
         fontWeight: '500',
       }],
-      'md': ['0.875rem', {
-        lineHeight: '1.138rem',
-        letterSpacing: '0.01em',
+      'md': ['14px', {
+        lineHeight: '18.2px',
+        letterSpacing: '0.16px',
         fontWeight: '500',
       }],
-      'lg': ['1rem', {
+      'lg': ['16px', {
         lineHeight: '1.3rem',
-        letterSpacing: '0.01em',
+        letterSpacing: '0.16px',
         fontWeight: '400',
       }],
-      'xl': ['1.25rem', {
-        lineHeight: '1.625rem',
-        letterSpacing: '0.01em',
+      'xl': ['20px', {
+        lineHeight: '26px',
+        letterSpacing: '0.16px',
         fontWeight: '600',
       }],
-      'xxl': ['1.750rem', {
-        lineHeight: '2.275rem',
-        letterSpacing: '0.01em',
+      'xxl': ['28px', {
+        lineHeight: '36.4px',
+        letterSpacing: '0.16px',
         fontWeight: '600',
       }],
     }
