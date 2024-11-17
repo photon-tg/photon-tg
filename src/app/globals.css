@@ -24,3 +24,16 @@ h3 {
 	user-select: none !important;
 	pointer-events: none;
 }
+
+.tonConnectButton {
+	width: 100% !important;
+}
+
+.tonConnectButton button {
+	width: 100% !important;
+	justify-content: center;
+}
+
+.tonConnectButton svg {
+	display: none !important;
+}

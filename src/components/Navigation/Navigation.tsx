@@ -20,17 +20,11 @@ const tabs: {
 		icon: '/assets/icons/battle.svg',
 		name: 'Battle',
 		url: '/battle',
-		isHidden: process.env.NEXT_PUBLIC_BATTLES_HIDDEN === 'true',
 	},
 	{
 		icon: '/assets/icons/camera.svg',
 		name: 'Photo',
 		url: '/photo/gallery',
-	},
-	{
-		icon: '/assets/icons/pickaxe.svg',
-		name: 'Tap',
-		url: '/tap',
 	},
 	{
 		icon: '/assets/icons/friends.svg',
@@ -42,6 +36,12 @@ const tabs: {
 		name: 'Tasks',
 		url: '/tasks',
 	},
+	{
+		icon: '/assets/icons/wallet.svg',
+		name: 'Wallet',
+		url: '/wallet',
+		isHidden: process.env.NEXT_PUBLIC_WALLET_HIDDEN === 'true',
+	},
 ];
 
 export function Navigation() {
@@ -50,7 +50,7 @@ export function Navigation() {
 	return (
 		<div
 			className={
-				'z-10 mx-auto my-0 flex h-[71px] w-full justify-between rounded-tl rounded-tr bg-[#041837] p-[5px] px-[10px] pb-[10px] drop-shadow-[0_-15px_10px_rgba(0,0,0,0.1)]'
+				'z-10 mx-auto my-0 flex h-[71px] w-full justify-between overflow-hidden rounded-tl rounded-tr bg-[#041837] p-[5px] px-[10px] pb-[10px] drop-shadow-[0_-15px_10px_rgba(0,0,0,0.1)]'
 			}
 		>
 			{tabs

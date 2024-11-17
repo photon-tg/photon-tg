@@ -11,6 +11,7 @@ import { Locale } from '../../i18n-config';
 import { IntlProvider } from 'react-intl';
 import { getTranslations } from '@/model/localization/utils';
 import { BATTLES_QUERYResult } from '../../sanity/types';
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
 
 export interface ApplicationProvidersProps {
 	lang: Locale;
@@ -22,25 +23,27 @@ export function ApplicationProviders({
 	lang,
 	battlesContent,
 }: PropsWithChildren<ApplicationProvidersProps>) {
-	const storeRef = useRef<AppStore>(null);
+	const storeRef = useRef<AppStore | null>(null);
 
 	if (!storeRef.current) {
 		storeRef.current = createStore();
 	}
 
 	return (
-		<IntlProvider
-			defaultLocale={'en'}
-			locale={lang}
-			messages={getTranslations(lang)}
-		>
-			<ApolloProvider client={apolloClient}>
-				<Provider store={storeRef.current!}>
-					<AppContextProvider battlesContent={battlesContent} lang={lang}>
-						<ModalContextProvider>{children}</ModalContextProvider>
-					</AppContextProvider>
-				</Provider>
-			</ApolloProvider>
-		</IntlProvider>
+		<TonConnectUIProvider manifestUrl="https://photon-tg.com/tonconnect-manifest.json">
+			<IntlProvider
+				defaultLocale={'en'}
+				locale={lang}
+				messages={getTranslations(lang)}
+			>
+				<ApolloProvider client={apolloClient}>
+					<Provider store={storeRef.current!}>
+						<AppContextProvider battlesContent={battlesContent} lang={lang}>
+							<ModalContextProvider>{children}</ModalContextProvider>
+						</AppContextProvider>
+					</Provider>
+				</ApolloProvider>
+			</IntlProvider>
+		</TonConnectUIProvider>
 	);
 }
