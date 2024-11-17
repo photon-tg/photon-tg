@@ -167,6 +167,38 @@ export const getPhotoLikes = async (
 	return { data: response.count };
 };
 
+export const getAllUserLikes = async (
+	userId: string
+): Promise<GetEntityResult<number | null>> => {
+	const photosResponse = await supabase
+		.from('battle_photos')
+		.select('id,user_id')
+		.eq('user_id', userId);
+
+	if (photosResponse.data?.length === 0) 	return { data: 0 }
+
+	if (photosResponse.error || !photosResponse.data) {
+		return {
+			error: true,
+		};
+	}
+
+	const photoIds = photosResponse.data.map((a) => a.id);
+
+	const response = await supabase
+		.from('photo_likes')
+		.select('*', { head: true, count: 'estimated' })
+		.in('photo_id', photoIds);
+	console.log(response, 'resp')
+	if (response.error) {
+		return {
+			error: true,
+		};
+	}
+
+	return { data: response.count };
+};
+
 export const getNotClaimedPhotoLikes = async (
 	photoIds: string[],
 	lastClaimed?: string | null,

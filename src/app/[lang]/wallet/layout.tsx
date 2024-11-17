@@ -1,9 +1,10 @@
 import { Layout } from '@/components/Layout/Layout';
+import { Profile } from '@/containers/Tap/Profile';
 
 export default function WalletLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return <Layout>{children}</Layout>;
+	return <Layout externalChildren={<Profile />}>{children}</Layout>;
 }
