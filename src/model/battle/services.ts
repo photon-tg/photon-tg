@@ -168,14 +168,14 @@ export const getPhotoLikes = async (
 };
 
 export const getAllUserLikes = async (
-	userId: string
+	userId: string,
 ): Promise<GetEntityResult<number | null>> => {
 	const photosResponse = await supabase
 		.from('battle_photos')
 		.select('id,user_id')
 		.eq('user_id', userId);
 
-	if (photosResponse.data?.length === 0) 	return { data: 0 }
+	if (photosResponse.data?.length === 0) return { data: 0 };
 
 	if (photosResponse.error || !photosResponse.data) {
 		return {
@@ -189,7 +189,7 @@ export const getAllUserLikes = async (
 		.from('photo_likes')
 		.select('*', { head: true, count: 'estimated' })
 		.in('photo_id', photoIds);
-	console.log(response, 'resp')
+	console.log(response, 'resp');
 	if (response.error) {
 		return {
 			error: true,
