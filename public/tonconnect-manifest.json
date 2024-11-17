@@ -1,5 +1,7 @@
 {
 	"url": "photon-tg.com",
-	"name": "photon-tg.com",
-	"iconUrl": "https://photon-tg.com/photon.png"
+	"name": "PHOTON",
+	"iconUrl": "https://photon-tg.com/photon.png",
+	"termsOfUseUrl": "https://ton-connect.github.io/demo-dapp/terms-of-use.txt",
+	"privacyPolicyUrl": "https://ton-connect.github.io/demo-dapp/privacy-policy.txt"
 }
