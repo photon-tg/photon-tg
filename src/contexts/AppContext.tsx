@@ -62,23 +62,23 @@ export function AppContextProvider({
 		if (!isDetected || (!process.env.NEXT_PUBLIC_ALLOW_DESKTOP! && !isMobile)) {
 			return;
 		}
-		//
-		// if (!isApplicationInitialized) {
-		// 	dispatch(operationInitApplication());
-		// 	return;
-		// }
-		//
-		// if (!isUserInitialized) {
-		// 	dispatch(operationUserInit());
-		// 	return;
-		// }
-		//
-		// if (!isUserConsentGiven) return;
-		//
-		// if (!isBattleInitialized) {
-		// 	dispatch(operationBattleInitialize());
-		// 	return;
-		// }
+
+		if (!isApplicationInitialized) {
+			dispatch(operationInitApplication());
+			return;
+		}
+
+		if (!isUserInitialized) {
+			dispatch(operationUserInit());
+			return;
+		}
+
+		if (!isUserConsentGiven) return;
+
+		if (!isBattleInitialized) {
+			dispatch(operationBattleInitialize());
+			return;
+		}
 	}, [
 		dispatch,
 		isApplicationInitialized,
