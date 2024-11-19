@@ -91,7 +91,7 @@ export function* operationUserInitWorker() {
 				getUserCredentials,
 				telegramId,
 			);
-
+			console.log(isNewUser, 'isNewUser')
 			if (isNewUser) {
 				/** Sign up */
 				const signUpData: SignUpData = yield call(
@@ -149,6 +149,7 @@ export function* operationUserInitWorker() {
 				}
 
 				if (signInResponse.error && signInResponse.error.status === 400) {
+					console.log('set stuff')
 					yield put(userIsNewUserSet(true));
 					yield put(userIsConsentGivenSet(false));
 				}

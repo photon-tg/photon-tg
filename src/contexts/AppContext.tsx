@@ -24,6 +24,7 @@ import { ConsentScreen } from '@/components/ConsentScreen';
 import { useModalContext } from '@/contexts/ModalContext';
 import { Locale } from '../../i18n-config';
 import { BATTLES_QUERYResult } from '../../sanity/types';
+import { Modal } from '@/contexts/Modal';
 
 export interface AppContext {
 	lang: Locale;
@@ -50,7 +51,7 @@ export function AppContextProvider({
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { isMobile, isDetected } = useDevice();
-	const { openModal, closeModal } = useModalContext();
+	const { openModal, closeModal, modalContent } = useModalContext();
 	const isApplicationInitialized = useSelector(
 		applicationIsInitializedSelector,
 	);
@@ -59,22 +60,22 @@ export function AppContextProvider({
 	const isBattleInitialized = useSelector(battleIsInitializedSelector);
 
 	useEffect(() => {
-		if (!isDetected || (!process.env.NEXT_PUBLIC_ALLOW_DESKTOP! && !isMobile)) {
+		if (!isDetected || !isMobile) {
 			return;
 		}
-
+		console.log(isApplicationInitialized, 'isApplicationInitialized')
 		if (!isApplicationInitialized) {
 			dispatch(operationInitApplication());
 			return;
 		}
-
+		console.log(isUserInitialized, 'isUserInitialized')
 		if (!isUserInitialized) {
 			dispatch(operationUserInit());
 			return;
 		}
-
+		console.log(isUserConsentGiven, 'isUserConsentGiven')
 		if (!isUserConsentGiven) return;
-
+		console.log(isBattleInitialized, 'isBattleInitialized')
 		if (!isBattleInitialized) {
 			dispatch(operationBattleInitialize());
 			return;
@@ -113,10 +114,12 @@ export function AppContextProvider({
 	const onConsentAccept = () => {
 		dispatch(userIsConsentGivenSet(true));
 		dispatch(userIsInitializedSet(false));
+		closeModal();
 	};
 
 	const onConsentReject = () => {
 		window.Telegram.WebApp?.close();
+		closeModal();
 	};
 
 	const value = useMemo(
@@ -132,12 +135,14 @@ export function AppContextProvider({
 		isUserInitialized &&
 		isBattleInitialized &&
 		isApplicationInitialized &&
-		(isMobile || process.env.NEXT_PUBLIC_ALLOW_DESKTOP);
+		isMobile
 
 	useEffect(() => {
+		console.log(isUserInitialized, 'is')
 		if (!isUserInitialized) return;
-		closeModal();
-		if (!isUserConsentGiven) {
+		console.log(isUserConsentGiven, modalContent, 'is');
+		if (!isUserConsentGiven && !modalContent) {
+			console.log('open')
 			openModal(
 				<ConsentScreen onAccept={onConsentAccept} onReject={onConsentReject} />,
 				{
@@ -146,10 +151,6 @@ export function AppContextProvider({
 				},
 			);
 		}
-
-		return () => {
-			closeModal();
-		};
 	}, [
 		closeModal,
 		isUserConsentGiven,
@@ -173,6 +174,7 @@ export function AppContextProvider({
 					isMobile={isMobile}
 				/>
 			)}
+			<Modal />
 		</AppContext.Provider>
 	);
 }

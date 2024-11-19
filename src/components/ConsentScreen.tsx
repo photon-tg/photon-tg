@@ -12,9 +12,10 @@ export interface ConsentScreenProps {
 export function ConsentScreen(props: ConsentScreenProps) {
 	const { onAccept, onReject } = props;
 	const [docShown, setDocShown] = useState<'pp' | 'tou' | ''>('');
+	console.log('here')
 	return (
 		<>
-			<div className={'px-[10px] pb-[10px] pt-[0px]'}>
+			<div className={'px-[10px] pb-[10px] pt-[0px] z-50'}>
 				<div className={'mb-[20px]'}>
 					You must accept{' '}
 					<a

@@ -30,20 +30,22 @@ export function ApplicationProviders({
 	}
 
 	return (
-		<TonConnectUIProvider manifestUrl="https://photon-tg.com/tonconnect-manifest.json">
-			<IntlProvider
-				defaultLocale={'en'}
-				locale={lang}
-				messages={getTranslations(lang)}
-			>
-				<ApolloProvider client={apolloClient}>
-					<Provider store={storeRef.current!}>
-						<AppContextProvider battlesContent={battlesContent} lang={lang}>
-							<ModalContextProvider>{children}</ModalContextProvider>
-						</AppContextProvider>
-					</Provider>
-				</ApolloProvider>
-			</IntlProvider>
-		</TonConnectUIProvider>
+			<TonConnectUIProvider manifestUrl="https://photon-tg.com/tonconnect-manifest.json">
+				<IntlProvider
+					defaultLocale={'en'}
+					locale={lang}
+					messages={getTranslations(lang)}
+				>
+					<ModalContextProvider>
+						<ApolloProvider client={apolloClient}>
+							<Provider store={storeRef.current!}>
+								<AppContextProvider battlesContent={battlesContent} lang={lang}>
+									{children}
+								</AppContextProvider>
+							</Provider>
+						</ApolloProvider>
+					</ModalContextProvider>
+				</IntlProvider>
+			</TonConnectUIProvider>
 	);
 }
