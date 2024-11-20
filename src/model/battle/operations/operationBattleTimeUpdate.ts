@@ -68,7 +68,7 @@ export function* operationBattleTimeUpdateWorker() {
 			Number(timeLeftToVote.formattedHours) <= 0 &&
 			Number(timeLeftToVote.formattedMinutes) <= 0
 		) {
-			yield put(operationBattleInitialize());
+			// yield put(operationBattleInitialize());
 		}
 
 		yield put(battleTimeLeftToVoteSet(timeLeftToVote));
