@@ -2,7 +2,7 @@ import { TelegramAuth } from '@/utils/telegram-auth-verification';
 import { z } from 'zod';
 import { UserErrorType } from '@/model/user/types';
 
-export const runtime = "node"
+export const runtime = "nodejs"
 
 const AuthenticationData = z.object({
 	dataCheckString: z.string().trim().min(1),
