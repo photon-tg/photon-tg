@@ -1,4 +1,4 @@
-import * as crypto from 'crypto';
+import { createHmac } from 'node:crypto';
 
 export interface ParseAuthStringResult {
 	user: WebAppUser;
@@ -20,8 +20,7 @@ export class TelegramAuth implements TelegramAuthInterface {
 
 	verifyAuthString() {
 		// HMAC-SHA-256 signature of the bot's token with the constant string WebAppData used as a key.
-		const secret = crypto
-			.createHmac('sha256', 'WebAppData')
+		const secret = createHmac('sha256', 'WebAppData')
 			.update(process.env.TELEGRAM_BOT_TOKEN!);
 
 		// Data-check-string is a chain of all received fields'.
@@ -35,8 +34,7 @@ export class TelegramAuth implements TelegramAuthInterface {
 		const dataCheckString = arr.join('\n');
 
 		// The hexadecimal representation of the HMAC-SHA-256 signature of the data-check-string with the secret key
-		const _hash = crypto
-			.createHmac('sha256', secret.digest())
+		const _hash = createHmac('sha256', secret.digest())
 			.update(dataCheckString)
 			.digest('hex');
 
