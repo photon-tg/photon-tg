@@ -4,7 +4,7 @@ import TonWeb from 'tonweb';
 import { mnemonicToSeed } from 'tonweb-mnemonic';
 const BN = TonWeb.utils.BN;
 
-export const runtime = "edge"
+export const runtime = "edge";
 
 const isMainnet = true;
 
