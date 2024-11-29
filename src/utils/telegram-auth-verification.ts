@@ -1,4 +1,4 @@
-import { createHmac } from 'node:crypto';
+import CryptoJS from 'crypto-js';
 
 export interface ParseAuthStringResult {
 	user: WebAppUser;
@@ -20,9 +20,9 @@ export class TelegramAuth implements TelegramAuthInterface {
 
 	verifyAuthString() {
 		// HMAC-SHA-256 signature of the bot's token with the constant string WebAppData used as a key.
-		const secret = createHmac('sha256', 'WebAppData')
-			.update(process.env.TELEGRAM_BOT_TOKEN!);
 
+		const intermediateSecret = CryptoJS.HmacSHA256(process.env.TELEGRAM_BOT_TOKEN!, 'WebAppData');
+		const intermediateSecretHex = intermediateSecret.toString(CryptoJS.enc.Hex);
 		// Data-check-string is a chain of all received fields'.
 		const arr = this.tgInitData.split('&');
 		const hashIndex = arr.findIndex((str) => str.startsWith('hash='));
@@ -34,9 +34,14 @@ export class TelegramAuth implements TelegramAuthInterface {
 		const dataCheckString = arr.join('\n');
 
 		// The hexadecimal representation of the HMAC-SHA-256 signature of the data-check-string with the secret key
-		const _hash = createHmac('sha256', secret.digest())
-			.update(dataCheckString)
-			.digest('hex');
+		// const _hash = crypto.createHmac('sha256', secret.digest())
+		// 	.update(dataCheckString)
+		// 	.digest('hex');
+// Step 4: Compute the final HMAC
+		const finalHMAC = CryptoJS.HmacSHA256(dataCheckString, CryptoJS.enc.Hex.parse(intermediateSecretHex));
+
+// Step 5: Convert the result to a hexadecimal string
+		const _hash = finalHMAC.toString(CryptoJS.enc.Hex);
 
 		// If hash is equal, the data may be used on your server.
 		// Complex data types are represented as JSON-serialized objects.
