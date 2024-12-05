@@ -50,6 +50,10 @@ export async function GET(request: Request) {
 				.from('battles')
 				.update({ stage: 'vote' })
 				.eq('id', joinAndVoteBattle.id);
+
+			await supabase
+				.from('battles')
+				.insert({ stage: 'join', is_active: true });
 		}
 
 		if (voteBattle) {
@@ -57,10 +61,6 @@ export async function GET(request: Request) {
 				.from('battles')
 				.update({ stage: 'finish', is_active: false })
 				.eq('id', voteBattle.id);
-
-			await supabase
-				.from('battles')
-				.insert({ stage: 'join', is_active: true });
 		}
 
 		return new Response(JSON.stringify('OK'));
